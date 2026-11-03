@@ -1,5 +1,4 @@
-// Checked against the migration by tests/database.test.ts. Regenerate from Supabase
-// with `npm run db:types` after applying migrations to review schema drift.
+// Regenerate with `npm run db:types` after applying Supabase migrations.
 type Table<Row> = {
   Row: Row
   Insert: Partial<Row>
@@ -7,6 +6,7 @@ type Table<Row> = {
   Relationships: []
 }
 type Rpc<Args, Returns> = { Args: Args; Returns: Returns }
+
 export type Group = {
   id: string
   name: string
@@ -14,6 +14,7 @@ export type Group = {
   created_at: string
   updated_at: string
 }
+
 export type Member = {
   group_id: string
   user_id: string
@@ -21,6 +22,7 @@ export type Member = {
   joined_at: string
   removed_at: string | null
 }
+
 export type Profile = {
   id: string
   display_name: string | null
@@ -28,6 +30,7 @@ export type Profile = {
   created_at: string
   updated_at: string
 }
+
 export type Invite = {
   id: string
   group_id: string
@@ -39,6 +42,7 @@ export type Invite = {
   revoked_at: string | null
   created_at: string
 }
+
 export type ShoppingList = {
   id: string
   group_id: string
@@ -48,6 +52,7 @@ export type ShoppingList = {
   created_at: string
   updated_at: string
 }
+
 export type ShoppingItem = {
   id: string
   list_id: string
@@ -62,19 +67,23 @@ export type ShoppingItem = {
   updated_at: string
   deleted_at: string | null
 }
+
 export type GroupSummary = {
   id: string
   name: string
   member_count: number
   remaining_count: number
 }
+
 export type MemberProfile = {
   user_id: string
   display_name: string | null
   avatar_url: string | null
   role: 'owner' | 'member'
 }
+
 export type InvitePreview = { group_id: string; group_name: string; already_member: boolean }
+
 export type Database = {
   public: {
     Tables: {

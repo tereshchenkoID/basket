@@ -6,8 +6,10 @@ import { Link } from '@/i18n/navigation'
 import { LanguageSwitcher } from '@/modules/Languages'
 
 import styles from './index.module.scss'
-export async function Header() {
+
+export const Header = async () => {
   const t = await getTranslations('Common')
+
   return (
     <header className={styles.header}>
       <Link href="/" className={styles.brand}>

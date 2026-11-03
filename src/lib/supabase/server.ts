@@ -5,10 +5,14 @@ import { getSupabaseConfig } from '@/lib/config'
 
 import 'server-only'
 import type { Database } from '@/types/database'
+
 export async function createClient() {
   const config = getSupabaseConfig()
+
   if (!config) throw new Error('Supabase is not configured')
+
   const store = await cookies()
+
   return createServerClient<Database>(config.url, config.key, {
     cookies: {
       getAll() {

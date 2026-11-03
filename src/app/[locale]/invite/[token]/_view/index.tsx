@@ -11,9 +11,15 @@ import styles from '@/modules/Groups/index.module.scss'
 
 import type { InvitePreview } from '@/types/database'
 
-export default function InviteView({ preview, token }: { preview: InvitePreview; token: string }) {
+type InviteViewProps = {
+  preview: InvitePreview
+  token: string
+}
+
+const InviteView = ({ preview, token }: InviteViewProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
+
   return (
     <section className={styles['invite-card']}>
       <p className={styles.eyebrow}>{t('invited')}</p>
@@ -25,7 +31,7 @@ export default function InviteView({ preview, token }: { preview: InvitePreview;
         <ActionForm
           label={t('joinGroup')}
           operation={() => acceptInvite({ token })}
-          onSuccess={(groupId) => router.replace(`/groups/${groupId}`)}
+          onSuccess={groupId => router.replace(`/groups/${groupId}`)}
         />
       )}
       <Link className={styles.back} href="/dashboard">
@@ -34,3 +40,5 @@ export default function InviteView({ preview, token }: { preview: InvitePreview;
     </section>
   )
 }
+
+export default InviteView

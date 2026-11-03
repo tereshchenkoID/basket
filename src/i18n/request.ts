@@ -1,8 +1,13 @@
+import { notFound } from 'next/navigation'
+import * as rootParams from 'next/root-params'
 import { getRequestConfig } from 'next-intl/server'
 
-import { defaultLocale, isLocale } from './locales'
-export default getRequestConfig(async ({ requestLocale }) => {
-  const requested = await requestLocale
-  const locale = isLocale(requested) ? requested : defaultLocale
+import { isLocale } from './locales'
+
+export default getRequestConfig(async ({ locale: localeOverride }) => {
+  const locale = localeOverride ?? await rootParams.locale()
+
+  if (!isLocale(locale)) notFound()
+
   return { locale, messages: (await import(`../messages/${locale}.json`)).default }
 })

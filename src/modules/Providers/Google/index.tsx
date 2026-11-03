@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
@@ -9,21 +10,22 @@ import { getSiteUrl } from '@/lib/config'
 import { createClient } from '@/lib/supabase/client'
 
 import styles from './index.module.scss'
-export function GoogleLoginButton({
-  locale,
-  configured,
-  next,
-}: {
+
+type GoogleLoginButtonProps = {
   locale: Locale
   configured: boolean
   next?: string
-}) {
+}
+
+export const GoogleLoginButton = ({ locale, configured, next }: GoogleLoginButtonProps) => {
   const t = useTranslations('Auth')
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
-  async function signIn() {
+
+  const signIn = async () => {
     setPending(true)
     setError(false)
+
     try {
       const supabase = createClient()
       const { error } = await supabase.auth.signInWithOAuth({
@@ -32,12 +34,14 @@ export function GoogleLoginButton({
           redirectTo: callbackUrl(getSiteUrl(), locale, next),
         },
       })
+
       if (error) throw error
     } catch {
       setError(true)
       setPending(false)
     }
   }
+
   return (
     <div className={styles.auth}>
       <button

@@ -12,13 +12,22 @@ import { GoogleLoginButton } from '@/modules/Providers/Google'
 
 import styles from './page.module.scss'
 
+type HomeProps = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
 export const dynamic = 'force-dynamic'
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+const Home = async ({ params }: HomeProps) => {
   const { locale } = await params
+
   if (!isLocale(locale)) notFound()
+
   const t = await getTranslations('Home')
   const user = await getUser()
+
   return (
     <section className={styles.hero}>
       <div className={styles['hero-copy']}>
@@ -56,3 +65,5 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     </section>
   )
 }
+
+export default Home

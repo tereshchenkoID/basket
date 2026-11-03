@@ -1,0 +1,6 @@
+@mixin word-break($display: block) {
+  @content;
+
+  display: $display;
+  overflow-wrap: anywhere;
+}

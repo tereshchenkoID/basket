@@ -2,11 +2,18 @@ import Image from 'next/image'
 
 import styles from './index.module.scss'
 
-export function Avatar({ name, url }: { name: string; url: unknown }) {
+type AvatarProps = {
+  name: string
+  url: unknown
+}
+
+export const Avatar = ({ name, url }: AvatarProps) => {
   let source: string | null = null
+
   if (typeof url === 'string') {
     try {
       const parsed = new URL(url)
+
       if (
         parsed.protocol === 'https:' &&
         !parsed.username &&
@@ -20,6 +27,7 @@ export function Avatar({ name, url }: { name: string; url: unknown }) {
       /* Invalid avatars fall back to an initial. */
     }
   }
+
   return source ? (
     <Image
       className={styles.avatar}

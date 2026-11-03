@@ -1,4 +1,5 @@
 'use server'
+
 import { mutate } from '@/lib/supabase/mutation'
 
 import {
@@ -9,6 +10,7 @@ import {
   purchaseItemSchema,
   updateListSchema,
 } from './schema'
+
 export async function createList(input: unknown) {
   return mutate(createListSchema, input, (client, value) =>
     client.rpc('create_shopping_list', {
@@ -18,6 +20,7 @@ export async function createList(input: unknown) {
     }),
   )
 }
+
 export async function updateList(input: unknown) {
   return mutate(updateListSchema, input, (client, value) =>
     client.rpc('update_shopping_list', {
@@ -27,6 +30,7 @@ export async function updateList(input: unknown) {
     }),
   )
 }
+
 export async function addItem(input: unknown) {
   return mutate(addItemSchema, input, (client, value) =>
     client.rpc('add_shopping_item', {
@@ -38,6 +42,7 @@ export async function addItem(input: unknown) {
     }),
   )
 }
+
 export async function editItem(input: unknown) {
   return mutate(editItemSchema, input, (client, value) =>
     client.rpc('edit_shopping_item', {
@@ -48,11 +53,13 @@ export async function editItem(input: unknown) {
     }),
   )
 }
+
 export async function purchaseItem(input: unknown) {
   return mutate(purchaseItemSchema, input, (client, value) =>
     client.rpc('set_item_purchased', { p_item_id: value.itemId, p_purchased: value.purchased }),
   )
 }
+
 export async function deleteItem(input: unknown) {
   return mutate(deleteItemSchema, input, (client, value) =>
     client.rpc('delete_shopping_item', { p_item_id: value.itemId }),

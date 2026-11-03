@@ -7,7 +7,7 @@ import styles from './index.module.scss'
 
 import type { ActionResult } from '@/types/action'
 
-type Props<T> = {
+type ActionFormProps<T> = {
   children?: React.ReactNode
   label: string
   operation: (form: FormData, operationId: string) => Promise<ActionResult<T>>
@@ -16,31 +16,45 @@ type Props<T> = {
   compact?: boolean
 }
 
-export function ActionForm<T>({ children, label, operation, onSuccess, reset, compact }: Props<T>) {
+export const ActionForm = <T,>({
+  children,
+  label,
+  operation,
+  onSuccess,
+  reset,
+  compact,
+}: ActionFormProps<T>) => {
   const t = useTranslations('Workspace')
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const lock = useRef(false)
-  const operationId = useRef<string | null>(null)
+  const lockRef = useRef(false)
+  const operationIdRef = useRef<string | null>(null)
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (lock.current) return
-    lock.current = true
+
+    if (lockRef.current) return
+
+    lockRef.current = true
     const form = event.currentTarget
     const data = new FormData(form)
-    operationId.current ??= crypto.randomUUID()
+    operationIdRef.current ??= crypto.randomUUID()
     setPending(true)
     setError(null)
+
     try {
-      const result = await operation(data, operationId.current)
+      const result = await operation(data, operationIdRef.current)
+
       if (result.ok) {
-        operationId.current = null
+        operationIdRef.current = null
+
         if (reset) {
           form.reset()
           const input = form.elements.namedItem('name')
+
           if (input instanceof HTMLInputElement) input.focus({ preventScroll: true })
         }
+
         onSuccess?.(result.data)
       } else {
         setError(t(`errors.${result.error}`))
@@ -49,7 +63,7 @@ export function ActionForm<T>({ children, label, operation, onSuccess, reset, co
       // Keep the operation UUID on ambiguous transport failure; retries are idempotent.
       setError(t('errors.unavailable'))
     } finally {
-      lock.current = false
+      lockRef.current = false
       setPending(false)
     }
   }

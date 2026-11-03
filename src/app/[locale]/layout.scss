@@ -15,7 +15,7 @@
   --space-6: 3rem;
   --radius-small: 0.75rem;
   --radius-large: 2rem;
-  --content-width: 70rem;
+  --content-width: #{rem(1120px)};
 }
 
 * {

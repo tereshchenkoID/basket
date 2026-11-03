@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { validationLimits } from '@/constant/validation'
+
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
 import { ActionForm } from '@/components/ActionForm'
@@ -14,12 +16,17 @@ import { units } from '@/modules/Shopping/schema'
 
 import styles from '@/modules/Shopping/index.module.scss'
 
-export default function ListView({ data, userId }: { data: ListData; userId: string }) {
+type ListViewProps = {
+  data: ListData
+  userId: string
+}
+
+const ListView = ({ data, userId }: ListViewProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
   const status = useWorkspaceRealtime({ userId, groupId: data.list.group_id, listId: data.list.id })
   const refresh = () => router.refresh()
-  const purchased = data.items.filter((item) => item.is_purchased).length
+  const purchased = data.items.filter(item => item.is_purchased).length
   const archived = data.list.status === 'archived'
 
   return (
@@ -65,7 +72,7 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
                 name="name"
                 placeholder={t('itemPlaceholder')}
                 required
-                maxLength={120}
+                maxLength={validationLimits.itemName}
                 autoComplete="off"
                 enterKeyHint="done"
               />
@@ -78,7 +85,7 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
                   type="number"
                   inputMode="decimal"
                   min="0.001"
-                  max="1000000"
+                  max={validationLimits.quantity}
                   step="any"
                   defaultValue="1"
                   required
@@ -87,7 +94,7 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
               <label>
                 {t('unit')}
                 <select name="unit" defaultValue="pcs">
-                  {units.map((unit) => (
+                  {units.map(unit => (
                     <option key={unit} value={unit}>
                       {t(`units.${unit}`)}
                     </option>
@@ -105,7 +112,7 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
         </div>
       ) : (
         <ul className={styles.items}>
-          {data.items.map((item) => (
+          {data.items.map(item => (
             <ItemRow key={item.id} item={item} archived={archived} />
           ))}
         </ul>
@@ -114,12 +121,12 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
         <summary>{t('listSettings')}</summary>
         <ActionForm
           label={t('save')}
-          operation={(form) => updateList({ listId: data.list.id, title: form.get('name') })}
+          operation={form => updateList({ listId: data.list.id, title: form.get('name') })}
           onSuccess={refresh}
         >
           <label>
             {t('listTitle')}
-            <input name="name" required maxLength={100} defaultValue={data.list.title} />
+            <input name="name" required maxLength={validationLimits.listTitle} defaultValue={data.list.title} />
           </label>
         </ActionForm>
         <ActionForm
@@ -133,3 +140,5 @@ export default function ListView({ data, userId }: { data: ListData; userId: str
     </section>
   )
 }
+
+export default ListView

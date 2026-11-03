@@ -10,22 +10,33 @@ import { isAuthConfigured } from '@/lib/config'
 import { GoogleLoginButton } from '@/modules/Providers/Google'
 
 import styles from '../page.module.scss'
+
+type LoginProps = {
+  params: Promise<{
+    locale: string
+  }>
+  searchParams: Promise<{
+    error?: string | string[]
+    next?: string | string[]
+  }>
+}
+
 export const dynamic = 'force-dynamic'
-export default async function Login({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ locale: string }>
-  searchParams: Promise<{ error?: string | string[]; next?: string | string[] }>
-}) {
+
+const Login = async ({ params, searchParams }: LoginProps) => {
   const { locale } = await params
+
   if (!isLocale(locale)) notFound()
+
   const query = await searchParams
   const next = nextForLocale(query.next, locale)
+
   if (await getUser()) redirect(next)
+
   const t = await getTranslations('Auth')
   const { error } = query
   const configured = isAuthConfigured()
+
   return (
     <section className={styles['center-card']}>
       <div className={styles['card-icon']} aria-hidden="true">
@@ -44,3 +55,5 @@ export default async function Login({
     </section>
   )
 }
+
+export default Login

@@ -6,6 +6,8 @@ import { useTranslations } from 'next-intl'
 import type { Locale } from '@/i18n/locales'
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { validationLimits } from '@/constant/validation'
+
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
 import { ActionForm } from '@/components/ActionForm'
@@ -17,31 +19,30 @@ import { createList } from '@/modules/Shopping/action'
 
 import styles from '@/modules/Groups/index.module.scss'
 
-export default function GroupView({
-  data,
-  userId,
-  locale,
-}: {
+type GroupViewProps = {
   data: GroupData
   userId: string
   locale: Locale
-}) {
+}
+
+const GroupView = ({ data, userId, locale }: GroupViewProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
   const [invitation, setInvitation] = useState<{ url: string; id: string } | null>(null)
   const [copied, setCopied] = useState(false)
   const status = useWorkspaceRealtime({ userId, groupId: data.group.id })
-  const owner = data.members.find((member) => member.user_id === userId)?.role === 'owner'
+  const owner = data.members.find(member => member.user_id === userId)?.role === 'owner'
   const refresh = () => router.refresh()
-  const active = data.lists.filter((list) => list.status === 'active')
-  const archived = data.lists.filter((list) => list.status === 'archived')
+  const active = data.lists.filter(list => list.status === 'active')
+  const archived = data.lists.filter(list => list.status === 'archived')
   const liveInvites = data.invites.filter(
-    (invite) =>
+    invite =>
       !invite.revoked_at && invite.use_count === 0 && new Date(invite.expires_at) > new Date(),
   )
 
-  async function copy() {
+  const copy = async () => {
     if (!invitation) return
+
     try {
       await navigator.clipboard.writeText(invitation.url)
       setCopied(true)
@@ -49,6 +50,7 @@ export default function GroupView({
       setCopied(false)
     }
   }
+
   return (
     <section className={styles.workspace}>
       <Link className={styles.back} href="/dashboard">
@@ -67,7 +69,7 @@ export default function GroupView({
         <h2>{t('lists')}</h2>
         {active.length ? (
           <div className={styles.cards}>
-            {active.map((list) => (
+            {active.map(list => (
               <Link
                 key={list.id}
                 className={styles.card}
@@ -86,18 +88,18 @@ export default function GroupView({
           operation={(form, id) =>
             createList({ id, groupId: data.group.id, title: form.get('name') })
           }
-          onSuccess={(id) => router.push(`/groups/${data.group.id}/lists/${id}`)}
+          onSuccess={id => router.push(`/groups/${data.group.id}/lists/${id}`)}
         >
           <label>
             {t('listTitle')}
-            <input name="name" required maxLength={100} placeholder={t('defaultList')} />
+            <input name="name" required maxLength={validationLimits.listTitle} placeholder={t('defaultList')} />
           </label>
         </ActionForm>
         {archived.length > 0 && (
           <details className={styles.details}>
             <summary>{t('archivedLists')}</summary>
             <div className={styles.cards}>
-              {archived.map((list) => (
+              {archived.map(list => (
                 <Link
                   key={list.id}
                   className={styles.card}
@@ -113,7 +115,7 @@ export default function GroupView({
       <section className={styles.panel}>
         <h2>{t('members')}</h2>
         <ul className={styles.members}>
-          {data.members.map((member) => (
+          {data.members.map(member => (
             <li key={member.user_id}>
               <Avatar name={member.display_name || t('unnamed')} url={member.avatar_url} />
               <div className={styles['member-name']}>
@@ -144,7 +146,7 @@ export default function GroupView({
           <ActionForm
             label={t('createInvite')}
             operation={() => createInvite({ groupId: data.group.id, locale })}
-            onSuccess={(value) => {
+            onSuccess={value => {
               setInvitation(value)
               setCopied(false)
               refresh()
@@ -157,7 +159,7 @@ export default function GroupView({
                 <input
                   readOnly
                   value={invitation.url}
-                  onFocus={(event) => event.currentTarget.select()}
+                  onFocus={event => event.currentTarget.select()}
                 />
               </label>
               <button type="button" onClick={copy}>
@@ -179,6 +181,7 @@ export default function GroupView({
                       operation={() => revokeInvite({ inviteId: invite.id })}
                       onSuccess={() => {
                         if (invitation?.id === invite.id) setInvitation(null)
+
                         refresh()
                       }}
                     />
@@ -194,12 +197,12 @@ export default function GroupView({
         {owner ? (
           <ActionForm
             label={t('renameGroup')}
-            operation={(form) => renameGroup({ groupId: data.group.id, name: form.get('name') })}
+            operation={form => renameGroup({ groupId: data.group.id, name: form.get('name') })}
             onSuccess={refresh}
           >
             <label>
               {t('groupName')}
-              <input name="name" required maxLength={80} defaultValue={data.group.name} />
+              <input name="name" required maxLength={validationLimits.groupName} defaultValue={data.group.name} />
             </label>
           </ActionForm>
         ) : (
@@ -217,3 +220,5 @@ export default function GroupView({
     </section>
   )
 }
+
+export default GroupView

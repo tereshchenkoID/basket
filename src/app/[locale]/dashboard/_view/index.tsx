@@ -6,6 +6,8 @@ import { useTranslations } from 'next-intl'
 import type { Locale } from '@/i18n/locales'
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { validationLimits } from '@/constant/validation'
+
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
 import { ActionForm } from '@/components/ActionForm'
@@ -15,18 +17,17 @@ import styles from '@/modules/Groups/index.module.scss'
 
 import type { GroupSummary } from '@/types/database'
 
-export default function DashboardView({
-  groups,
-  userId,
-  locale,
-}: {
+type DashboardViewProps = {
   groups: GroupSummary[]
   userId: string
   locale: Locale
-}) {
+}
+
+const DashboardView = ({ groups, userId, locale }: DashboardViewProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
   useWorkspaceRealtime({ userId })
+
   return (
     <div className={styles.workspace}>
       {groups.length === 0 ? (
@@ -37,7 +38,7 @@ export default function DashboardView({
         </div>
       ) : (
         <div className={styles.cards}>
-          {groups.map((group) => (
+          {groups.map(group => (
             <Link href={`/groups/${group.id}`} key={group.id} className={styles.card}>
               <span className={styles['card-icon']} aria-hidden="true">
                 ⌂
@@ -55,14 +56,14 @@ export default function DashboardView({
         <ActionForm
           label={t('createGroup')}
           operation={(form, id) => createGroup({ id, name: form.get('name'), locale })}
-          onSuccess={(id) => router.push(`/groups/${id}`)}
+          onSuccess={id => router.push(`/groups/${id}`)}
         >
           <label>
             {t('groupName')}
             <input
               name="name"
               required
-              maxLength={80}
+              maxLength={validationLimits.groupName}
               autoComplete="off"
               placeholder={t('groupPlaceholder')}
             />
@@ -72,3 +73,5 @@ export default function DashboardView({
     </div>
   )
 }
+
+export default DashboardView

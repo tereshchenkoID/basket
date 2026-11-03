@@ -1,178 +1,84 @@
-# Basket v0.2
+# Basket
 
-Мобильное приложение для совместных семейных покупок: Google-вход, несколько групп, одноразовые приглашения, общие списки и синхронизация через Supabase Realtime. Используются только Next.js и бесплатные возможности Supabase; дополнительные серверы для работы приложения, платные API, Edge Functions, бюджеты и AI не требуются.
+Семейные группы и совместные списки покупок. Next.js App Router, Supabase Auth / PostgreSQL / Realtime, Google OAuth. Языки: EN, RO, RU, UK; язык по умолчанию — RU.
 
-**Статус:** код и миграция реализованы, unit-тесты и проверки безопасности выполнены на настоящей локальной PostgreSQL 17. В облачный проект миграция ещё не применена: в текущем окружении Supabase CLI не авторизован. Перед использованием v0.2 примените миграцию по инструкции ниже и выполните проверку Realtime с двумя Google-аккаунтами. Успешный вход Google проверялся на предыдущем этапе; это не подтверждение новых облачных сценариев.
+## Запуск
 
-## Установка и запуск
-
-Требуется Node.js >=22.13, npm. Версии зафиксированы в `package-lock.json`.
+Node.js 24.x (`.nvmrc`), npm 12.0.1.
 
 ```sh
 npm ci
-# Создайте .env с переменными из блока ниже
 npm run dev
 ```
 
-Откройте [localhost:3000](http://localhost:3000). Язык по умолчанию — `ru`; также доступны `en`, `ro`, `uk`. Существующий `.env` не перезаписывайте.
+Создайте `.env`:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://loawocnrcgxghhvvrexg.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Project URL можно взять в Supabase Dashboard → Connect / Project Settings → Data API. Publishable key (`sb_publishable_…`) находится в Project Settings → API Keys. Принимается именно новый Publishable key; legacy JWT, secret и service_role приложение не использует. Секрет Google хранится только в настройках провайдера Supabase. Env-файлы, временные файлы CLI, пароли и access tokens не должны попадать в Git.
-
-После изменения `NEXT_PUBLIC_*` перезапустите dev-сервер или пересоберите production. Без публичной конфигурации главная/login работают с отключённым входом. Без миграции dashboard показывает ошибку загрузки с пояснением; фиктивные группы не подставляются.
-
-## Supabase CLI v3 и миграции
-
-CLI установлен как dev dependency. `supabase/config.toml` уже создан командой `npx supabase init`; повторять инициализацию в этом checkout не нужно. При создании отдельного окружения используйте `npx supabase init`.
-
-Выполните в терминале:
-
-```sh
-npx supabase login
-npx supabase link --project-ref loawocnrcgxghhvvrexg
-npx supabase migration list --remote
-npx supabase db push --remote --dry-run
-```
-
-Проверьте, что выбран именно ваш проект и план содержит только `20261103000100_family_shopping.sql`. Миграция создаёт шесть таблиц, индексы, ограничения, профильный trigger, RLS, RPC и добавляет четыре таблицы в публикацию Realtime. Существующие auth users получают профили через `ON CONFLICT DO NOTHING`. Нет `DROP`, `TRUNCATE` или удаления пользовательских данных. Если одноимённые таблицы уже созданы вне этой миграции, сначала согласуйте существующую схему; не обходите конфликт удалением таблиц.
-
-Затем примените и проверьте историю:
-
-```sh
-npx supabase db push --remote
-npx supabase migration list --remote
-npm run db:types
-```
-
-CLI v3 по умолчанию работает с локальной БД: `--remote` здесь обязателен. Не используйте `db reset --remote` на облачном проекте. CLI запросит подтверждение удалённой операции; пароль вводите интерактивно, не сохраняйте в файлы репозитория или аргументы команд. Не используйте Supabase service_role для операций приложения.
-
-`npm run db:types` вызывает `supabase gen types --remote --schema public` и сохраняет результат в `src/types/database.generated.ts` только после успешного завершения. Текущий типизированный контракт находится в `src/types/database.ts`; сравните сгенерированную схему с ним перед обновлением. Не подменяйте доменные enum-типы произвольными строками без проверки. При ошибке авторизации существующие типы сохраняются.
-
-Локальная Supabase-среда опциональна и требует Docker (`npx supabase start`, `npx supabase db push`, `npx supabase migration list`). Для `npm run test:db` Docker не нужен: тест запускает отдельную временную PostgreSQL 17 на loopback-порту 55439. Это исключительно тестовая зависимость, не сервер приложения и не замена Supabase Auth/Realtime.
+Для production задайте `NEXT_PUBLIC_SITE_URL` равным публичному HTTPS origin приложения. После изменения `NEXT_PUBLIC_*` нужна пересборка. Secret / service_role ключи в приложение не передаются.
 
 ## Google OAuth
 
-1. В Google Cloud Console / Google Auth Platform настройте Branding, Audience и OAuth consent screen. Для External → Testing добавьте тестовые аккаунты.
-2. Создайте OAuth Client типа **Web application**.
-3. При необходимости добавьте Authorized JavaScript origin `http://localhost:3000`.
-4. Authorized redirect URI Google:
+В Google Cloud создайте Web OAuth client, затем включите Google в Supabase → Authentication → Providers. Google Client ID / Secret хранятся в настройках провайдера Supabase.
 
-   ```text
-   https://loawocnrcgxghhvvrexg.supabase.co/auth/v1/callback
-   ```
-
-5. В Supabase → Authentication → Sign In / Providers → Google включите провайдер и сохраните Google Client ID / Client Secret. Client Secret не добавляется в код или `NEXT_PUBLIC_*`.
-6. Для первого входа убедитесь, что регистрация новых пользователей разрешена.
-
-Supabase → Authentication → URL Configuration:
-
-| Поле          | Значение                              |
-| ------------- | ------------------------------------- |
-| Site URL      | `http://localhost:3000`               |
-| Redirect URLs | `http://localhost:3000/auth/callback` |
-
-Callback Google возвращает в Supabase, callback Supabase возвращает в Basket. OAuth приложения добавляет безопасный query `next`. Для приглашений после входа открывается `/{locale}/invite/TOKEN`, а не автоматическое вступление.
-
-Открывайте приложение с тем же hostname, что указан в `NEXT_PUBLIC_SITE_URL`: PKCE cookies с `127.0.0.1` не переходят на `localhost`.
-
-Для публичного демо добавьте точный **HTTPS origin + `/auth/callback`** в Supabase Redirect URLs, задайте HTTPS origin в `NEXT_PUBLIC_SITE_URL` и при необходимости обновите Supabase Site URL / Google JavaScript origin. Для другого проекта замените callback Google. Не используйте широкие wildcard для production.
-
-## Работа с группами и покупками
-
-- Dashboard: группы пользователя, количество активных участников и некупленных товаров активных списков; создание нескольких групп.
-- Создание группы одной транзакцией создаёт владельца и первый список с названием на текущем языке.
-- Владелец переименовывает группу, создаёт/отзывает одноразовые ссылки на 7 дней и удаляет участников.
-- Участник может покинуть группу. Владелец не может выйти или назначить другого владельца в этом MVP.
-- Приглашённый сначала входит через Google, видит только название группы и подтверждает вступление. Ссылки нельзя принимать простым GET-запросом.
-- Список: создание, переименование, архив/восстановление; товары с количеством и единицами, добавление, редактирование, удаление, отметка покупки и прогресс.
-- Некупленные товары идут первыми. Повторная отправка добавления с тем же operation UUID не создаёт дубль; одинаковые названия с разными UUID допускаются.
-- В архивном списке товары доступны для чтения, изменения запрещены базой до восстановления.
-
-Все названия нормализуются по пробелам. Лимиты: группа 80 символов, список 100, товар 120; количество — конечное положительное число до 1 000 000. Пользовательские названия не переводятся.
-
-## Realtime и доступ
-
-Миграция добавляет `groups`, `group_members`, `shopping_lists`, `shopping_items` в `supabase_realtime`. Проверьте наличие этих таблиц в публикации после применения миграции; RLS должен оставаться включённым.
-
-Подписки ограничены текущей группой и открытым списком; на dashboard подписка только на собственное членство. Слушаются INSERT/UPDATE. Изменения вызывают повторное чтение через сервер и RLS с коротким debounce. Строки из payload не добавляются в клиентские массивы. При восстановлении подписки, online и возврате на вкладку выполняется повторная загрузка. Бесконечного polling нет; каналы удаляются при уходе со страницы.
-
-Служебные `group_members.removed_at` и `shopping_items.deleted_at` нужны для безопасных Realtime UPDATE: DELETE не поддерживает те же гарантии RLS и фильтрации. Удалённому участнику остаётся доступна только собственная строка отзыва, без названия группы, участников, списков и товаров. База немедленно запрещает ему чтение и изменения. Подробнее: [безопасность](docs/SECURITY.md).
-
-## Структура и форматирование
-
-Структура адаптирована по [Betman](https://github.com/dev-parallaxsoft/betman):
+Google Authorized redirect URI:
 
 ```text
-src/
-  app/
-    [locale]/
-      dashboard/_view/
-      groups/[groupId]/_view/
-      groups/[groupId]/lists/[listId]/_view/
-      invite/[token]/_view/
-      login/
-    actions/auth.ts
-    auth/callback/route.ts
-  components/ActionForm/       Общая форма: pending, ошибки, защита двойной отправки
-  modules/
-    Groups/                   schema.ts, action.ts, query.ts, index.module.scss
-    Invites/                  Валидация, криптографические токены, preview и принятие
-    Shopping/                 Списки, товары, ItemRow
-    Providers/Google/         Рабочий Supabase Google-вход
-    Providers/Logout/
-    Languages/
-    Avatar/
-    WorkspaceState/
-  widgets/Header/             Общая шапка
-  widgets/Footer/             Общий footer
-  hooks/useWorkspaceRealtime.ts
-  helpers/validation.ts
-  lib/                        Supabase clients, Auth, конфигурация, общие серверные утилиты
-  types/                      Типы БД и результатов операций
-  i18n/
-  messages/                   en, ro, ru, uk
-  scss/globals.scss           Reset и CSS custom properties
-supabase/migrations/          Воспроизводимая схема и права
-scripts/                      HTTP smoke и безопасная генерация типов
-tests/                       Unit и интеграционные проверки PostgreSQL
+https://YOUR_PROJECT.supabase.co/auth/v1/callback
 ```
 
-Компоненты/виджеты — папки PascalCase с `index.tsx` и `index.module.scss`. Серверная загрузка и авторизация остаются в `page.tsx`; интерактивный интерфейс — в `_view`. Доменные схемы и действия находятся рядом. Пустые слои `store`, `context`, `sections` не создавались.
+В Supabase → Authentication → URL Configuration:
 
-**ESLint + Stylelint, как в Betman:** ESLint использует `@stylistic/eslint-plugin`, `typescript-eslint` и `simple-import-sort`: отступы в два пробела, одинарные JS/TS-кавычки, двойные JSX-кавычки, без `;`, пробелы и переносы в объектах/импортах, сортировка импортов. JSX-правила перенесены из Betman без дополнительного принудительного форматтера. `.editorconfig` задаёт базовые отступы и переводы строк.
+- Site URL: `https://basket-gray-three.vercel.app` для текущего production.
+- Redirect URLs: адреса callback ниже. Варианты с query нужны для передачи локали и возврата к приглашению.
 
-Stylelint использует `stylelint-config-standard-scss`, `stylelint-order` и `@stylistic/stylelint-plugin`, как в Betman. Проверяются порядок CSS-свойств, пустые строки и правила SCSS. Для Basket сохранены проверка kebab-case классов и проверка всех `src/**/*.scss`, включая глобальные стили.
+```text
+http://localhost:3000/auth/callback
+http://localhost:3000/auth/callback?next=**
+https://basket-gray-three.vercel.app/auth/callback
+https://basket-gray-three.vercel.app/auth/callback?next=**
+```
+
+Callback обменивает code на сессию и возвращает пользователя в локализованный dashboard или приглашение. Допустимые пути проверяются allowlist; состояние входа на landing определяется сервером. После входа landing показывает переход в dashboard.
+
+## База данных
+
+Supabase CLI установлен как dev dependency. Для настройки проекта:
+
+```sh
+npx supabase login
+npx supabase link --project-ref YOUR_PROJECT
+npx supabase migration list --remote
+npx supabase db push --remote --dry-run
+npx supabase db push --remote
+npm run db:types
+```
+
+Миграция находится в `supabase/migrations`. `db:types` генерирует типы удалённой БД; прикладной контракт — `src/types/database.ts`. Доступ к группам, спискам и приглашениям ограничен RLS и RPC. Подробнее: [SECURITY.md](docs/SECURITY.md).
+
+## Структура и стиль
+
+Структура и SCSS-утилиты адаптированы по [Betman](https://github.com/dev-parallaxsoft/betman).
+
+- `app/[locale]` — маршруты, серверная загрузка; `_view` — интерактивные компоненты страницы.
+- `groups/[group-id]/lists/[list-id]` — параметры маршрутов без camelCase. Публичные URL от имён параметров не зависят.
+- `components`, `modules`, `widgets` — компоненты в папках PascalCase, `index.tsx` и `index.module.scss`.
+- `constant/regex.ts` — регулярные выражения; `constant/validation.ts` — лимиты полей; `constant/errors.ts` — ключи валидации и соответствия ошибок БД.
+- `helpers/validation.ts` — общие Zod-правила; схемы доменов — рядом с модулями; тексты ошибок — `messages/{locale}.json`.
+- `scss` — функции и миксины Betman без primitives. Config подключается через `sassOptions.additionalData`; глобальные стили — в locale layout.
+
+Компоненты и обработчики — стрелочные функции, props — отдельные типы. Отступы два пробела, одинарные JS/TS-кавычки, без `;`. ESLint / Stylelint исправляют форматирование без Prettier.
 
 ```sh
 npm run lint:fix
 npm run stylelint:fix
 npm run check
-npm run test:db
 npm run build
 npm run start
-# Во втором терминале:
-npm run test:smoke
 ```
 
-`npm run check` проверяет ESLint и Stylelint без предупреждений, TypeScript и unit-тесты. `npm run lint:fix` исправляет JS/TS/TSX, `npm run stylelint:fix` исправляет SCSS напрямую. Исправимые нарушения сохраняются даже при оставшихся неисправимых ошибках; ненулевой exit code сообщает об этих остаточных ошибках. Синтаксические ошибки SCSS, из-за которых парсер не может разобрать файл, нужно сначала исправить вручную. `test:db` и production build запускаются отдельно. Изменения в SQL обязательно перепроверяйте через `test:db`. [Подробности тестирования](docs/TESTING.md).
-
-## Безопасность и ограничения проверки
-
-- Все шесть таблиц имеют RLS; публичные роли не могут напрямую менять группы/членство/приглашения/списки/товары. Единственный путь мутаций — проверенные RPC.
-- `SECURITY DEFINER` использует пустой `search_path`, квалифицированные таблицы, `auth.uid()` и ограниченный EXECUTE. Profile trigger вызывается только базой, не пользователем.
-- Профили доступны напрямую только владельцу; участники видят минимальные имена/аватары через защищённую RPC без email.
-- Одноразовость приглашения защищена `FOR UPDATE`; хранятся SHA-256 hashes от случайных 32-байтных токенов. Принятие идемпотентно для действующего участника.
-- `created_by` / `purchased_by` назначает база; перенос записей в другую группу/список запрещён API и привилегиями.
-- OAuth/Invite redirect проходят точный allowlist; origin берётся из доверенной конфигурации. Referrer отключён; dev request-логи приглашений и OAuth callback выключены. На хостинге дополнительно исключите эти пути и login query из access-логов и аналитики.
-- Приватные страницы динамические и `private, no-store`; сервер проверяет личность через `getUser` / `getClaims`. Ручного хранения auth tokens в localStorage нет.
-
-Проверки PostgreSQL используют настоящий процесс БД и роли `authenticated`/`anon`, а не моки. JWT adapter `auth.uid()` в тестовой БД воспроизводит контракт Supabase. Они проверяют SQL, RLS, привилегии и блокировки; не запускают PostgREST, Google Auth или Realtime gateway.
-
-**До домашнего демо остаётся:** применить облачную миграцию, сгенерировать и сравнить типы, пройти сценарии из `docs/TESTING.md` двумя реальными Google-пользователями на двух устройствах, проверить offline/reconnect и отзыв доступа. Новый облачный функционал не объявляется проверенным до этих шагов.
-
-Официальные справочники: [Supabase SSR](https://supabase.com/docs/guides/auth/server-side/creating-a-client), [Google provider](https://supabase.com/docs/guides/auth/social-login/auth-google), [Postgres Changes](https://supabase.com/docs/guides/realtime/postgres-changes), [CLI v3](https://supabase.com/docs/guides/local-development/cli/migrating-to-v3).
+`check` запускает ESLint, Stylelint и TypeScript. Исправления при сохранении настроены в WebStorm. `package.json#allowScripts` разрешает install scripts только указанных версий пакетов. `vercel.json` удаляет неподдерживаемую переменную npm `cache-dir` перед установкой и сборкой.

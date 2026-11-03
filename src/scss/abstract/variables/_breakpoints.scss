@@ -1,0 +1,16 @@
+$screen-desk-m: 1440px;
+$screen-desk-s: 1280px;
+$screen-tab-l: 1024px;
+$screen-tab-m: 992px;
+$screen-tab-s: 768px;
+$screen-mob-m: 560px;
+$screen-mob-s: 360px;
+$breakpoints: (
+  mobs: $screen-mob-s,
+  mobm: $screen-mob-m,
+  tabs: $screen-tab-s,
+  tabm: $screen-tab-m,
+  tabl: $screen-tab-l,
+  desks: $screen-desk-s,
+  deskm: $screen-desk-m,
+);

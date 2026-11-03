@@ -123,7 +123,11 @@
       "unavailable": "Datele nu au putut fi încărcate sau salvate. Verifică conexiunea și retrimite același formular pentru a evita duplicatele.",
       "inviteInvalid": "Invitația este invalidă, expirată, revocată sau deja folosită. Cere proprietarului un link nou.",
       "ownerCannotLeave": "Proprietarul nu poate părăsi grupul.",
-      "setupRequired": "Configurarea Basket nu este încă finalizată. Contactează persoana care administrează aplicația."
+      "setupRequired": "Configurarea Basket nu este încă finalizată. Contactează persoana care administrează aplicația.",
+      "textRequired": "Introduceți un nume sau un titlu.",
+      "textTooLong": "Numele sau titlul este prea lung.",
+      "invalidQuantity": "Introduceți o cantitate mai mare decât zero și de cel mult 1.000.000.",
+      "invalidUnit": "Selectați o unitate validă."
     },
     "loading": "Se încarcă spațiul tău…"
   }

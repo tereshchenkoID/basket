@@ -1,4 +1,5 @@
 'use client'
+
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 
@@ -8,16 +9,19 @@ import { Link, usePathname } from '@/i18n/navigation'
 import { nextForLocale } from '@/lib/auth/redirect'
 
 import styles from './index.module.scss'
+
 const labels = { en: 'English', ro: 'Română', ru: 'Русский', uk: 'Українська' }
-export function LanguageSwitcher() {
+
+export const LanguageSwitcher = () => {
   const locale = useLocale()
   const pathname = usePathname()
   const search = useSearchParams()
   const next = search.get('next')
   const t = useTranslations('Common')
+
   return (
     <nav className={styles.languages} aria-label={t('language')}>
-      {locales.map((value) => (
+      {locales.map(value => (
         <Link
           key={value}
           href={

@@ -1,15 +1,14 @@
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex(space-between, center);
+
   gap: var(--space-3);
   padding: var(--space-5) 0;
   border-bottom: 1px solid var(--border);
 }
 
 .brand {
-  display: flex;
-  align-items: center;
+  @include flex($align-items: center);
+
   gap: 0.6rem;
   font-size: 1.65rem;
   font-weight: 750;

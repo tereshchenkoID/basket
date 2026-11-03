@@ -45,7 +45,7 @@ export function useWorkspaceRealtime({
         channel.on('postgres_changes', { event, schema: 'public', ...table }, refresh)
       }
     }
-    channel.subscribe((value) => {
+    channel.subscribe(value => {
       if (disposed) return
       if (value === 'SUBSCRIBED') {
         setStatus('live')
@@ -61,6 +61,7 @@ export function useWorkspaceRealtime({
     window.addEventListener('online', online)
     window.addEventListener('offline', offline)
     document.addEventListener('visibilitychange', visible)
+
     return () => {
       disposed = true
       clearTimeout(timer)

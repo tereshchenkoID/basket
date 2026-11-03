@@ -1,0 +1,15 @@
+@use '../helpers/mixins/rem-converter' as *;
+
+$spacing: (
+  0: 0,
+  half: rem(2px),
+  1: rem(4px),
+  2: rem(8px),
+  3: rem(12px),
+  4: rem(16px),
+  5: rem(24px),
+  6: rem(32px),
+  7: rem(40px),
+  8: rem(48px),
+  9: rem(64px),
+);

@@ -2,8 +2,8 @@
 .initial {
   flex-shrink: 0;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
+
+  @include size(rem(40px));
 }
 
 .initial {

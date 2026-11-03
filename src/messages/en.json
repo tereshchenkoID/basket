@@ -123,7 +123,11 @@
       "unavailable": "Could not load or save data. Check your connection and retry the same form to avoid duplicates.",
       "inviteInvalid": "This invitation is invalid, expired, revoked or already used. Ask the owner for a new link.",
       "ownerCannotLeave": "The owner cannot leave the group.",
-      "setupRequired": "Basket is still being set up. Please contact the person who manages the application."
+      "setupRequired": "Basket is still being set up. Please contact the person who manages the application.",
+      "textRequired": "Enter a name or title.",
+      "textTooLong": "The name or title is too long.",
+      "invalidQuantity": "Enter a quantity greater than zero and no more than 1,000,000.",
+      "invalidUnit": "Select a valid unit."
     },
     "loading": "Loading your space…"
   }

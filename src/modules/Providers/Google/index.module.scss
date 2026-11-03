@@ -3,9 +3,8 @@
 }
 
 .google-button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @include flex(space-between, center);
+
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--border);
@@ -40,8 +39,9 @@
 
 .screen-reader {
   position: absolute;
-  width: 1px;
-  height: 1px;
+
+  @include size(1px);
+
   overflow: hidden;
   clip-path: inset(50%);
 }

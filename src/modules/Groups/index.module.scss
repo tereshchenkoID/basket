@@ -1,3 +1,5 @@
+@use '@/scss/config' as *;
+
 .workspace {
   padding: var(--space-5) 0;
   width: 100%;
@@ -35,10 +37,8 @@
 }
 
 .heading {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  @include flex(space-between, center, $wrap: wrap);
+
   gap: var(--space-3);
   margin: var(--space-4) 0 var(--space-5);
 }
@@ -130,15 +130,12 @@
 }
 
 .members {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  @include reset-list;
 }
 
 .members li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  @include flex($align-items: center, $wrap: wrap);
+
   gap: var(--space-3);
   padding: var(--space-3) 0;
 }
@@ -163,8 +160,9 @@
   display: grid;
   flex-shrink: 0;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
+
+  @include size(rem(40px));
+
   background: var(--green-soft);
   place-items: center;
 }

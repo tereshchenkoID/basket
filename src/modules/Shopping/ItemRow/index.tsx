@@ -4,6 +4,8 @@ import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
+import { validationLimits } from '@/constant/validation'
+
 import { ActionForm } from '@/components/ActionForm'
 
 import { deleteItem, editItem, purchaseItem } from '../action'
@@ -13,30 +15,41 @@ import styles from '../index.module.scss'
 
 import type { ShoppingItem } from '@/types/database'
 
-export function ItemRow({ item, archived }: { item: ShoppingItem; archived: boolean }) {
+type ItemRowProps = {
+  item: ShoppingItem
+  archived: boolean
+}
+
+export const ItemRow = ({ item, archived }: ItemRowProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const lock = useRef(false)
+  const lockRef = useRef(false)
   const refresh = () => router.refresh()
-  async function toggle() {
-    if (lock.current) return
-    lock.current = true
+
+  const toggle = async () => {
+    if (lockRef.current) return
+
+    lockRef.current = true
     setPending(true)
     setError(null)
+
     try {
       const result = await purchaseItem({ itemId: item.id, purchased: !item.is_purchased })
+
       if (!result.ok) setError(t(`errors.${result.error}`))
+
       refresh()
     } catch {
       setError(t('errors.unavailable'))
     } finally {
-      lock.current = false
+      lockRef.current = false
       setPending(false)
     }
   }
+
   return (
     <li className={styles.item}>
       <div className={styles['item-row']}>
@@ -75,7 +88,7 @@ export function ItemRow({ item, archived }: { item: ShoppingItem; archived: bool
         <div className={styles['item-edit']}>
           <ActionForm
             label={t('save')}
-            operation={(form) =>
+            operation={form =>
               editItem({
                 itemId: item.id,
                 name: form.get('name'),
@@ -90,7 +103,7 @@ export function ItemRow({ item, archived }: { item: ShoppingItem; archived: bool
           >
             <label>
               {t('itemName')}
-              <input name="name" defaultValue={item.name} required maxLength={120} />
+              <input name="name" defaultValue={item.name} required maxLength={validationLimits.itemName} />
             </label>
             <div className={styles['quantity-fields']}>
               <label>
@@ -101,7 +114,7 @@ export function ItemRow({ item, archived }: { item: ShoppingItem; archived: bool
                   inputMode="decimal"
                   min="0.001"
                   step="any"
-                  max="1000000"
+                  max={validationLimits.quantity}
                   defaultValue={item.quantity}
                   required
                 />
@@ -109,7 +122,7 @@ export function ItemRow({ item, archived }: { item: ShoppingItem; archived: bool
               <label>
                 {t('unit')}
                 <select name="unit" defaultValue={item.unit}>
-                  {units.map((unit) => (
+                  {units.map(unit => (
                     <option key={unit} value={unit}>
                       {t(`units.${unit}`)}
                     </option>

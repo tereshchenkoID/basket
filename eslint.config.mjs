@@ -1,13 +1,31 @@
+import next from '@next/eslint-plugin-next'
+import js from '@eslint/js'
+import react from '@eslint-react/eslint-plugin'
 import stylistic from '@stylistic/eslint-plugin'
 import { defineConfig, globalIgnores } from 'eslint/config'
-import nextVitals from 'eslint-config-next/core-web-vitals'
-import nextTypescript from 'eslint-config-next/typescript'
+import a11y from 'eslint-plugin-jsx-a11y-x'
+import reactHooks from 'eslint-plugin-react-hooks'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
+import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 const eslintConfig = defineConfig([
-  ...nextVitals,
-  ...nextTypescript,
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
+  {
+    files: ['**/*.{jsx,tsx}'],
+    extends: [
+      next.configs['core-web-vitals'],
+      react.configs['recommended-typescript'],
+      reactHooks.configs.flat.recommended,
+      a11y.configs.recommended,
+    ],
+    rules: {
+      'func-style': ['error', 'expression'],
+      'jsx-a11y-x/label-has-associated-control': ['error', { depth: 3 }],
+    },
+  },
 
   {
     plugins: {
@@ -48,6 +66,19 @@ const eslintConfig = defineConfig([
       ],
       'simple-import-sort/exports': 'error',
 
+      '@stylistic/padding-line-between-statements': ['error',
+        { blankLine: 'always', prev: '*', next: 'export' },
+        { blankLine: 'always', prev: 'export', next: '*' },
+        { blankLine: 'always', prev: '*', next: 'function' },
+        { blankLine: 'always', prev: 'function', next: '*' },
+        { blankLine: 'always', prev: 'directive', next: '*' },
+        { blankLine: 'always', prev: '*', next: ['return', 'if', 'try'] },
+        { blankLine: 'always', prev: ['if', 'try'], next: '*' },
+        { blankLine: 'any', prev: 'if', next: 'if' },
+        { blankLine: 'always', prev: 'import', next: '*' },
+        { blankLine: 'any', prev: 'import', next: 'import' },
+      ],
+      '@stylistic/arrow-parens': ['error', 'as-needed'],
       '@stylistic/comma-spacing': ['error', { before: false, after: true }],
       '@stylistic/object-curly-spacing': ['error', 'always'],
 

@@ -14,13 +14,23 @@ import DashboardView from './_view'
 
 import styles from '../page.module.scss'
 
+type DashboardProps = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
 export const dynamic = 'force-dynamic'
 
-export default async function Dashboard({ params }: { params: Promise<{ locale: string }> }) {
+const Dashboard = async ({ params }: DashboardProps) => {
   const { locale } = await params
+
   if (!isLocale(locale)) notFound()
+
   const user = await getUser()
+
   if (!user) redirect(`/${locale}/login`)
+
   const t = await getTranslations('Dashboard')
   const value: unknown = user.user_metadata.full_name ?? user.user_metadata.name
   const name = typeof value === 'string' && value.trim() ? value : t('friend')
@@ -47,3 +57,5 @@ export default async function Dashboard({ params }: { params: Promise<{ locale: 
     </section>
   )
 }
+
+export default Dashboard

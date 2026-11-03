@@ -3,9 +3,8 @@
   min-width: 0;
 
   fieldset {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: end;
+    @include flex($align-items: end, $wrap: wrap);
+
     gap: var(--space-3);
     margin: 0;
     padding: 0;
