@@ -23,7 +23,7 @@
     "description": "Sign in to Basket. Start with something simple.",
     "google": "Continue with Google",
     "loading": "Taking you to Google…",
-    "configuration": "Sign-in is not available yet: configure Supabase and the application URL in .env.local.",
+    "configuration": "Sign-in is not available yet: configure Supabase and the application URL in .env.",
     "oauth": "We couldn’t sign you in. Please try again and allow access through Google.",
     "note": "No new password. Just your Google account.",
     "logout": "Sign out",

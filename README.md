@@ -10,12 +10,11 @@
 
 ```sh
 npm ci
-# Только если .env.local ещё нет:
-cp .env.example .env.local
+# Создайте .env с переменными из блока ниже
 npm run dev
 ```
 
-Откройте [localhost:3000](http://localhost:3000). Язык по умолчанию — `ru`; также доступны `en`, `ro`, `uk`. Существующий `.env.local` не перезаписывайте.
+Откройте [localhost:3000](http://localhost:3000). Язык по умолчанию — `ru`; также доступны `en`, `ro`, `uk`. Существующий `.env` не перезаписывайте.
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://loawocnrcgxghhvvrexg.supabase.co

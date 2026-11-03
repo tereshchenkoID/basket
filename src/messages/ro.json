@@ -23,7 +23,7 @@
     "description": "Intră în Basket și începe cu ceva simplu.",
     "google": "Continuă cu Google",
     "loading": "Te redirecționăm către Google…",
-    "configuration": "Autentificarea nu este încă disponibilă: configurează Supabase și adresa aplicației în .env.local.",
+    "configuration": "Autentificarea nu este încă disponibilă: configurează Supabase și adresa aplicației în .env.",
     "oauth": "Autentificarea a eșuat. Încearcă din nou și permite conectarea prin Google.",
     "note": "Fără o parolă nouă. Doar contul tău Google.",
     "logout": "Deconectare",
