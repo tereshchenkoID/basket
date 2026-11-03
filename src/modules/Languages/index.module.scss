@@ -1,0 +1,30 @@
+.languages {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+
+  a {
+    padding: 0.6rem;
+    border-radius: var(--radius-small);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--muted);
+  }
+
+  a[aria-current] {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+
+  a:hover {
+    color: var(--green);
+  }
+}
+
+@media (width <= 400px) {
+  .languages a {
+    padding: 0.5rem 0.4rem;
+    font-size: 0.7rem;
+  }
+}

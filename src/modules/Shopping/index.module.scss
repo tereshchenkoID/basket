@@ -1,0 +1,129 @@
+@use '../Groups/index.module';
+
+.progress {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.progress progress {
+  border: 0;
+  border-radius: var(--radius-small);
+  width: 100%;
+  height: 0.5rem;
+  overflow: hidden;
+  accent-color: var(--green);
+}
+
+.progress progress::-webkit-progress-bar {
+  background: var(--green-soft);
+}
+
+.progress progress::-webkit-progress-value {
+  background: var(--green);
+}
+
+.quantity-fields {
+  display: flex;
+  flex: 1 1 11rem;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.quantity-fields label {
+  flex: 1 1 5rem;
+}
+
+.items {
+  margin: var(--space-5) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  margin-bottom: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  min-width: 0;
+  background: var(--paper);
+  overflow: hidden;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+.purchase-label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.65rem 0.35rem;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.purchase-label input {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  accent-color: var(--green);
+}
+
+.purchase-label > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.purchase-label small {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.purchased {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.item-name {
+  color: var(--ink);
+}
+
+.edit-button {
+  flex-shrink: 0;
+  padding: 0.8rem 0.4rem;
+  border: 0;
+  min-height: 2.75rem;
+  background: transparent;
+  font-size: 0.75rem;
+  color: var(--green);
+  cursor: pointer;
+}
+
+.item-edit {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.error {
+  padding: 0 var(--space-3);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--error);
+}
+
+@media (width <= 400px) {
+  .quantity-fields {
+    flex-basis: 100%;
+  }
+}

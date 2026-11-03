@@ -1,0 +1,254 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  max-width: var(--content-width);
+  min-height: 100svh;
+}
+
+.main {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: 100%;
+}
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6) 0;
+  width: 100%;
+}
+
+.hero-copy {
+  max-width: 33rem;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1.7;
+  text-transform: uppercase;
+  color: var(--green);
+  letter-spacing: 0.15em;
+}
+
+.eyebrow > span {
+  border-radius: 50%;
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--green);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.65rem, 5vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.065em;
+}
+
+.hero h1 em {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 400;
+  color: var(--green);
+}
+
+.description {
+  margin: var(--space-4) 0 var(--space-5);
+  max-width: 27rem;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.sign-in-area {
+  max-width: 23rem;
+}
+
+.dashboard-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  width: 100%;
+  min-height: 3.5rem;
+  background: var(--paper);
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+  font-weight: 650;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.dashboard-link:hover {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.note {
+  margin: var(--space-3) 0 0;
+  font-size: 0.72rem;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--muted);
+}
+
+.hero-caption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+.hero-caption > span {
+  font-size: 1.6rem;
+  color: var(--green);
+}
+
+.hero-art {
+  position: relative;
+  border-radius: 48% 48% var(--radius-large) var(--radius-large);
+  width: 100%;
+  max-width: 32rem;
+  background: var(--green-soft);
+  justify-self: center;
+}
+
+.hero-art > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.art-caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4) var(--space-5);
+  font-size: 0.73rem;
+  line-height: 1.5;
+  color: var(--green);
+}
+
+.art-caption > span {
+  opacity: 0.5;
+  font-size: 0.65rem;
+}
+
+.center-card {
+  margin: var(--space-6) auto;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  width: 100%;
+  max-width: 28rem;
+  background: var(--paper);
+}
+
+.center-card h1,
+.dashboard h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+
+.card-icon {
+  display: grid;
+  margin-bottom: var(--space-5);
+  border-radius: 50%;
+  width: 3.25rem;
+  height: 3.25rem;
+  background: var(--green-soft);
+  font-size: 1.7rem;
+  place-items: center;
+}
+
+.error-message {
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--error);
+}
+
+.dashboard {
+  padding: var(--space-6) 0;
+  width: 100%;
+}
+
+.dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.profile p {
+  margin: var(--space-2) 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.skip-link {
+  position: absolute;
+  top: -6rem;
+  padding: var(--space-3);
+  background: var(--paper);
+  z-index: 10;
+}
+
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+@media (width >= 800px) {
+  .shell {
+    padding: 0 var(--space-6);
+  }
+
+  .hero {
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: var(--space-6);
+    padding: 4.5rem 0;
+  }
+
+  .hero-caption {
+    margin-top: var(--space-6);
+  }
+
+  .center-card {
+    padding: var(--space-6);
+  }
+}
+
+@media (width <= 400px) {
+  .shell {
+    padding: 0 var(--space-3);
+  }
+}

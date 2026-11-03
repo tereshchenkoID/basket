@@ -1,0 +1,236 @@
+.workspace {
+  padding: var(--space-5) 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.workspace h1,
+.invite-card h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+
+.workspace h2 {
+  margin: 0 0 var(--space-4);
+  font-size: 1.2rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.workspace h3 {
+  margin: 0 0 var(--space-3);
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.workspace p,
+.invite-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0 var(--space-5);
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--green);
+  letter-spacing: 0.13em;
+}
+
+.connection {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  font-size: 0.75rem;
+}
+
+.back {
+  display: inline-block;
+  margin: var(--space-3) 0;
+  font-size: 0.85rem;
+  color: var(--green);
+  text-underline-offset: 0.25rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.card {
+  display: block;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  min-width: 0;
+  background: var(--paper);
+  transition: border-color 0.2s;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--green);
+}
+
+.card p {
+  margin: var(--space-2) 0;
+}
+
+.card-icon {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  padding: 0.5rem 0.8rem;
+  border-radius: 50%;
+  background: var(--green-soft);
+}
+
+.card-link {
+  display: block;
+  margin-top: var(--space-4);
+  font-size: 0.8rem;
+  color: var(--green);
+}
+
+.panel {
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  min-width: 0;
+  background: var(--paper);
+}
+
+.panel > form + form {
+  margin-top: var(--space-4);
+}
+
+.empty {
+  padding: var(--space-5) 0;
+  text-align: center;
+}
+
+.empty img {
+  max-width: 100%;
+  height: auto;
+}
+
+.members {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.members li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.members li + li {
+  border-top: 1px solid var(--border);
+}
+
+.member-name {
+  flex: 1;
+  min-width: 5rem;
+  overflow-wrap: anywhere;
+}
+
+.member-name small {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted);
+}
+
+.initial {
+  display: grid;
+  flex-shrink: 0;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--green-soft);
+  place-items: center;
+}
+
+.details {
+  margin-top: var(--space-4);
+}
+
+.details summary {
+  padding: var(--space-3) 0;
+  min-height: 2.75rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.details[open] summary {
+  margin-bottom: var(--space-3);
+}
+
+.invite-output {
+  margin-top: var(--space-4);
+  min-width: 0;
+}
+
+.invite-output label {
+  display: grid;
+  gap: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.invite-output input {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  width: 100%;
+  min-width: 0;
+  font-size: 0.8rem;
+}
+
+.invite-output button {
+  margin-top: var(--space-3);
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: var(--radius-small);
+  background: var(--green-soft);
+  color: var(--green);
+  cursor: pointer;
+}
+
+.invite-card {
+  margin: var(--space-6) auto;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  width: 100%;
+  max-width: 32rem;
+  background: var(--paper);
+}
+
+.invite-card > form {
+  margin: var(--space-5) 0;
+}
+
+@media (width >= 600px) {
+  .panel,
+  .invite-card {
+    padding: var(--space-5);
+  }
+}

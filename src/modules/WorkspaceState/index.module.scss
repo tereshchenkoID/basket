@@ -1,0 +1,24 @@
+.state {
+  margin: var(--space-6) auto;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-large);
+  width: 100%;
+  max-width: 34rem;
+  background: var(--paper);
+}
+
+.state h1 {
+  font-size: 1.7rem;
+  font-weight: 500;
+}
+
+.state p {
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.state a {
+  display: inline-block;
+  padding: var(--space-3) 0;
+}

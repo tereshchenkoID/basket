@@ -1,0 +1,55 @@
+:root {
+  --background: #f7f8f2;
+  --paper: #fff;
+  --ink: #203a30;
+  --muted: #737d72;
+  --green: #325d42;
+  --green-soft: #e9efdf;
+  --border: #dfe4d8;
+  --error: #a43829;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --radius-small: 0.75rem;
+  --radius-large: 2rem;
+  --content-width: 70rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid var(--green);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: var(--green-soft);
+}
