@@ -1,0 +1,61 @@
+@use '@/scss/config' as *;
+
+.block {
+  @include flex($align-items: center);
+
+  gap: var(--space-3);
+  position: relative;
+  min-height: var(--touch-target);
+  cursor: pointer;
+
+  &:has(.input:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.input {
+  position: absolute;
+
+  @include size(1px);
+
+  opacity: 0;
+}
+
+.control {
+  @include flex(center, center);
+  @include size(rem(24px));
+
+  flex-shrink: 0;
+  border: 1px solid var(--control-border);
+  border-radius: rem(7px);
+  background-color: var(--paper);
+  color: var(--on-accent);
+}
+
+.check {
+  opacity: 0;
+}
+
+.input:checked + .control {
+  border-color: var(--green);
+  background-color: var(--green);
+}
+
+.input:checked + .control .check {
+  opacity: 1;
+}
+
+.input:focus-visible + .control {
+  outline: 3px solid var(--green);
+  outline-offset: 4px;
+}
+
+.label {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.invalid .control {
+  border-color: var(--error);
+}

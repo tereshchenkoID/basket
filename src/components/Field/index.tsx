@@ -1,0 +1,45 @@
+import { Grid } from '@/components/Grid'
+import { Text } from '@/components/Text'
+
+import type { FieldProps } from '@/types/ui'
+
+export const Field = ({
+  id,
+  label,
+  hint,
+  error,
+  className,
+  children,
+}: FieldProps) => (
+  <Grid
+    gap={2}
+    full
+    className={className}
+  >
+    {
+      label &&
+      <Text
+        as="label"
+        id={`${id}-label`}
+        htmlFor={id}
+        size="sm"
+        color="muted"
+        weight={500}
+      >
+        {label}
+      </Text>
+    }
+    {children}
+    {
+      error || hint &&
+      <Text
+        id={`${id}-message`}
+        size="sm"
+        color={error ? 'error' : 'muted'}
+        role={error ? 'alert' : undefined}
+      >
+        {error || hint}
+      </Text>
+    }
+  </Grid>
+)

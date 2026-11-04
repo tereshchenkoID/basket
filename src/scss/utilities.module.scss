@@ -1,0 +1,64 @@
+@use '@/scss/config' as *;
+@use './abstract/variables/breakpoints' as *;
+@use './abstract/variables/utilities' as *;
+
+@mixin utilities($breakpoint, $suffix) {
+  @each $name, $property in $properties {
+    .#{$name}#{$suffix} {
+      #{$property}: var(--ui-#{$name}-#{$breakpoint});
+    }
+  }
+}
+
+@layer base, utilities;
+
+@layer utilities {
+  @include utilities(initial, '');
+
+  @each $name, $width in $breakpoints {
+    @media (min-width: $width) {
+      @include utilities($name, $name);
+    }
+  }
+
+  .grow {
+    flex: 1;
+  }
+
+  .full {
+    width: 100%;
+  }
+
+  .container {
+    margin-inline: auto;
+    padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px)) max(var(--gutter), env(safe-area-inset-right, 0px));
+    width: 100%;
+    max-width: var(--content-width);
+  }
+
+  .paper {
+    background-color: var(--paper);
+  }
+
+  .soft {
+    background-color: var(--green-soft);
+  }
+
+  .small {
+    border-radius: var(--radius-small);
+  }
+
+  .large {
+    border-radius: var(--radius-large);
+  }
+
+  .border {
+    border: 1px solid var(--border);
+  }
+}
+
+@layer base {
+  .grid {
+    display: grid;
+  }
+}

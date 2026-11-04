@@ -1,0 +1,20 @@
+@use '@/scss/config' as *;
+
+.body {
+  @include flex($direction: column);
+
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+.skip {
+  position: absolute;
+  top: rem(-96px);
+  padding: var(--space-3);
+  background-color: var(--paper);
+  z-index: $z-index-9;
+
+  &:focus {
+    top: var(--space-3);
+  }
+}

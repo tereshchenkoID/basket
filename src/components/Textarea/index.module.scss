@@ -1,0 +1,59 @@
+@use '@/scss/config' as *;
+
+.control {
+  position: relative;
+  width: 100%;
+}
+
+.field {
+  @include transition(border-color, var(--motion-duration));
+
+  padding: rem(12px);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-small);
+  width: 100%;
+  min-height: rem(112px);
+  background-color: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+
+  &::placeholder {
+    color: var(--muted);
+  }
+
+  &[aria-busy='true'] {
+    padding-right: rem(42px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:read-only {
+    background-color: var(--background);
+  }
+
+  &:user-invalid,
+  &.invalid {
+    border-color: var(--error);
+  }
+}
+
+.invalid:focus-visible {
+  outline-color: var(--error);
+}
+
+.spinner {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  animation: spin 0.8s linear infinite;
+  color: var(--muted);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

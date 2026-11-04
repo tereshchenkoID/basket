@@ -1,0 +1,118 @@
+@use '@/scss/config' as *;
+
+.block {
+  position: relative;
+  width: 100%;
+}
+
+.native {
+  position: absolute;
+
+  @include size(1px);
+
+  opacity: 0;
+  pointer-events: none;
+}
+
+.trigger {
+  @include flex($align-items: center);
+  @include transition(border-color, var(--motion-duration));
+
+  gap: var(--space-2);
+  padding: rem(11px) rem(12px);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-small);
+  width: 100%;
+  min-height: var(--control-height);
+  background-color: var(--paper);
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+
+  &[aria-expanded='true'] {
+    border-color: var(--green);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.value {
+  flex: 1;
+  overflow-wrap: anywhere;
+}
+
+.icon,
+.chevron,
+.spinner {
+  flex-shrink: 0;
+}
+
+.chevron {
+  @include transition(transform, var(--motion-duration));
+
+  color: var(--muted);
+}
+
+.open {
+  transform: rotate(180deg);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-1);
+  position: fixed;
+  padding: var(--space-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  background-color: var(--paper);
+  box-shadow: 0 rem(8px) rem(32px) var(--shadow);
+  overflow-y: auto;
+  z-index: $z-index-9;
+}
+
+.option {
+  @include flex($align-items: center);
+
+  gap: var(--space-2);
+  padding: rem(10px);
+  border: 0;
+  border-radius: rem(8px);
+  width: 100%;
+  min-height: var(--touch-target);
+  background-color: transparent;
+  text-align: left;
+  color: var(--ink);
+  cursor: pointer;
+
+  &[aria-selected='true'],
+  &.active {
+    background-color: var(--green-soft);
+    color: var(--green);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.invalid {
+  border-color: var(--error);
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.invalid:focus-visible {
+  outline-color: var(--error);
+}

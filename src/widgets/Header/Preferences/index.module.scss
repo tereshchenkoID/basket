@@ -1,0 +1,49 @@
+@use '@/scss/config' as *;
+
+.trigger {
+  border-radius: 50%;
+}
+
+.panel {
+  @include flex($direction: column);
+  @include transition(transform, var(--motion-duration));
+
+  gap: var(--space-5);
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  padding: max(var(--space-4), env(safe-area-inset-top, 0px)) max(var(--space-4), env(safe-area-inset-right, 0px)) max(var(--space-4), env(safe-area-inset-bottom, 0px));
+  border: 0;
+  width: min(rem(400px), 100%);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  background-color: var(--paper);
+  overflow-y: auto;
+  color: var(--ink);
+  border-left: 1px solid var(--border);
+
+  &:not([open]) {
+    display: none;
+  }
+
+  &::backdrop {
+    background-color: var(--overlay);
+  }
+}
+
+.account {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.logout {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+@starting-style {
+  .panel[open] {
+    transform: translateX(100%);
+  }
+}

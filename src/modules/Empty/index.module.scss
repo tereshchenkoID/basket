@@ -1,0 +1,18 @@
+@use '@/scss/config' as *;
+
+.block {
+  justify-items: center;
+  margin-inline: auto;
+  width: min(100%, rem(560px));
+  text-align: center;
+}
+
+.icon {
+  @include flex(center, center);
+  @include size(rem(64px));
+
+  margin-bottom: var(--space-2);
+  border-radius: 50%;
+  background-color: var(--green-soft);
+  color: var(--green);
+}
