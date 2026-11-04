@@ -20,8 +20,31 @@ import styles from './index.module.scss'
 export const Add = ({ listId, onSuccess }: AddProps) => {
   const t = useTranslations('List')
   const workspace = useTranslations('Workspace')
-  
+
   const { execute, pending, error, success } = useMutation(t('itemAdded'))
+
+  const handleSubmit = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement }) => {
+    event.preventDefault()
+
+    const form = event.currentTarget
+    const values = new FormData(form)
+    const result = await execute(id => addItem({
+      id,
+      listId,
+      name: values.get('name'),
+      quantity: Number(values.get('quantity')),
+      unit: values.get('unit'),
+    }))
+
+    if (result) {
+      form.reset()
+      const input = form.elements.namedItem('name')
+
+      if (input instanceof HTMLInputElement) input.focus({ preventScroll: true })
+
+      onSuccess()
+    }
+  }
 
   return (
     <section
@@ -33,27 +56,7 @@ export const Add = ({ listId, onSuccess }: AddProps) => {
         as="form"
         gap={2}
         aria-busy={pending}
-        onSubmit={async event => {
-          event.preventDefault()
-          const form = event.currentTarget
-          const values = new FormData(form)
-          const result = await execute(id => addItem({
-            id,
-            listId,
-            name: values.get('name'),
-            quantity: Number(values.get('quantity')),
-            unit: values.get('unit'),
-          }))
-
-          if (result) {
-            form.reset()
-            const input = form.elements.namedItem('name')
-
-            if (input instanceof HTMLInputElement) input.focus({ preventScroll: true })
-
-            onSuccess()
-          }
-        }}
+        onSubmit={handleSubmit}
       >
         <Grid
           columns="1fr auto"
@@ -78,19 +81,20 @@ export const Add = ({ listId, onSuccess }: AddProps) => {
           </Action>
         </Grid>
         <Dropdown
-          label={<Text
-            as="span"
-            color="muted"
-                 >
-                   {t('quantityAndUnit')}
-                 </Text>}
+          label={
+            <Text
+              as="span"
+              color="muted"
+            >
+              {t('quantityAndUnit')}
+            </Text>
+          }
           plain
           data-quantity-options
         >
           <Grid
             columns={2}
             gap={3}
-            pb={3}
           >
             <Input
               label={t('quantity')}

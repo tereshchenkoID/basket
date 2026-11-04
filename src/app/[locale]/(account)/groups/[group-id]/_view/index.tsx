@@ -50,7 +50,6 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
   )
 
   const data = result.data
-
   const owner = data.members.find(member => member.user_id === userId)?.role === 'owner'
   const refresh = () => router.refresh()
   const active = data.lists.filter(list => list.status === 'active')
@@ -60,7 +59,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
       !invite.revoked_at && invite.use_count === 0 && new Date(invite.expires_at) > new Date(),
   )
 
-  const copy = async () => {
+  const handleCopy = async () => {
     if (!invitation) return
 
     setCopyError(false)
@@ -304,7 +303,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
               />
               <Action
                 type="button"
-                onClick={copy}
+                onClick={handleCopy}
               >
                 {t(copied ? 'copied' : 'copy')}
               </Action>

@@ -21,7 +21,6 @@ import styles from './index.module.scss'
 const Section = ({ result, token }: InviteViewProps) => {
   const t = useTranslations('Invite')
   const workspace = useTranslations('Workspace')
-  
   const router = useRouter()
 
   if (!result.ok) return (

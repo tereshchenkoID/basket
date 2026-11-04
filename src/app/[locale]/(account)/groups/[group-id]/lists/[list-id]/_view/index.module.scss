@@ -34,7 +34,7 @@
 
 .purchase {
   flex: 1;
-  padding: rem(12px) rem(4px);
+  padding: rem(4px);
 
   &:has([aria-busy='true']) {
     opacity: 0.6;

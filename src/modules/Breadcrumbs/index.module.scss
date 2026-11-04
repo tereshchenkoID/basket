@@ -2,13 +2,13 @@
   @include flex($align-items: center, $wrap: wrap);
 
   gap: var(--space-2);
+  padding-block-end: var(--space-4);
 }
 
 .item {
   @include flex($align-items: center);
 
   gap: var(--space-2);
-  min-height: var(--touch-target);
 }
 
 .link {
@@ -16,15 +16,15 @@
 
   text-decoration: none;
   color: var(--text-muted);
+
+  @include hover {
+    &:hover {
+      color: var(--primary);
+    }
+  }
 }
 
 .icon {
   flex-shrink: 0;
   color: var(--text-muted);
-}
-
-@include hover {
-  .link:hover {
-    color: var(--primary);
-  }
 }

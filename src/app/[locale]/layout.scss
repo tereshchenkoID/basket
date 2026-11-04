@@ -5,11 +5,11 @@
   --font-base: -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
   --font-accent: georgia, 'Times New Roman', serif;
   --content-width: #{rem(1120px)};
-  --control-height: #{rem(48px)};
+  --control-height: #{rem(44px)};
   --touch-target: #{rem(44px)};
   --motion-duration: 160ms;
-  --focus-width: #{rem(3px)};
-  --focus-offset: #{rem(4px)};
+  --focus-width: #{rem(1px)};
+  --focus-offset: #{rem(-1px)};
   --disabled-opacity: 0.5;
   --header-height: #{rem(64px)};
   --gutter: #{rem(16px)};
@@ -37,7 +37,6 @@
 
 * {
   box-sizing: border-box;
-  user-select: none;
 
   &::after,
   &::before {

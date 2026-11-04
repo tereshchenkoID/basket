@@ -23,15 +23,21 @@ import styles from '../index.module.scss'
 export const Item = ({ item, archived }: ItemProps) => {
   const t = useTranslations('List')
   const workspace = useTranslations('Workspace')
-  
+
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const { execute, pending, error } = useMutation(t('purchaseUpdated'))
   const refresh = () => router.refresh()
 
   const toggle = async () => {
-    await execute(() => purchaseItem({ itemId: item.id, purchased: !item.is_purchased }))
-    refresh()
+    const result = await execute(() =>
+      purchaseItem({
+        itemId: item.id,
+        purchased: !item.is_purchased,
+      })
+    )
+
+    if (result?.ok) refresh()
   }
 
   return (
@@ -78,29 +84,29 @@ export const Item = ({ item, archived }: ItemProps) => {
             align="center"
             gap={2}
           >
-          <Action
-            variant="ghost"
-            iconOnly
-            aria-expanded={editing}
-            onClick={() => setEditing(!editing)}
-            aria-label={t('editNamedItem', { name: item.name })}
-          >
-            {
-              editing
-                ?
-                <Icon
-                  name="x"
-                  size={18}
-                  aria-hidden="true"
-                />
-                :
-                <Icon
-                  name="pencil"
-                  size={18}
-                  aria-hidden="true"
-                />
-            }
-          </Action>
+            <Action
+              variant="primary"
+              iconOnly
+              aria-expanded={editing}
+              onClick={() => setEditing(!editing)}
+              aria-label={t('editNamedItem', { name: item.name })}
+            >
+              {
+                editing
+                  ?
+                  <Icon
+                    name="x"
+                    size={18}
+                    aria-hidden="true"
+                  />
+                  :
+                  <Icon
+                    name="pencil"
+                    size={18}
+                    aria-hidden="true"
+                  />
+              }
+            </Action>
             <Mutation
               label={t('deleteItem')}
               ariaLabel={t('deleteNamedItem', { name: item.name })}

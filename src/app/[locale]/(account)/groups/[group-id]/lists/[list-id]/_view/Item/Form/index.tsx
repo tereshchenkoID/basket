@@ -17,25 +17,27 @@ import type { FormProps } from './types'
 export const Form = ({ item, onSuccess }: FormProps) => {
   const t = useTranslations('List')
   const workspace = useTranslations('Workspace')
-  
   const { execute, pending, error } = useMutation(t('itemUpdated'))
+
+  const handleSubmit = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement }) => {
+    event.preventDefault()
+
+    const form = new FormData(event.currentTarget)
+    const result = await execute(() => editItem({
+      itemId: item.id,
+      name: form.get('name'),
+      quantity: Number(form.get('quantity')),
+      unit: form.get('unit'),
+    }))
+
+    if (result) onSuccess()
+  }
 
   return (
     <Grid
       as="form"
       gap={3}
-      onSubmit={async event => {
-        event.preventDefault()
-        const form = new FormData(event.currentTarget)
-        const result = await execute(() => editItem({
-          itemId: item.id,
-          name: form.get('name'),
-          quantity: Number(form.get('quantity')),
-          unit: form.get('unit'),
-        }))
-
-        if (result) onSuccess()
-      }}
+      onSubmit={handleSubmit}
       aria-busy={pending}
     >
       <Grid

@@ -24,15 +24,6 @@ export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
               className={styles.item}
             >
               {
-                index > 0 &&
-                <Icon
-                  name="chevron-right"
-                  className={styles.icon}
-                  size={16}
-                  aria-hidden="true"
-                />
-              }
-              {
                 item.href && index < items.length - 1
                   ?
                   <Link
@@ -55,6 +46,15 @@ export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
                   >
                     {item.label}
                   </Text>
+              }
+              {
+                index !== items.length - 1 &&
+                <Icon
+                  name="chevron-right"
+                  className={styles.icon}
+                  size={16}
+                  aria-hidden="true"
+                />
               }
             </li>
           )
