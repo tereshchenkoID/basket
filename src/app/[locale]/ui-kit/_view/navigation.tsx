@@ -31,7 +31,7 @@ export const Navigation = () => {
       </Box>
       <Grid
         as="nav"
-        gap={4}
+        gap={3}
         display={{ initial: 'none', tabS: 'grid' }}
         className={styles.navigation}
         aria-label="Component catalog"
@@ -47,15 +47,18 @@ export const Navigation = () => {
           GROUPS.map(group =>
             <Grid
               key={group}
-              gap={2}
+              gap={1}
             >
               <Link
                 href={`/ui-kit/${group}`}
                 className={styles.link}
+                aria-current={pathname === `/ui-kit/${group}` ? 'page' : undefined}
               >
                 <Text
                   as="span"
                   weight="semibold"
+                  size={2}
+                  transform="capitalize"
                 >
                   {group}
                 </Text>

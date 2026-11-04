@@ -31,7 +31,7 @@ const UIKitLayout = ({ children }: UIKitLayoutProps) => {
         Basket / Development / UI kit
       </Text>
       <Grid
-        columns={{ initial: 1, tabS: '220px 1fr' }}
+        columns={{ initial: 1, tabS: '13rem 1fr' }}
         align="start"
         gap={4}
       >

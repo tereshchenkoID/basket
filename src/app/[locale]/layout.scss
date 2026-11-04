@@ -1,6 +1,5 @@
 @use '@/scss/config' as *;
 @use '@/scss/theme';
-@use '@/scss/abstract/variables/tokens' as *;
 
 :root {
   --font-base: -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
@@ -14,18 +13,21 @@
   --disabled-opacity: 0.5;
   --header-height: #{rem(64px)};
   --gutter: #{rem(16px)};
-
-  @each $name, $value in $spaces {
-    --space-#{$name}: #{rem($value)};
-  }
-
-  @each $name, $value in $text-sizes {
-    --text-#{$name}: #{$value};
-  }
-
-  @each $name, $value in $radius {
-    --radius-#{$name}: #{rem($value)};
-  }
+  --space-1: #{rem(4px)};
+  --space-2: #{rem(8px)};
+  --space-3: #{rem(16px)};
+  --space-4: #{rem(24px)};
+  --space-5: #{rem(32px)};
+  --space-6: #{rem(48px)};
+  --text-1: #{rem(12px)};
+  --text-2: #{rem(14px)};
+  --text-3: #{rem(16px)};
+  --text-4: #{rem(18px)};
+  --text-5: #{rem(24px)};
+  --text-6: clamp(1.75rem, 5vw, 2.75rem);
+  --text-7: clamp(2.25rem, 7vw, 4.4rem);
+  --radius-sm: #{rem(12px)};
+  --radius-lg: #{rem(24px)};
 
   @include tab-s {
     --header-height: #{rem(80px)};

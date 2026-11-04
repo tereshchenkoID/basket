@@ -1,23 +1,45 @@
-@use './abstract/variables/tokens' as *;
+@mixin dark {
+  --bg: #131b17;
+  --surface: #1c2821;
+  --text: #edf3e7;
+  --text-muted: #b0bdaa;
+  --primary: #b3d2a0;
+  --primary-subtle: #2b3e2b;
+  --border: #3d4e40;
+  --border-strong: #71856f;
+  --on-danger: #341b16;
+  --danger: #ffb8a8;
+  --on-accent: #19281d;
+  --shadow-color: rgb(0 0 0 / 30%);
+  --overlay-color: rgb(0 0 0 / 60%);
 
-@mixin palette($colors, $scheme) {
-  color-scheme: $scheme;
-
-  @each $name, $value in $colors {
-    --#{$name}: #{$value};
-  }
+  color-scheme: dark;
 }
 
 :root {
-  @include palette($colors-light, light);
+  --bg: #f6f7f2;
+  --surface: #fff;
+  --text: #203a30;
+  --text-muted: #596958;
+  --primary: #325d42;
+  --primary-subtle: #e9efdf;
+  --border: #d9e0d4;
+  --border-strong: #9ba895;
+  --on-danger: #fff;
+  --danger: #a43829;
+  --on-accent: #fff;
+  --shadow-color: rgb(22 39 28 / 12%);
+  --overlay-color: rgb(0 0 0 / 45%);
+
+  color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  @include palette($colors-dark, dark);
+  @include dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light'], [data-theme='dark']) {
-    @include palette($colors-dark, dark);
+    @include dark;
   }
 }

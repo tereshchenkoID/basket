@@ -11,7 +11,13 @@ import type { CatalogGroupViewProps } from './types'
 const Section = ({ group, entries }: CatalogGroupViewProps) => {
   return (
     <Grid gap={4}>
-      <Heading as="h1">{group}</Heading>
+      <Heading
+        as="h1"
+        size={6}
+        transform="capitalize"
+      >
+        {group}
+      </Heading>
       {
         entries.map(entry =>
           <Grid

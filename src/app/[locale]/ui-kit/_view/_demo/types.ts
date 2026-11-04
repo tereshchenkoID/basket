@@ -11,11 +11,3 @@ export type FieldsProps = {
 export type ChecksProps = {
   kind: 'Checkbox' | 'Toggle'
 }
-
-export type ModuleFormProps = {
-  kind: 'GroupForm' | 'ListForm' | 'Form' | 'Add'
-}
-
-export type AuthExampleProps = {
-  kind: 'Google' | 'Logout' | 'Languages'
-}

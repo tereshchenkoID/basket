@@ -1,23 +1,38 @@
 .content {
-  overflow: hidden;
   overflow-wrap: anywhere;
 }
 
 .navigation {
+  padding: var(--space-2);
+  border: rem(1px) solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  scrollbar-width: thin;
+}
+
+.link {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+
+  &:hover,
+  &[aria-current='page'] {
+    background-color: var(--primary-subtle);
+    color: var(--primary);
+  }
+}
+
+.card {
+  display: block;
   padding: var(--space-3);
   border: rem(1px) solid var(--border);
   border-radius: var(--radius-sm);
   background-color: var(--surface);
-}
-
-.link {
-  padding: var(--space-2);
   text-decoration: none;
 
-  &[aria-current='page'] {
-    border-radius: var(--radius-sm);
-    background-color: var(--primary-subtle);
-    color: var(--primary);
+  &:hover {
+    border-color: var(--primary);
   }
 }
 

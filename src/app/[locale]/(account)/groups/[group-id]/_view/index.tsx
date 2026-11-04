@@ -35,7 +35,7 @@ import type { InvitationLink } from '@/types/workspace'
 const Section = ({ result, userId, locale }: GroupViewProps) => {
   const t = useTranslations('Group')
   const workspace = useTranslations('Workspace')
-  
+
   const router = useRouter()
   const [invitation, setInvitation] = useState<InvitationLink | null>(null)
   const [copied, setCopied] = useState(false)
@@ -76,7 +76,6 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
 
   return (
     <Box
-      as="section"
       full
       py={4}
     >

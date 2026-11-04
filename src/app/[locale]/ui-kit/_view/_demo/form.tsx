@@ -3,6 +3,7 @@
 import { useState } from 'react'
 
 import { Action } from '@/components/Action'
+import { Box } from '@/components/Box'
 import { Checkbox } from '@/components/Checkbox'
 import { Field } from '@/components/Field'
 import { Grid } from '@/components/Grid'
@@ -40,42 +41,59 @@ export const Actions = () => (
         </Grid>
       )
     }
-    <Action
-      iconOnly
-      aria-label="Add"
+    <Box
+      display="flex"
+      wrap="wrap"
+      align="center"
+      gap={3}
     >
-      <Icon
-        name="plus"
-        size={18}
-        aria-hidden="true"
-      />
-    </Action>
-    <Action
-      iconOnly
-      isLoading
-      aria-label="Loading icon button"
-    >
-      <Icon
-        name="plus"
-        size={18}
-        aria-hidden="true"
-      />
-    </Action>
-    <Action href="/">Link</Action>
-    <Action
-      href="/"
-      aria-disabled="true"
-    >
-      Disabled link
-    </Action>
-    <Action
-      href="/"
-      isLoading
-    >
-      Loading link
-    </Action>
+      <Action
+        iconOnly
+        aria-label="Add"
+      >
+        <Icon
+          name="plus"
+          size={18}
+          aria-hidden="true"
+        />
+      </Action>
+      <Action
+        iconOnly
+        isLoading
+        aria-label="Loading icon button"
+      >
+        <Icon
+          name="plus"
+          size={18}
+          aria-hidden="true"
+        />
+      </Action>
+      <Action href="/">Link</Action>
+      <Action
+        href="/"
+        aria-disabled="true"
+      >
+        Disabled link
+      </Action>
+      <Action
+        href="/"
+        isLoading
+      >
+        Loading link
+      </Action>
+    </Box>
   </Grid>
 )
+
+const FIELD_STATES = [
+  { label: 'Default', placeholder: 'Enter a value' },
+  { label: 'Hint', placeholder: 'Enter a value', hint: 'Helpful description' },
+  { label: 'Error', error: 'Check this value', defaultValue: 'Invalid value' },
+  { label: 'Disabled', disabled: true, defaultValue: 'Unavailable' },
+  { label: 'Read only', readOnly: true, defaultValue: 'Read only' },
+  { label: 'Loading', isLoading: true, defaultValue: 'Loading' },
+  { label: 'Required', required: true, placeholder: 'Required value' },
+]
 
 export const Fields = ({ kind }: FieldsProps) => {
   const Component = kind === 'Input' ? Input : Textarea
@@ -83,40 +101,22 @@ export const Fields = ({ kind }: FieldsProps) => {
   return (
     <Grid
       gap={3}
+      align="start"
       columns={{ initial: 1, tabS: 2 }}
     >
-      <Component
-        label="Default"
-        placeholder="Enter a value"
-      />
-      <Component
-        label="Hint"
-        hint="Helpful description"
-      />
-      <Component
-        label="Error"
-        error="Check this value"
-        defaultValue="Invalid value"
-      />
-      <Component
-        label="Disabled"
-        disabled
-        defaultValue="Unavailable"
-      />
-      <Component
-        label="Read only"
-        readOnly
-        value="Read only"
-      />
-      <Component
-        label="Loading"
-        isLoading
-        defaultValue="Loading"
-      />
-      <Component
-        label="Required"
-        required
-      />
+      {
+        FIELD_STATES.map(state =>
+          <Box
+            key={state.label}
+            p={3}
+            border
+            radius="sm"
+            surface="default"
+          >
+            <Component {...state} />
+          </Box>
+        )
+      }
     </Grid>
   )
 }
@@ -131,7 +131,11 @@ export const Selects = () => {
   ]
 
   return (
-    <Grid gap={3}>
+    <Grid
+      gap={3}
+      align="start"
+      columns={{ initial: 1, tabS: 2 }}
+    >
       <Select
         label="Default"
         options={options}
@@ -213,7 +217,11 @@ export const Checks = ({ kind }: ChecksProps) => {
   const [checked, setChecked] = useState(false)
 
   return (
-    <Grid gap={3}>
+    <Grid
+      gap={3}
+      align="start"
+      columns={{ initial: 1, tabS: 2 }}
+    >
       <Component
         label="Controlled"
         checked={checked}
@@ -247,9 +255,10 @@ export const FieldExample = () => (
     label="Custom field"
     hint="Label and description are connected to the control"
   >
-    <input
+    <Input
       id="custom-field"
       aria-describedby="custom-field-message"
+      placeholder="Custom control"
     />
   </Field>
 )
