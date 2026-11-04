@@ -1,28 +1,45 @@
-.header {
-  @include flex(space-between, center);
+@use '@/scss/config' as *;
 
-  gap: var(--space-3);
-  padding: var(--space-5) 0;
+.block {
+  position: sticky;
+  top: 0;
+  padding-block: calc(var(--space-2) + env(safe-area-inset-top, 0px)) var(--space-2);
+  height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
+  background-color: var(--background);
+  z-index: $z-index-8;
   border-bottom: 1px solid var(--border);
 }
 
 .brand {
   @include flex($align-items: center);
 
-  gap: 0.6rem;
-  font-size: 1.65rem;
-  font-weight: 750;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
   letter-spacing: -0.06em;
   text-decoration: none;
 }
 
-.brand-dot {
-  margin-left: -0.5rem;
+.icon {
+  flex-shrink: 0;
+}
+
+.dot {
+  margin-left: rem(-6px);
   color: var(--green);
 }
 
-@media (width >= 800px) {
-  .header {
-    padding: var(--space-6) 0 var(--space-5);
+@include tab-s {
+  .block {
+    padding-block: var(--space-3);
+  }
+}
+
+.language {
+  width: rem(84px);
+}
+
+@include mob-m {
+  .language {
+    width: rem(96px);
   }
 }

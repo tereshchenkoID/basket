@@ -1,1 +1,1 @@
-export { WorkspaceLoading as default } from '@/modules/WorkspaceLoading'
+export { Loading as default } from '@/modules/Loading'

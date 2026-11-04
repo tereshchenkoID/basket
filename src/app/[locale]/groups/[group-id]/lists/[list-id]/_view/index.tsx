@@ -1,25 +1,27 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { ArrowLeft, ChevronRight } from 'lucide-react'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { validationLimits } from '@/constant/validation'
-
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
-import { ActionForm } from '@/components/ActionForm'
-import { addItem, updateList } from '@/modules/Shopping/action'
-import { ItemRow } from '@/modules/Shopping/ItemRow'
-import type { ListData } from '@/modules/Shopping/query'
-import { units } from '@/modules/Shopping/schema'
+import { Box } from '@/components/Box'
+import { Grid } from '@/components/Grid'
+import { Heading } from '@/components/Heading'
+import { Text } from '@/components/Text'
+import { Empty } from '@/modules/Empty'
+import { Mutation } from '@/modules/Mutation'
+import { updateList } from '@/modules/Shopping/action'
+import { ListForm } from '@/modules/Shopping/ListForm'
 
-import styles from '@/modules/Shopping/index.module.scss'
+import { ItemRow } from './ItemRow'
+import { QuickAdd } from './QuickAdd'
 
-type ListViewProps = {
-  data: ListData
-  userId: string
-}
+import styles from './index.module.scss'
+
+import type { ListViewProps } from '@/types/views'
 
 const ListView = ({ data, userId }: ListViewProps) => {
   const t = useTranslations('Workspace')
@@ -30,114 +32,127 @@ const ListView = ({ data, userId }: ListViewProps) => {
   const archived = data.list.status === 'archived'
 
   return (
-    <section className={styles.workspace}>
-      <Link className={styles.back} href={`/groups/${data.list.group_id}`}>
-        ← {t('backGroup')}
+    <Box
+      as="section"
+      full
+      py={4}
+    >
+      <Link
+        className={styles.back}
+        href={`/groups/${data.list.group_id}`}
+      >
+        <ArrowLeft
+          size={16}
+          aria-hidden="true"
+        /> {t('backGroup')}
       </Link>
-      <div className={styles.heading}>
+      <Box
+        display="flex"
+        justify="between"
+        align="center"
+        wrap="wrap"
+        gap={3}
+        mt={2}
+        mb={3}
+      >
         <div>
-          <p className={styles.eyebrow}>{t(archived ? 'archived' : 'shoppingList')}</p>
-          <h1>{data.list.title}</h1>
-        </div>
-        <p className={styles.connection} role="status">
-          {t(`connection.${status}`)}
-        </p>
-      </div>
-      <div className={styles.progress}>
-        <label htmlFor="shopping-progress">
-          {t('progress', { done: purchased, total: data.items.length })}
-        </label>
-        <progress id="shopping-progress" value={purchased} max={Math.max(data.items.length, 1)} />
-      </div>
-      {!archived && (
-        <section className={styles.panel}>
-          <h2>{t('addItem')}</h2>
-          <ActionForm
-            label={t('add')}
-            reset
-            operation={(form, id) =>
-              addItem({
-                id,
-                listId: data.list.id,
-                name: form.get('name'),
-                quantity: Number(form.get('quantity')),
-                unit: form.get('unit'),
-              })
-            }
-            onSuccess={refresh}
+          <Text
+            className={styles.eyebrow}
+            size="xs"
+            weight={700}
+            color="accent"
           >
-            <label>
-              {t('itemName')}
-              <input
-                name="name"
-                placeholder={t('itemPlaceholder')}
-                required
-                maxLength={validationLimits.itemName}
-                autoComplete="off"
-                enterKeyHint="done"
-              />
-            </label>
-            <div className={styles['quantity-fields']}>
-              <label>
-                {t('quantity')}
-                <input
-                  name="quantity"
-                  type="number"
-                  inputMode="decimal"
-                  min="0.001"
-                  max={validationLimits.quantity}
-                  step="any"
-                  defaultValue="1"
-                  required
-                />
-              </label>
-              <label>
-                {t('unit')}
-                <select name="unit" defaultValue="pcs">
-                  {units.map(unit => (
-                    <option key={unit} value={unit}>
-                      {t(`units.${unit}`)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-          </ActionForm>
-        </section>
-      )}
-      {data.items.length === 0 ? (
-        <div className={styles.empty}>
-          <h2>{t('emptyList')}</h2>
-          <p>{t('emptyListDescription')}</p>
+            {t(archived ? 'archived' : 'shoppingList')}
+          </Text>
+          <Heading
+            as="h1"
+            size="title"
+          >
+            {data.list.title}
+          </Heading>
         </div>
-      ) : (
-        <ul className={styles.items}>
-          {data.items.map(item => (
-            <ItemRow key={item.id} item={item} archived={archived} />
-          ))}
-        </ul>
-      )}
-      <details className={`${styles.panel} ${styles.details}`}>
-        <summary>{t('listSettings')}</summary>
-        <ActionForm
-          label={t('save')}
-          operation={form => updateList({ listId: data.list.id, title: form.get('name') })}
-          onSuccess={refresh}
+        <Text
+          className={styles.connection}
+          size="sm"
+          color="muted"
+          data-status={status}
+          role="status"
         >
-          <label>
-            {t('listTitle')}
-            <input name="name" required maxLength={validationLimits.listTitle} defaultValue={data.list.title} />
-          </label>
-        </ActionForm>
-        <ActionForm
+          {t(`connection.${status}`)}
+        </Text>
+      </Box>
+      <Grid
+        gap={2}
+        my={4}
+      >
+        <Text
+          as="label"
+          size="sm"
+          color="muted"
+          htmlFor="shopping-progress"
+        >
+          {t('progress', { done: purchased, total: data.items.length })}
+        </Text>
+        <progress
+          className={styles.bar}
+          id="shopping-progress"
+          value={purchased}
+          max={Math.max(data.items.length, 1)}
+        />
+      </Grid>
+      {
+        !archived &&
+        <QuickAdd
+          listId={data.list.id}
+          onSuccess={refresh}
+        />
+      }
+      {
+        data.items.length === 0
+          ?
+          <Empty
+            title={t('emptyList')}
+            description={t('emptyListDescription')}
+          />
+          :
+          <ul className={styles.items}>
+            {
+              data.items.map(item =>
+                <ItemRow
+                  key={item.id}
+                  item={item}
+                  archived={archived}
+                />
+              )
+            }
+          </ul>
+      }
+
+      <details className={styles.details}>
+        <summary className={styles.summary}>
+          <ChevronRight
+            className={styles.chevron}
+            size={16}
+            aria-hidden="true"
+          />
+          {t('listSettings')}
+        </summary>
+        <ListForm
+          groupId={data.list.group_id}
+          list={data.list}
+          onSuccess={refresh}
+        />
+        <Mutation
+          className={styles.setting}
           label={t(archived ? 'restoreList' : 'archiveList')}
+          confirmation={archived ? undefined : t('confirmArchive')}
           operation={() =>
             updateList({ listId: data.list.id, status: archived ? 'active' : 'archived' })
           }
           onSuccess={refresh}
         />
       </details>
-    </section>
+    </Box>
   )
 }
 

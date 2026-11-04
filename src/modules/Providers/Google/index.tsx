@@ -2,20 +2,18 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-
-import type { Locale } from '@/i18n/locales'
+import { ArrowUpRight } from 'lucide-react'
 
 import { callbackUrl } from '@/lib/auth/redirect'
 import { getSiteUrl } from '@/lib/config'
 import { createClient } from '@/lib/supabase/client'
 
+import { Action } from '@/components/Action'
+import { Text } from '@/components/Text'
+
 import styles from './index.module.scss'
 
-type GoogleLoginButtonProps = {
-  locale: Locale
-  configured: boolean
-  next?: string
-}
+import type { GoogleLoginButtonProps } from '@/types/components'
 
 export const GoogleLoginButton = ({ locale, configured, next }: GoogleLoginButtonProps) => {
   const t = useTranslations('Auth')
@@ -44,14 +42,20 @@ export const GoogleLoginButton = ({ locale, configured, next }: GoogleLoginButto
 
   return (
     <div className={styles.auth}>
-      <button
-        className={styles['google-button']}
+      <Action
+        variant="secondary"
+        className={styles.button}
         type="button"
         onClick={signIn}
         disabled={pending || !configured}
         aria-busy={pending}
       >
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+        >
           <path
             fill="#4285F4"
             d="M21.6 12.23c0-.71-.06-1.39-.18-2.05H12v3.88h5.38a4.6 4.6 0 0 1-2 3.02v2.51h3.24c1.9-1.75 2.98-4.33 2.98-7.36Z"
@@ -69,13 +73,45 @@ export const GoogleLoginButton = ({ locale, configured, next }: GoogleLoginButto
             d="M12 5.96c1.47 0 2.79.5 3.82 1.5l2.86-2.86A9.6 9.6 0 0 0 12 2a10 10 0 0 0-8.92 5.48l3.34 2.6A5.99 5.99 0 0 1 12 5.96Z"
           />
         </svg>
-        <span>{pending ? t('loading') : t('google')}</span>
-        <span aria-hidden="true">↗</span>
-      </button>
-      <div aria-live="polite" role={error ? 'alert' : undefined}>
-        {!configured && <p className={styles.error}>{t('configuration')}</p>}
-        {error && <p className={styles.error}>{t('oauth')}</p>}
-        {pending && <span className={styles['screen-reader']}>{t('loading')}</span>}
+        <Text as="span">{pending ? t('loading') : t('google')}</Text>
+        <ArrowUpRight
+          size={18}
+          aria-hidden="true"
+        />
+      </Action>
+      <div
+        aria-live="polite"
+        role={error ? 'alert' : undefined}
+      >
+        {
+          !configured &&
+          <Text
+            size="sm"
+            color="error"
+            mt={3}
+          >
+            {t('configuration')}
+          </Text>
+        }
+        {
+          error &&
+          <Text
+            size="sm"
+            color="error"
+            mt={3}
+          >
+            {t('oauth')}
+          </Text>
+        }
+        {
+          pending &&
+          <Text
+            as="span"
+            className={styles.hidden}
+          >
+            {t('loading')}
+          </Text>
+        }
       </div>
     </div>
   )

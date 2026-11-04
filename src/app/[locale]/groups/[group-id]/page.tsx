@@ -4,17 +4,12 @@ import { isLocale } from '@/i18n/locales'
 
 import { getUser } from '@/lib/auth/user'
 
+import { Empty } from '@/modules/Empty'
 import { getGroup } from '@/modules/Groups/query'
-import { WorkspaceState } from '@/modules/WorkspaceState'
 
 import GroupView from './_view'
 
-type GroupPageProps = {
-  params: Promise<{
-    locale: string
-    'group-id': string
-  }>
-}
+import type { GroupPageProps } from '@/types/routes'
 
 export const dynamic = 'force-dynamic'
 
@@ -29,9 +24,20 @@ const GroupPage = async ({ params }: GroupPageProps) => {
 
   const result = await getGroup(groupId)
 
-  if (!result.ok) return <WorkspaceState error={result.error} />
+  if (!result.ok) return (
+    <Empty
+      heading="h1"
+      error={result.error}
+    />
+  )
 
-  return <GroupView data={result.data} userId={user.id} locale={locale} />
+  return (
+    <GroupView
+      data={result.data}
+      userId={user.id}
+      locale={locale}
+    />
+  )
 }
 
 export default GroupPage

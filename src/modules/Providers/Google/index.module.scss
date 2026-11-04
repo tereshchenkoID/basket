@@ -1,43 +1,15 @@
+@use '@/scss/config' as *;
+
 .auth {
   width: 100%;
 }
 
-.google-button {
-  @include flex(space-between, center);
-
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-small);
+.button {
+  justify-content: space-between;
   width: 100%;
-  min-height: 3.5rem;
-  background: var(--paper);
-  transition:
-    border-color 0.2s,
-    transform 0.2s;
-  font-weight: 650;
-  color: var(--ink);
-  cursor: pointer;
 }
 
-.google-button:hover:enabled {
-  border-color: var(--green);
-  transform: translateY(-1px);
-}
-
-.google-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.error {
-  margin-top: var(--space-3);
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--error);
-}
-
-.screen-reader {
+.hidden {
   position: absolute;
 
   @include size(1px);

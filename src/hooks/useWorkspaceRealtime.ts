@@ -5,17 +5,15 @@ import { useRouter } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/client'
 
+import type { WorkspaceConnection, WorkspaceRealtimeProps } from '@/types/workspace'
+
 export function useWorkspaceRealtime({
   userId,
   groupId,
   listId,
-}: {
-  userId: string
-  groupId?: string
-  listId?: string
-}) {
+}: WorkspaceRealtimeProps) {
   const router = useRouter()
-  const [status, setStatus] = useState<'connecting' | 'live' | 'offline'>('connecting')
+  const [status, setStatus] = useState<WorkspaceConnection>('connecting')
 
   useEffect(() => {
     const supabase = createClient()

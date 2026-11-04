@@ -1,27 +1,22 @@
 'use client'
 
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
+import { ArrowUpRight, Users } from 'lucide-react'
 
-import type { Locale } from '@/i18n/locales'
 import { Link, useRouter } from '@/i18n/navigation'
-
-import { validationLimits } from '@/constant/validation'
 
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
-import { ActionForm } from '@/components/ActionForm'
-import { createGroup } from '@/modules/Groups/action'
+import { Box } from '@/components/Box'
+import { Grid } from '@/components/Grid'
+import { Heading } from '@/components/Heading'
+import { Text } from '@/components/Text'
+import { Empty } from '@/modules/Empty'
+import { GroupForm } from '@/modules/Groups/GroupForm'
 
 import styles from '@/modules/Groups/index.module.scss'
 
-import type { GroupSummary } from '@/types/database'
-
-type DashboardViewProps = {
-  groups: GroupSummary[]
-  userId: string
-  locale: Locale
-}
+import type { DashboardViewProps } from '@/types/views'
 
 const DashboardView = ({ groups, userId, locale }: DashboardViewProps) => {
   const t = useTranslations('Workspace')
@@ -29,48 +24,91 @@ const DashboardView = ({ groups, userId, locale }: DashboardViewProps) => {
   useWorkspaceRealtime({ userId })
 
   return (
-    <div className={styles.workspace}>
-      {groups.length === 0 ? (
-        <div className={styles.empty}>
-          <Image src="/basket.svg" alt="" width={180} height={180} />
-          <h2>{t('startFamily')}</h2>
-          <p>{t('startDescription')}</p>
-        </div>
-      ) : (
-        <div className={styles.cards}>
-          {groups.map(group => (
-            <Link href={`/groups/${group.id}`} key={group.id} className={styles.card}>
-              <span className={styles['card-icon']} aria-hidden="true">
-                ⌂
-              </span>
-              <h2>{group.name}</h2>
-              <p>{t('memberCount', { count: group.member_count })}</p>
-              <p>{t('remainingCount', { count: group.remaining_count })}</p>
-              <span className={styles['card-link']}>{t('openGroup')} ↗</span>
-            </Link>
-          ))}
-        </div>
-      )}
-      <section className={styles.panel}>
-        <h2>{t('createGroup')}</h2>
-        <ActionForm
-          label={t('createGroup')}
-          operation={(form, id) => createGroup({ id, name: form.get('name'), locale })}
-          onSuccess={id => router.push(`/groups/${id}`)}
+    <Box
+      full
+      py={4}
+    >
+      {
+        groups.length === 0
+          ?
+          <Empty
+            title={t('startFamily')}
+            description={t('startDescription')}
+          />
+          :
+          <Grid
+            columns={{ initial: 1, mobM: 2, tabM: 3 }}
+            gap={3}
+            mb={5}
+          >
+            {
+              groups.map(group =>
+                <Box
+                  as={Link}
+                  p={4}
+                  border
+                  radius="small"
+                  surface="paper"
+                  href={`/groups/${group.id}`}
+                  key={group.id}
+                  className={styles.card}
+                >
+                  <Text
+                    as="span"
+                    className={styles.icon}
+                    aria-hidden="true"
+                  >
+                    <Users
+                      size={24}
+                      aria-hidden="true"
+                    />
+                  </Text>
+                  <Heading
+                    as="h2"
+                    size="xl"
+                  >
+                    {group.name}
+                  </Heading>
+                  <Text color="muted">{t('memberCount', { count: group.member_count })}</Text>
+                  <Text color="muted">{t('remainingCount', { count: group.remaining_count })}</Text>
+                  <Text
+                    as="span"
+                    className={styles.link}
+                    size="sm"
+                    color="accent"
+                    mt={4}
+                  >
+                    {t('openGroup')}
+                    <ArrowUpRight
+                      size={16}
+                      aria-hidden="true"
+                    />
+                  </Text>
+                </Box>
+              )
+            }
+          </Grid>
+      }
+      <Grid
+        as="section"
+        gap={3}
+        mt={4}
+        p={{ initial: 3, tabS: 5 }}
+        radius="large"
+        surface="paper"
+      >
+        <Heading
+          as="h2"
+          size="xl"
         >
-          <label>
-            {t('groupName')}
-            <input
-              name="name"
-              required
-              maxLength={validationLimits.groupName}
-              autoComplete="off"
-              placeholder={t('groupPlaceholder')}
-            />
-          </label>
-        </ActionForm>
-      </section>
-    </div>
+          {t('createGroup')}
+        </Heading>
+        <GroupForm
+          locale={locale}
+          onSuccess={id => router.push(`/groups/${id}`)}
+        />
+      </Grid>
+    </Box>
   )
 }
 

@@ -1,11 +1,10 @@
 import Image from 'next/image'
 
+import { Text } from '@/components/Text'
+
 import styles from './index.module.scss'
 
-type AvatarProps = {
-  name: string
-  url: unknown
-}
+import type { AvatarProps } from '@/types/components'
 
 export const Avatar = ({ name, url }: AvatarProps) => {
   let source: string | null = null
@@ -39,8 +38,12 @@ export const Avatar = ({ name, url }: AvatarProps) => {
       referrerPolicy="no-referrer"
     />
   ) : (
-    <span className={styles.initial} aria-hidden="true">
+    <Text
+      as="span"
+      className={styles.initial}
+      aria-hidden="true"
+    >
       {name.slice(0, 1)}
-    </span>
+    </Text>
   )
 }

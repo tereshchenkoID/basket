@@ -1,34 +1,84 @@
 import { Suspense } from 'react'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { ShoppingBasket } from 'lucide-react'
 
+import { defaultLocale, isLocale } from '@/i18n/locales'
 import { Link } from '@/i18n/navigation'
 
-import { LanguageSwitcher } from '@/modules/Languages'
+import { getUser } from '@/lib/auth/user'
+
+import { Box } from '@/components/Box'
+import { Text } from '@/components/Text'
+import { LanguageSwitcher } from '@/widgets/Header/LanguageSwitcher'
+
+import { Preferences } from './Preferences'
 
 import styles from './index.module.scss'
 
-export const Header = async () => {
+import type { HeaderProps } from '@/types/components'
+
+export const Header = async ({ theme }: HeaderProps) => {
   const t = await getTranslations('Common')
+  const locale = await getLocale()
+  const user = await getUser()
+  const name = user?.user_metadata.full_name ?? user?.user_metadata.name
+  const avatar = user?.user_metadata.avatar_url
+  const account = user ? {
+    name: typeof name === 'string' && name.trim() ? name : t('brand'),
+    email: user.email ?? null,
+    avatar: typeof avatar === 'string' ? avatar : null,
+  } : null
 
   return (
-    <header className={styles.header}>
-      <Link href="/" className={styles.brand}>
-        <svg width="29" height="30" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <path
-            d="m7 12 6-8m12 8-6-8M4 12h24l-3 15H7L4 12Z"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M12 17v5m8-5v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-        {t('brand')}
-        <span className={styles['brand-dot']}>.</span>
+    <Box
+      as="header"
+      container
+      display="flex"
+      justify="between"
+      align="center"
+      gap={3}
+      className={styles.block}
+    >
+      <Link
+        href="/"
+        className={styles.brand}
+      >
+        <ShoppingBasket
+          className={styles.icon}
+          size={28}
+          strokeWidth={1.8}
+          aria-hidden="true"
+        />
+        <Text
+          as="span"
+          size="xl"
+          weight={700}
+        >
+          {t('brand')}
+        </Text>
+        <Text
+          as="span"
+          className={styles.dot}
+        >
+          .
+        </Text>
       </Link>
-      <Suspense>
-        <LanguageSwitcher />
-      </Suspense>
-    </header>
+      <Box
+        display="flex"
+        align="center"
+        gap={2}
+      >
+        <div className={styles.language}>
+          <Suspense>
+            <LanguageSwitcher />
+          </Suspense>
+        </div>
+        <Preferences
+          theme={theme}
+          account={account}
+          locale={isLocale(locale) ? locale : defaultLocale}
+        />
+      </Box>
+    </Box>
   )
 }

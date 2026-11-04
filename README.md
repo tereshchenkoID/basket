@@ -1,6 +1,6 @@
 # Basket
 
-Семейные группы и совместные списки покупок. Next.js App Router, Supabase Auth / PostgreSQL / Realtime, Google OAuth. Языки: EN, RO, RU, UK; язык по умолчанию — RU.
+Семейные группы и совместные списки покупок. Next.js App Router, Supabase Auth / PostgreSQL / Realtime, Google OAuth. Языки: EN, RO, RU, UK; по умолчанию — EN.
 
 ## Запуск
 
@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Создайте `.env`:
+Настройки в `.env`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
@@ -19,22 +19,20 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Для production задайте `NEXT_PUBLIC_SITE_URL` равным публичному HTTPS origin приложения. После изменения `NEXT_PUBLIC_*` нужна пересборка. Secret / service_role ключи в приложение не передаются.
+В production `NEXT_PUBLIC_SITE_URL` должен содержать публичный HTTPS origin. После изменения `NEXT_PUBLIC_*` нужна пересборка. Secret / service_role ключи в приложение не передаются.
 
 ## Google OAuth
 
-В Google Cloud создайте Web OAuth client, затем включите Google в Supabase → Authentication → Providers. Google Client ID / Secret хранятся в настройках провайдера Supabase.
-
-Google Authorized redirect URI:
+Включите Google в Supabase → Authentication → Providers. Google Client ID / Secret хранятся там. Authorized redirect URI в Google Cloud:
 
 ```text
 https://YOUR_PROJECT.supabase.co/auth/v1/callback
 ```
 
-В Supabase → Authentication → URL Configuration:
+Supabase → Authentication → URL Configuration:
 
-- Site URL: `https://basket-gray-three.vercel.app` для текущего production.
-- Redirect URLs: адреса callback ниже. Варианты с query нужны для передачи локали и возврата к приглашению.
+- Site URL для текущего production: `https://basket-gray-three.vercel.app`.
+- Redirect URLs:
 
 ```text
 http://localhost:3000/auth/callback
@@ -43,42 +41,35 @@ https://basket-gray-three.vercel.app/auth/callback
 https://basket-gray-three.vercel.app/auth/callback?next=**
 ```
 
-Callback обменивает code на сессию и возвращает пользователя в локализованный dashboard или приглашение. Допустимые пути проверяются allowlist; состояние входа на landing определяется сервером. После входа landing показывает переход в dashboard.
+Callback обменивает code на сессию и возвращает в локализованный dashboard или приглашение. Пути возврата проверяются allowlist. Landing определяет вход на сервере и показывает соответствующую CTA.
 
 ## База данных
 
-Supabase CLI установлен как dev dependency. Для настройки проекта:
+Миграции — `supabase/migrations`, прикладные типы — `src/types/database.ts`. Supabase CLI установлен как dev dependency. После `npx supabase login` и `npx supabase link --project-ref YOUR_PROJECT` проверьте изменения через `npx supabase db push --remote --dry-run`, затем применяйте `npx supabase db push --remote`. Команда `npm run db:types` генерирует типы удалённой БД в отдельный файл для сравнения с прикладным контрактом.
 
-```sh
-npx supabase login
-npx supabase link --project-ref YOUR_PROJECT
-npx supabase migration list --remote
-npx supabase db push --remote --dry-run
-npx supabase db push --remote
-npm run db:types
-```
+Доступ к данным ограничен RLS и RPC. Подробнее: [SECURITY.md](docs/SECURITY.md).
 
-Миграция находится в `supabase/migrations`. `db:types` генерирует типы удалённой БД; прикладной контракт — `src/types/database.ts`. Доступ к группам, спискам и приглашениям ограничен RLS и RPC. Подробнее: [SECURITY.md](docs/SECURITY.md).
+## Структура и интерфейс
 
-## Структура и стиль
+- `app/[locale]` — серверные маршруты; `_view` — представления страниц, включая главную. Компоненты одной страницы лежат рядом с её `_view`. Параметры: `[group-id]`, `[list-id]`.
+- `components` — Box, Grid, типографика и контролы; `modules` — переиспользуемые формы и состояния; `widgets` — шапка и футер.
+- `modules/*/repository.ts` — Supabase-запросы; `query.ts` / `action.ts` — серверные адаптеры.
+- `types` — общие типы; `constant` — лимиты, регулярные выражения и соответствия ошибок; `messages` — переводы.
+- `scss` — токены, функции и миксины. Config подключается через `sassOptions.additionalData`, глобальные стили — в locale layout.
 
-Структура и SCSS-утилиты адаптированы по [Betman](https://github.com/dev-parallaxsoft/betman).
+Форма создания списка находится перед карточками. Внутри списка добавление товаров закрепляется под шапкой. Язык выбирается рядом с кнопкой меню; профиль, выход и оформление находятся в боковой панели. Светлая, тёмная и системная темы сохраняются в cookie `basket-theme`. Общий `Empty` используется для пустых данных и ошибок. `loading.tsx` оставлены на границах страниц с серверной загрузкой и реэкспортируют один `Loading`.
 
-- `app/[locale]` — маршруты, серверная загрузка; `_view` — интерактивные компоненты страницы.
-- `groups/[group-id]/lists/[list-id]` — параметры маршрутов без camelCase. Публичные URL от имён параметров не зависят.
-- `components`, `modules`, `widgets` — компоненты в папках PascalCase, `index.tsx` и `index.module.scss`.
-- `constant/regex.ts` — регулярные выражения; `constant/validation.ts` — лимиты полей; `constant/errors.ts` — ключи валидации и соответствия ошибок БД.
-- `helpers/validation.ts` — общие Zod-правила; схемы доменов — рядом с модулями; тексты ошибок — `messages/{locale}.json`.
-- `scss` — функции и миксины Betman без primitives. Config подключается через `sassOptions.additionalData`; глобальные стили — в locale layout.
+Переиспользуйте Box/Grid, Heading/Text и общие контролы. Компоненты — стрелочные функции, props — отдельные типы. Отступы два пробела, одинарные JS/TS-кавычки, без `;`; CSS-классы — одно слово. Форматирование проверяют ESLint и Stylelint, без Prettier. Локальные правила `eslint.rules.mjs` закрепляют многострочные JSX-списки, условия и `clsx` с объектами условных классов.
 
-Компоненты и обработчики — стрелочные функции, props — отдельные типы. Отступы два пробела, одинарные JS/TS-кавычки, без `;`. ESLint / Stylelint исправляют форматирование без Prettier.
+## Проверки и каталог компонентов
 
 ```sh
 npm run lint:fix
 npm run stylelint:fix
 npm run check
 npm run build
-npm run start
 ```
 
-`check` запускает ESLint, Stylelint и TypeScript. Исправления при сохранении настроены в WebStorm. `package.json#allowScripts` разрешает install scripts только указанных версий пакетов. `vercel.json` удаляет неподдерживаемую переменную npm `cache-dir` перед установкой и сборкой.
+`check` запускает ESLint, Stylelint и TypeScript. Production запускается через `npm run start`.
+
+Каталог: `http://localhost:3000/en/ui-kit`. Доступен только в development; в production возвращает 404. Категории и страницы компонентов содержат состояния, API и копируемые примеры. Ссылок на каталог в пользовательской навигации нет. Примеры доменных форм работают локально, без записи в БД.

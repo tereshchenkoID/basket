@@ -4,18 +4,12 @@ import { isLocale } from '@/i18n/locales'
 
 import { getUser } from '@/lib/auth/user'
 
+import { Empty } from '@/modules/Empty'
 import { getList } from '@/modules/Shopping/query'
-import { WorkspaceState } from '@/modules/WorkspaceState'
 
 import ListView from './_view'
 
-type ListPageProps = {
-  params: Promise<{
-    locale: string
-    'group-id': string
-    'list-id': string
-  }>
-}
+import type { ListPageProps } from '@/types/routes'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,9 +24,19 @@ const ListPage = async ({ params }: ListPageProps) => {
 
   const result = await getList(groupId, listId)
 
-  if (!result.ok) return <WorkspaceState error={result.error} />
+  if (!result.ok) return (
+    <Empty
+      heading="h1"
+      error={result.error}
+    />
+  )
 
-  return <ListView data={result.data} userId={user.id} />
+  return (
+    <ListView
+      data={result.data}
+      userId={user.id}
+    />
+  )
 }
 
 export default ListPage

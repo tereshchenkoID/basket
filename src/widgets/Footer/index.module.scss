@@ -1,10 +1,19 @@
-.footer {
-  @include flex($justify-content: space-between, $wrap: wrap);
+@use '@/scss/config' as *;
 
-  gap: var(--space-3);
-  padding: var(--space-4) 0;
-  font-size: 0.65rem;
-  line-height: 1.6;
-  color: var(--muted);
+.block {
+  padding-block: var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--border);
+}
+
+.link {
+  @include flex($align-items: center);
+
+  gap: var(--space-1);
+  min-height: var(--touch-target);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.icon {
+  color: var(--green);
 }

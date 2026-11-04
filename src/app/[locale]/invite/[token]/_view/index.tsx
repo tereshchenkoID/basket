@@ -1,43 +1,72 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { ArrowUpRight } from 'lucide-react'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { ActionForm } from '@/components/ActionForm'
+import { Action } from '@/components/Action'
+import { Grid } from '@/components/Grid'
+import { Heading } from '@/components/Heading'
+import { Text } from '@/components/Text'
 import { acceptInvite } from '@/modules/Invites/action'
+import { Mutation } from '@/modules/Mutation'
 
 import styles from '@/modules/Groups/index.module.scss'
 
-import type { InvitePreview } from '@/types/database'
-
-type InviteViewProps = {
-  preview: InvitePreview
-  token: string
-}
+import type { InviteViewProps } from '@/types/views'
 
 const InviteView = ({ preview, token }: InviteViewProps) => {
   const t = useTranslations('Workspace')
   const router = useRouter()
 
   return (
-    <section className={styles['invite-card']}>
-      <p className={styles.eyebrow}>{t('invited')}</p>
-      <h1>{preview.group_name}</h1>
-      <p>{t(preview.already_member ? 'alreadyMember' : 'joinDescription')}</p>
-      {preview.already_member ? (
-        <Link href={`/groups/${preview.group_id}`}>{t('openGroup')} ↗</Link>
-      ) : (
-        <ActionForm
-          label={t('joinGroup')}
-          operation={() => acceptInvite({ token })}
-          onSuccess={groupId => router.replace(`/groups/${groupId}`)}
-        />
-      )}
-      <Link className={styles.back} href="/dashboard">
+    <Grid
+      as="section"
+      gap={4}
+      my={5}
+      p={{ initial: 4, tabS: 5 }}
+      border
+      radius="large"
+      surface="paper"
+    >
+      <Text
+        className={styles.eyebrow}
+        size="xs"
+        weight={700}
+        color="accent"
+      >
+        {t('invited')}
+      </Text>
+      <Heading
+        as="h1"
+        size="title"
+      >
+        {preview.group_name}
+      </Heading>
+      <Text color="muted">{t(preview.already_member ? 'alreadyMember' : 'joinDescription')}</Text>
+      {
+        preview.already_member
+          ?
+          <Action href={`/groups/${preview.group_id}`}>{t('openGroup')}
+            <ArrowUpRight
+              size={16}
+              aria-hidden="true"
+            /></Action>
+          :
+          <Mutation
+            label={t('joinGroup')}
+            operation={() => acceptInvite({ token })}
+            onSuccess={groupId => router.replace(`/groups/${groupId}`)}
+          />
+      }
+      <Link
+        className={styles.back}
+        href="/dashboard"
+      >
         {t('backDashboard')}
       </Link>
-    </section>
+    </Grid>
   )
 }
 

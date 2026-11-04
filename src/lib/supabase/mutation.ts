@@ -1,32 +1,18 @@
-import type { SupabaseClient } from '@supabase/supabase-js'
 import type { z } from 'zod'
-
-import { databaseErrorCodes, databaseErrorMessages } from '@/constant/errors'
 
 import { getUser } from '@/lib/auth/user'
 import { createClient } from '@/lib/supabase/server'
+import { databaseError } from '@/helpers/errors'
 import { validationError } from '@/helpers/validation'
 
 import 'server-only'
-import type { ActionError, ActionResult } from '@/types/action'
-import type { Database } from '@/types/database'
-
-export const databaseError = (error: { message: string; code?: string }): ActionError => {
-  const message = Object.entries(databaseErrorMessages)
-    .find(([value]) => error.message.includes(value))?.[1]
-  const code = Object.entries(databaseErrorCodes)
-    .find(([value]) => value === error.code)?.[1]
-
-  return message ?? code ?? 'unavailable'
-}
+import type { ActionResult } from '@/types/action'
+import type { MutationOperation } from '@/types/supabase'
 
 export async function mutate<T, U>(
   schema: z.ZodType<T>,
   input: unknown,
-  operation: (
-    client: SupabaseClient<Database>,
-    data: T,
-  ) => PromiseLike<{ data: U | null; error: { message: string; code?: string } | null }>,
+  operation: MutationOperation<T, U>,
 ): Promise<ActionResult<U>> {
   if (!(await getUser())) return { ok: false, error: 'unauthorized' }
 

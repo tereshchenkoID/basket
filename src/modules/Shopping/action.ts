@@ -2,6 +2,7 @@
 
 import { mutate } from '@/lib/supabase/mutation'
 
+import * as repository from './repository'
 import {
   addItemSchema,
   createListSchema,
@@ -12,56 +13,25 @@ import {
 } from './schema'
 
 export async function createList(input: unknown) {
-  return mutate(createListSchema, input, (client, value) =>
-    client.rpc('create_shopping_list', {
-      p_id: value.id,
-      p_group_id: value.groupId,
-      p_title: value.title,
-    }),
-  )
+  return mutate(createListSchema, input, repository.createList)
 }
 
 export async function updateList(input: unknown) {
-  return mutate(updateListSchema, input, (client, value) =>
-    client.rpc('update_shopping_list', {
-      p_list_id: value.listId,
-      p_title: value.title ?? null,
-      p_status: value.status ?? null,
-    }),
-  )
+  return mutate(updateListSchema, input, repository.updateList)
 }
 
 export async function addItem(input: unknown) {
-  return mutate(addItemSchema, input, (client, value) =>
-    client.rpc('add_shopping_item', {
-      p_id: value.id,
-      p_list_id: value.listId,
-      p_name: value.name,
-      p_quantity: value.quantity,
-      p_unit: value.unit,
-    }),
-  )
+  return mutate(addItemSchema, input, repository.addItem)
 }
 
 export async function editItem(input: unknown) {
-  return mutate(editItemSchema, input, (client, value) =>
-    client.rpc('edit_shopping_item', {
-      p_item_id: value.itemId,
-      p_name: value.name,
-      p_quantity: value.quantity,
-      p_unit: value.unit,
-    }),
-  )
+  return mutate(editItemSchema, input, repository.editItem)
 }
 
 export async function purchaseItem(input: unknown) {
-  return mutate(purchaseItemSchema, input, (client, value) =>
-    client.rpc('set_item_purchased', { p_item_id: value.itemId, p_purchased: value.purchased }),
-  )
+  return mutate(purchaseItemSchema, input, repository.purchaseItem)
 }
 
 export async function deleteItem(input: unknown) {
-  return mutate(deleteItemSchema, input, (client, value) =>
-    client.rpc('delete_shopping_item', { p_item_id: value.itemId }),
-  )
+  return mutate(deleteItemSchema, input, repository.deleteItem)
 }

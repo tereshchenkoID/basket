@@ -9,6 +9,8 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
+import basket from './eslint.rules.mjs'
+
 const eslintConfig = defineConfig([
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -30,6 +32,7 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       '@stylistic': stylistic,
+      basket,
       'simple-import-sort': simpleImportSort,
     },
     rules: {
@@ -65,6 +68,8 @@ const eslintConfig = defineConfig([
         },
       ],
       'simple-import-sort/exports': 'error',
+      'basket/jsx-layout': 'error',
+      'basket/clsx-layout': 'error',
 
       '@stylistic/padding-line-between-statements': ['error',
         { blankLine: 'always', prev: '*', next: 'export' },
@@ -78,6 +83,7 @@ const eslintConfig = defineConfig([
         { blankLine: 'always', prev: 'import', next: '*' },
         { blankLine: 'any', prev: 'import', next: 'import' },
       ],
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
       '@stylistic/arrow-parens': ['error', 'as-needed'],
       '@stylistic/comma-spacing': ['error', { before: false, after: true }],
       '@stylistic/object-curly-spacing': ['error', 'always'],
@@ -99,20 +105,13 @@ const eslintConfig = defineConfig([
         2,
         {
           SwitchCase: 1,
-          ignoredNodes: [
-            'JSXElement',
-            'JSXElement *',
-            'JSXFragment',
-            'JSXFragment *',
-            'ConditionalExpression',
-            'JSXAttribute',
-            'JSXExpressionContainer',
-            'CallExpression > ObjectExpression',
-          ],
+          ignoredNodes: ['JSXElement', 'JSXElement *', 'JSXFragment', 'JSXFragment *'],
         },
       ],
-      '@stylistic/jsx-indent': 'off',
-      '@stylistic/jsx-indent-props': 'off',
+      '@stylistic/jsx-max-props-per-line': ['error', { maximum: 1, when: 'always' }],
+      '@stylistic/jsx-first-prop-new-line': ['error', 'multiline'],
+      '@stylistic/jsx-closing-bracket-location': ['error', 'tag-aligned'],
+      '@stylistic/jsx-indent-props': ['error', 2],
       '@stylistic/jsx-wrap-multilines': 'off',
       '@stylistic/jsx-curly-newline': 'off',
       '@stylistic/jsx-one-expression-per-line': 'off',

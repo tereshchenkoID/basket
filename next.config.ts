@@ -16,7 +16,7 @@ const config: NextConfig = {
     `,
   },
   experimental: {
-    optimizePackageImports: ['next-intl', 'use-intl'],
+    optimizePackageImports: ['next-intl', 'use-intl', 'lucide-react'],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production'

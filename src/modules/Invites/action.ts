@@ -5,14 +5,15 @@ import { createHash, randomBytes } from 'node:crypto'
 import { getSiteUrl } from '@/lib/config'
 import { mutate } from '@/lib/supabase/mutation'
 
+import * as repository from './repository'
 import { acceptInviteSchema, createInviteSchema, revokeInviteSchema } from './schema'
 
 export async function createInvite(input: unknown) {
   const token = randomBytes(32).toString('base64url')
   const result = await mutate(createInviteSchema, input, (client, value) =>
-    client.rpc('create_group_invite', {
-      p_group_id: value.groupId,
-      p_token_hash: createHash('sha256').update(token).digest('hex'),
+    repository.createInvite(client, {
+      groupId: value.groupId,
+      tokenHash: createHash('sha256').update(token).digest('hex'),
     }),
   )
 
@@ -27,13 +28,9 @@ export async function createInvite(input: unknown) {
 }
 
 export async function acceptInvite(input: unknown) {
-  return mutate(acceptInviteSchema, input, (client, value) =>
-    client.rpc('accept_group_invite', { p_token: value.token }),
-  )
+  return mutate(acceptInviteSchema, input, repository.acceptInvite)
 }
 
 export async function revokeInvite(input: unknown) {
-  return mutate(revokeInviteSchema, input, (client, value) =>
-    client.rpc('revoke_group_invite', { p_invite_id: value.inviteId }),
-  )
+  return mutate(revokeInviteSchema, input, repository.revokeInvite)
 }
