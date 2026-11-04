@@ -1,0 +1,29 @@
+.block {
+  --toastify-color-light: var(--surface);
+  --toastify-text-color-light: var(--text);
+  --toastify-color-success: var(--primary);
+  --toastify-color-error: var(--danger);
+  --toastify-icon-color-success: var(--primary);
+  --toastify-icon-color-error: var(--danger);
+  --toastify-color-progress-success: var(--primary);
+  --toastify-color-progress-error: var(--danger);
+  --toastify-font-family: inherit;
+  --toastify-toast-shadow: 0 #{rem(8px)} #{rem(24px)} var(--shadow-color);
+  --toastify-toast-width: #{rem(360px)};
+
+  padding: var(--space-2);
+}
+
+.toast {
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: rem(1px) solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.close {
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}

@@ -1,0 +1,13 @@
+.block {
+  @include scroll-y;
+
+  position: sticky;
+  top: calc(var(--header-height) + env(safe-area-inset-top, 0px) + var(--space-2));
+  margin-block: var(--space-4);
+  padding: var(--space-3);
+  border: rem(1px) solid var(--border);
+  border-radius: var(--radius-lg);
+  max-height: calc(100dvh - var(--header-height) - var(--space-4));
+  background-color: var(--surface);
+  z-index: $z-index-3;
+}

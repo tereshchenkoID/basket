@@ -1,0 +1,9 @@
+.block::before {
+  @include size(rem(6px));
+
+  display: inline-block;
+  margin-inline-end: var(--space-2);
+  border-radius: 50%;
+  background-color: currentcolor;
+  content: '';
+}

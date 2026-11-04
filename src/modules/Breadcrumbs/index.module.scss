@@ -1,0 +1,30 @@
+.list {
+  @include flex($align-items: center, $wrap: wrap);
+
+  gap: var(--space-2);
+}
+
+.item {
+  @include flex($align-items: center);
+
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+}
+
+.link {
+  @include transition(color, var(--motion-duration));
+
+  text-decoration: none;
+  color: var(--text-muted);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+@include hover {
+  .link:hover {
+    color: var(--primary);
+  }
+}

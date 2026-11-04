@@ -1,0 +1,35 @@
+.card {
+  @include transition(border-color, var(--motion-duration));
+
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  @include hover {
+    &:hover {
+      border-color: var(--primary);
+    }
+  }
+}
+
+.member {
+  @include flex($align-items: center, $wrap: wrap);
+
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+
+  & + & {
+    border-top: rem(1px) solid var(--border);
+  }
+}
+
+.detail {
+  display: block;
+}
+
+.setting {
+  margin-block: var(--space-3);
+}
+
+.eyebrow {
+  letter-spacing: 0.13em;
+}

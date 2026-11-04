@@ -1,0 +1,30 @@
+.card {
+  @include transition(border-color, var(--motion-duration));
+
+  text-decoration: none;
+  overflow-wrap: anywhere;
+
+  @include hover {
+    &:hover {
+      border-color: var(--primary);
+    }
+  }
+}
+
+.icon {
+  display: inline-flex;
+  margin-block-end: var(--space-3);
+  padding: rem(10px);
+  border-radius: 50%;
+  background-color: var(--primary-subtle);
+}
+
+.link {
+  @include flex(space-between, center);
+
+  gap: var(--space-2);
+}
+
+.eyebrow {
+  letter-spacing: 0.13em;
+}
