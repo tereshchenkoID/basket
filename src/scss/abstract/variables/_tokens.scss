@@ -1,55 +1,53 @@
+@use '../helpers/mixins/rem-converter' as *;
+
 $colors-light: (
-  'background': #f6f7f2,
-  'paper': #fff,
-  'ink': #203a30,
-  'muted': #596958,
-  'green': #325d42,
-  'green-soft': #e9efdf,
+  'bg': #f6f7f2,
+  'surface': #fff,
+  'text': #203a30,
+  'text-muted': #596958,
+  'primary': #325d42,
+  'primary-subtle': #e9efdf,
   'border': #d9e0d4,
-  'control-border': #9ba895,
-  'on-error': #fff,
-  'error': #a43829,
+  'border-strong': #9ba895,
+  'on-danger': #fff,
+  'danger': #a43829,
   'on-accent': #fff,
-  'shadow': rgb(22 39 28 / 12%),
-  'overlay': rgb(0 0 0 / 45%),
+  'shadow-color': rgb(22 39 28 / 12%),
+  'overlay-color': rgb(0 0 0 / 45%),
 );
 $colors-dark: (
-  'background': #131b17,
-  'paper': #1c2821,
-  'ink': #edf3e7,
-  'muted': #b0bdaa,
-  'green': #b3d2a0,
-  'green-soft': #2b3e2b,
+  'bg': #131b17,
+  'surface': #1c2821,
+  'text': #edf3e7,
+  'text-muted': #b0bdaa,
+  'primary': #b3d2a0,
+  'primary-subtle': #2b3e2b,
   'border': #3d4e40,
-  'control-border': #71856f,
-  'on-error': #341b16,
-  'error': #ffb8a8,
+  'border-strong': #71856f,
+  'on-danger': #341b16,
+  'danger': #ffb8a8,
   'on-accent': #19281d,
-  'shadow': rgb(0 0 0 / 30%),
-  'overlay': rgb(0 0 0 / 60%),
+  'shadow-color': rgb(0 0 0 / 30%),
+  'overlay-color': rgb(0 0 0 / 60%),
 );
 $spaces: (
-  1: 4px,
-  2: 8px,
-  3: 16px,
-  4: 24px,
-  5: 32px,
-  6: 48px,
+  1: rem(4px),
+  2: rem(8px),
+  3: rem(16px),
+  4: rem(24px),
+  5: rem(32px),
+  6: rem(48px),
 );
-$radius-small: 12px;
-$radius-large: 24px;
-$content-width: 1120px;
-$control-height: 48px;
-$touch-target: 44px;
-$motion-duration: 160ms;
-$font-base: -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
-$font-accent: georgia, 'Times New Roman', serif;
+$radius: (
+  sm: rem(12px),
+  lg: rem(24px),
+);
 $text-sizes: (
-  xs: 0.75rem,
-  sm: 0.875rem,
-  md: 1rem,
-  lg: 1.125rem,
-  xl: 1.5rem,
-  title: clamp(1.75rem, 5vw, 2.75rem),
-  hero: clamp(2.25rem, 7vw, 4.4rem),
+  1: rem(12px),
+  2: rem(14px),
+  3: rem(16px),
+  4: rem(18px),
+  5: rem(24px),
+  6: clamp(1.75rem, 5vw, 2.75rem),
+  7: clamp(2.25rem, 7vw, 4.4rem),
 );

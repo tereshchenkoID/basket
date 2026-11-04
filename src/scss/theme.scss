@@ -1,4 +1,3 @@
-@use './abstract/helpers/mixins/rem-converter' as *;
 @use './abstract/variables/tokens' as *;
 
 @mixin palette($colors, $scheme) {
@@ -11,26 +10,6 @@
 
 :root {
   @include palette($colors-light, light);
-
-  @each $name, $value in $spaces {
-    --space-#{$name}: #{rem($value)};
-  }
-
-  --font-base: #{$font-base};
-  --font-accent: #{$font-accent};
-  --header-height: #{rem(64px)};
-  --gutter: #{rem(16px)};
-
-  @each $name, $value in $text-sizes {
-    --text-#{$name}: #{$value};
-  }
-
-  --radius-small: #{rem($radius-small)};
-  --radius-large: #{rem($radius-large)};
-  --content-width: #{rem($content-width)};
-  --control-height: #{rem($control-height)};
-  --touch-target: #{rem($touch-target)};
-  --motion-duration: #{$motion-duration};
 }
 
 :root[data-theme='dark'] {
@@ -40,12 +19,5 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light'], [data-theme='dark']) {
     @include palette($colors-dark, dark);
-  }
-}
-
-@media (width >= 768px) {
-  :root {
-    --header-height: #{rem(80px)};
-    --gutter: #{rem(32px)};
   }
 }

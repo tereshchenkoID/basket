@@ -1,8 +1,8 @@
 'use client'
 
 import clsx from 'clsx'
-import { Check } from 'lucide-react'
 
+import Icon from '@/components/Icon'
 import { Text } from '@/components/Text'
 
 import styles from './index.module.scss'
@@ -36,7 +36,8 @@ export const Checkbox = ({
       className={styles.control}
       aria-hidden="true"
     >
-      <Check
+      <Icon
+        name="check"
         className={styles.check}
         size={16}
       />
@@ -49,7 +50,7 @@ export const Checkbox = ({
       error &&
       <Text
         as="span"
-        size="sm"
+        size={2}
         color="error"
         role="alert"
       >

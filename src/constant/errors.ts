@@ -1,18 +1,18 @@
 import type { ActionError } from '@/types/action'
 
-export const validationErrors = {
+export const VALIDATION_ERRORS = {
   required: 'textRequired',
   maxLength: 'textTooLong',
   quantity: 'invalidQuantity',
   unit: 'invalidUnit',
 } as const
 
-export const databaseErrorMessages = {
+export const DATABASE_ERROR_MESSAGES = {
   invalid_invite: 'inviteInvalid',
   owner_cannot_leave: 'ownerCannotLeave',
 } as const satisfies Record<string, ActionError>
 
-export const databaseErrorCodes = {
+export const DATABASE_ERROR_CODES = {
   PGRST202: 'setupRequired',
   PGRST205: 'setupRequired',
   '42P01': 'setupRequired',

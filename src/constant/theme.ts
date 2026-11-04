@@ -1,3 +1,3 @@
-export const themes = ['light', 'dark', 'system'] as const
+export const THEMES = ['light', 'dark', 'system'] as const
 
-export const themeCookie = 'basket-theme'
+export const THEME_COOKIE = 'basket-theme'

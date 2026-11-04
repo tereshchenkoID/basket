@@ -1,19 +1,21 @@
+'use client'
+
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { ArrowUpRight, Leaf } from 'lucide-react'
 
 import { Action } from '@/components/Action'
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
 import { Heading } from '@/components/Heading'
+import Icon from '@/components/Icon'
 import { Text } from '@/components/Text'
-import { GoogleLoginButton } from '@/modules/Providers/Google'
+import { Google } from '@/modules/Providers/Google'
 
-import styles from '../page.module.scss'
+import type { HomeViewProps } from './types'
 
-import type { HomeViewProps } from '@/types/views'
+import styles from './index.module.scss'
 
-const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
+const Section = ({ locale, authenticated, configured }: HomeViewProps) => {
   const t = useTranslations('Home')
 
   return (
@@ -28,27 +30,29 @@ const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
       <Box>
         <Text
           className={styles.eyebrow}
-          size="xs"
-          weight={700}
+          transform="uppercase"
+          size={1}
+          weight="bold"
           color="accent"
         >
           <Text
             as="span"
             className={styles.dot}
             aria-hidden="true"
-          /> {t('eyebrow')}
+          />
+          {t('eyebrow')}
         </Text>
         <Heading
           as="h1"
-          size="hero"
-          weight={500}
+          size={7}
+          weight="medium"
           className={styles.title}
         >
           {t('title')}{' '}
           <Text
             as="em"
             family="accent"
-            weight={400}
+            weight="regular"
             color="accent"
           >
             {t('accent')}
@@ -70,19 +74,20 @@ const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
                 className={styles.dashboard}
               >
                 <Text as="span">{t('dashboard')}</Text>
-                <ArrowUpRight
+                <Icon
+                  name="arrow-up-right"
                   size={18}
                   aria-hidden="true"
                 />
               </Action>
               :
               <>
-                <GoogleLoginButton
+                <Google
                   locale={locale}
                   configured={configured}
                 />
                 <Text
-                  size="sm"
+                  size={2}
                   color="muted"
                   align="center"
                   mt={3}
@@ -100,7 +105,8 @@ const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
           pt={4}
           className={styles.caption}
         >
-          <Leaf
+          <Icon
+            name="leaf"
             className={styles.leaf}
             size={24}
             aria-hidden="true"
@@ -112,15 +118,14 @@ const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
         className={styles.art}
       >
         <Image
-          className={styles.image}
           src="/basket.svg"
           width={560}
           height={560}
-          alt=""
+          alt="Basket"
           priority
         />
         <Text
-          size="sm"
+          size={2}
           color="accent"
           align="center"
           px={4}
@@ -133,4 +138,4 @@ const HomeView = ({ locale, authenticated, configured }: HomeViewProps) => {
   )
 }
 
-export default HomeView
+export default Section

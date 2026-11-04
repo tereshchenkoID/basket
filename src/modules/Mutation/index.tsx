@@ -3,18 +3,24 @@ import { useTranslations } from 'next-intl'
 import { useMutation } from '@/hooks/useMutation'
 
 import { Action } from '@/components/Action'
-import { Confirm } from '@/components/Confirm'
 import { Grid } from '@/components/Grid'
+import Icon from '@/components/Icon'
 import { Text } from '@/components/Text'
+import { Confirm } from '@/widgets/Modals/Confirm'
 
-import type { MutationProps } from '@/types/components'
+import type { MutationProps } from './types'
 
 export const Mutation = <T,>({
   label,
+  ariaLabel,
   operation,
   onSuccess,
   confirmation,
   compact,
+  variant,
+  icon,
+  iconOnly,
+  disabled,
   className,
 }: MutationProps<T>) => {
   const t = useTranslations('Workspace')
@@ -36,22 +42,38 @@ export const Mutation = <T,>({
           <Confirm
             label={label}
             description={confirmation}
-            disabled={pending}
+            ariaLabel={ariaLabel}
+            variant={variant ?? (compact ? 'secondary' : 'primary')}
+            icon={icon}
+            iconOnly={iconOnly}
+            isLoading={pending}
+            disabled={disabled || pending}
             onConfirm={() => void run()}
           />
           :
           <Action
-            variant={compact ? 'secondary' : 'primary'}
+            variant={variant ?? (compact ? 'secondary' : 'primary')}
+            iconOnly={iconOnly}
+            aria-label={ariaLabel ?? (iconOnly ? label : undefined)}
+            disabled={disabled}
             isLoading={pending}
             onClick={() => void run()}
           >
-            {label}
+            {
+              icon &&
+              <Icon
+                name={icon}
+                size={18}
+                aria-hidden="true"
+              />
+            }
+            {!iconOnly && label}
           </Action>
       }
       {
         error &&
         <Text
-          size="sm"
+          size={2}
           color="error"
           role="alert"
         >

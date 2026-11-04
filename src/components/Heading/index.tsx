@@ -1,27 +1,27 @@
 import { createElement } from 'react'
 
-import { primitiveProps, typographyProps } from '@/helpers/primitives'
+import { primitiveProps, TYPOGRAPHY_PROPS } from '@/helpers/primitives'
+
+import type { HeadingProps } from './types'
 
 import styles from './index.module.scss'
 
-import type { HeadingProps } from '@/types/ui'
-
-const sizes = {
-  h1: 'title',
-  h2: 'xl',
-  h3: 'lg',
-  h4: 'md',
-  h5: 'md',
-  h6: 'md',
+const SIZES = {
+  h1: 6,
+  h2: 5,
+  h3: 4,
+  h4: 3,
+  h5: 3,
+  h6: 3,
 } as const
 
 export const Heading = ({
   as = 'h2',
   size,
-  weight = 650,
+  weight = 'semibold',
   ...props
 }: HeadingProps) => createElement(as, primitiveProps({
   ...props,
-  size: size ?? sizes[as],
+  size: size ?? SIZES[as],
   weight,
-}, typographyProps, styles.block))
+}, TYPOGRAPHY_PROPS, styles.block))

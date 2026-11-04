@@ -2,13 +2,13 @@
 
 import { useId } from 'react'
 import clsx from 'clsx'
-import { LoaderCircle } from 'lucide-react'
 
 import { Field } from '@/components/Field'
+import Icon from '@/components/Icon'
+
+import type { TextareaProps } from './types'
 
 import styles from './index.module.scss'
-
-import type { TextareaProps } from '@/types/ui'
 
 export const Textarea = ({
   id,
@@ -54,7 +54,8 @@ export const Textarea = ({
         />
         {
           isLoading &&
-          <LoaderCircle
+          <Icon
+            name="loader-circle"
             className={styles.spinner}
             size={18}
             aria-hidden="true"

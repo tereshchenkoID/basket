@@ -1,15 +1,12 @@
-@use '@/scss/config' as *;
-
 .block {
   position: relative;
   width: 100%;
 }
 
 .native {
+  @include size(rem(1px));
+
   position: absolute;
-
-  @include size(1px);
-
   opacity: 0;
   pointer-events: none;
 }
@@ -20,23 +17,19 @@
 
   gap: var(--space-2);
   padding: rem(11px) rem(12px);
-  border: 1px solid var(--control-border);
-  border-radius: var(--radius-small);
+  border: rem(1px) solid var(--border-strong);
+  border-radius: var(--radius-sm);
   width: 100%;
   min-height: var(--control-height);
-  background-color: var(--paper);
-  text-align: left;
-  color: var(--ink);
+  background-color: var(--surface);
+  text-align: start;
+  color: var(--text);
   cursor: pointer;
 
   &[aria-expanded='true'] {
-    border-color: var(--green);
+    border-color: var(--primary);
   }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
 }
 
 .value {
@@ -53,7 +46,7 @@
 .chevron {
   @include transition(transform, var(--motion-duration));
 
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 .open {
@@ -61,15 +54,16 @@
 }
 
 .list {
+  @include scroll-y;
+
   display: grid;
   gap: var(--space-1);
   position: fixed;
   padding: var(--space-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-small);
-  background-color: var(--paper);
-  box-shadow: 0 rem(8px) rem(32px) var(--shadow);
-  overflow-y: auto;
+  border: rem(1px) solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  box-shadow: 0 rem(8px) rem(32px) var(--shadow-color);
   z-index: $z-index-9;
 }
 
@@ -83,24 +77,20 @@
   width: 100%;
   min-height: var(--touch-target);
   background-color: transparent;
-  text-align: left;
-  color: var(--ink);
+  text-align: start;
+  color: var(--text);
   cursor: pointer;
 
   &[aria-selected='true'],
   &.active {
-    background-color: var(--green-soft);
-    color: var(--green);
+    background-color: var(--primary-subtle);
+    color: var(--primary);
   }
 
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
 }
 
 .invalid {
-  border-color: var(--error);
+  border-color: var(--danger);
 }
 
 .spinner {
@@ -111,8 +101,4 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.invalid:focus-visible {
-  outline-color: var(--error);
 }

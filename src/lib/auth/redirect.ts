@@ -1,20 +1,20 @@
-import { regex } from '@/constant/regex'
+import { DEFAULT_LOCALE, isLocale, type Locale } from '@/i18n/locales'
 
-import { defaultLocale, isLocale, type Locale } from '../../i18n/locales'
+import { REGEX } from '@/constant/regex'
 
 // Only actual auth destinations are permitted. No queries, fragments, encoding or trailing slashes.
 export function safeNext(value: unknown): string {
-  if (typeof value !== 'string') return `/${defaultLocale}/dashboard`
+  if (typeof value !== 'string') return `/${DEFAULT_LOCALE}/dashboard`
 
-  const match = regex.authDestination.exec(value)
+  const match = REGEX.authDestination.exec(value)
 
-  return match && match[0] === value && isLocale(match[1]) ? value : `/${defaultLocale}/dashboard`
+  return match && match[0] === value && isLocale(match[1]) ? value : `/${DEFAULT_LOCALE}/dashboard`
 }
 
 export function localeFromNext(next: string): Locale {
   const value = safeNext(next).split('/')[1]
 
-  return isLocale(value) ? value : defaultLocale
+  return isLocale(value) ? value : DEFAULT_LOCALE
 }
 
 export function nextForLocale(value: unknown, locale: Locale): string {

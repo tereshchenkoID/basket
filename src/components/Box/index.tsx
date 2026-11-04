@@ -1,15 +1,14 @@
 import { createElement, type ElementType } from 'react'
 import clsx from 'clsx'
 
-import { layoutProps, primitiveProps, styles } from '@/helpers/primitives'
+import { LAYOUT_PROPS, primitiveProps, styles } from '@/helpers/primitives'
 
-import type { BoxProps } from '@/types/primitives'
+import type { BoxProps } from './types'
 
 export const Box = <Tag extends ElementType = 'div'>({
   as,
   grow,
   full,
-  container,
   surface,
   radius,
   border,
@@ -21,13 +20,12 @@ export const Box = <Tag extends ElementType = 'div'>({
     {
       [styles.grow]: grow,
       [styles.full]: full,
-      [styles.container]: container,
-      [styles.paper]: surface === 'paper',
+      [styles.surface]: surface === 'default',
       [styles.soft]: surface === 'soft',
-      [styles.small]: radius === 'small',
-      [styles.large]: radius === 'large',
+      [styles.sm]: radius === 'sm',
+      [styles.lg]: radius === 'lg',
       [styles.border]: border
     },
     className
   ),
-}, layoutProps))
+}, LAYOUT_PROPS))

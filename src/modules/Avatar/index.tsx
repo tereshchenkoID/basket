@@ -2,9 +2,9 @@ import Image from 'next/image'
 
 import { Text } from '@/components/Text'
 
-import styles from './index.module.scss'
+import type { AvatarProps } from './types'
 
-import type { AvatarProps } from '@/types/components'
+import styles from './index.module.scss'
 
 export const Avatar = ({ name, url }: AvatarProps) => {
   let source: string | null = null
@@ -17,8 +17,7 @@ export const Avatar = ({ name, url }: AvatarProps) => {
         parsed.protocol === 'https:' &&
         !parsed.username &&
         !parsed.password &&
-        (parsed.hostname === 'googleusercontent.com' ||
-          parsed.hostname.endsWith('.googleusercontent.com'))
+        (parsed.hostname === 'googleusercontent.com' || parsed.hostname.endsWith('.googleusercontent.com'))
       ) {
         source = parsed.href
       }
@@ -27,9 +26,9 @@ export const Avatar = ({ name, url }: AvatarProps) => {
     }
   }
 
-  return source ? (
+  if (source) return (
     <Image
-      className={styles.avatar}
+      className={styles.block}
       src={source}
       alt=""
       width={40}
@@ -37,10 +36,12 @@ export const Avatar = ({ name, url }: AvatarProps) => {
       unoptimized
       referrerPolicy="no-referrer"
     />
-  ) : (
+  )
+
+  return (
     <Text
       as="span"
-      className={styles.initial}
+      className={styles.text}
       aria-hidden="true"
     >
       {name.slice(0, 1)}

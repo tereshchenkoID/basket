@@ -1,21 +1,21 @@
 import { z } from 'zod'
 
-import { validationErrors } from '@/constant/errors'
-import { regex } from '@/constant/regex'
+import { VALIDATION_ERRORS } from '@/constant/errors'
+import { REGEX } from '@/constant/regex'
 
-export const uuid = z.uuid()
+export const UUID = z.uuid()
 
 export const normalizedText = (max: number) => z
   .string()
-  .transform(value => value.replace(regex.whitespace, ' ').trim())
+  .transform(value => value.replace(REGEX.whitespace, ' ').trim())
   .pipe(
     z.string()
-      .min(1, { error: validationErrors.required })
-      .max(max, { error: validationErrors.maxLength }),
+      .min(1, { error: VALIDATION_ERRORS.required })
+      .max(max, { error: VALIDATION_ERRORS.maxLength }),
   )
 
 export const validationError = (error: z.ZodError) => {
-  const messages = Object.values(validationErrors)
+  const messages = Object.values(VALIDATION_ERRORS)
   const issue = error.issues[0]
 
   return messages.find(message => message === issue?.message) ?? 'invalid'

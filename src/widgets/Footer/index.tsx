@@ -1,23 +1,23 @@
 import { getTranslations } from 'next-intl/server'
 import clsx from 'clsx'
-import { ArrowUpRight } from 'lucide-react'
 
-import { creator } from '@/constant/brand'
+import { CREATOR } from '@/constant/brand'
 
 import { Box } from '@/components/Box'
+import { Container } from '@/components/Container'
+import Icon from '@/components/Icon'
 import { Text } from '@/components/Text'
+
+import type { FooterProps } from './types'
 
 import styles from './index.module.scss'
 
-import type { FooterProps } from '@/types/components'
-
 export const Footer = async ({ className }: FooterProps) => {
-  const t = await getTranslations('Common')
+  const t = await getTranslations('Workspace')
 
   return (
-    <Box
+    <Container
       as="footer"
-      container
       display="flex"
       direction={{ initial: 'column', tabS: 'row' }}
       justify="between"
@@ -31,7 +31,7 @@ export const Footer = async ({ className }: FooterProps) => {
       }
     >
       <Text
-        size="sm"
+        size={2}
         color="muted"
       >
         {t('copyright', { year: new Date().getFullYear() })}
@@ -44,31 +44,32 @@ export const Footer = async ({ className }: FooterProps) => {
       >
         <Text
           as="span"
-          size="sm"
+          size={2}
           color="muted"
         >
           {t('creator')}
         </Text>
         <a
           className={styles.link}
-          href={creator.url}
+          href={CREATOR.url}
           target="_blank"
           rel="noopener noreferrer"
         >
           <Text
             as="span"
-            size="sm"
-            weight={600}
+            size={2}
+            weight="semibold"
           >
-            {creator.name}
+            {CREATOR.name}
           </Text>
-          <ArrowUpRight
+          <Icon
+            name="arrow-up-right"
             className={styles.icon}
             size={16}
             aria-hidden="true"
           />
         </a>
       </Box>
-    </Box>
+    </Container>
   )
 }

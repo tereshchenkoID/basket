@@ -1,3 +1,3 @@
-import type { themes } from '@/constant/theme'
+import type { THEMES } from '@/constant/theme'
 
-export type Theme = (typeof themes)[number]
+export type Theme = (typeof THEMES)[number]

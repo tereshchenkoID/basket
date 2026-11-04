@@ -1,13 +1,14 @@
 'use client'
 
 import clsx from 'clsx'
-import { LoaderCircle } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 
-import styles from './index.module.scss'
+import Icon from '@/components/Icon'
 
-import type { ActionProps } from '@/types/ui'
+import type { ActionProps } from './types'
+
+import styles from './index.module.scss'
 
 export const Action = (props: ActionProps) => {
   if (props.href !== undefined) {
@@ -16,10 +17,12 @@ export const Action = (props: ActionProps) => {
       children,
       variant: _variant,
       isLoading,
-      iconOnly: _iconOnly,
+      iconOnly,
       className: _className,
       ...rest
     } = props
+
+    const unavailable = isLoading || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true'
 
     return (
       <Link
@@ -36,22 +39,26 @@ export const Action = (props: ActionProps) => {
           )
         }
         aria-busy={isLoading || undefined}
-        aria-disabled={isLoading || rest['aria-disabled'] || undefined}
-        tabIndex={isLoading ? -1 : rest.tabIndex}
+        aria-disabled={unavailable || undefined}
+        tabIndex={unavailable ? -1 : rest.tabIndex}
         onClick={event => {
-          if (isLoading || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true') event.preventDefault()
+          if (unavailable) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
           else rest.onClick?.(event)
         }}
       >
         {
           isLoading &&
-          <LoaderCircle
+          <Icon
+            name="loader-circle"
             className={styles.spinner}
             size={18}
             aria-hidden="true"
           />
         }
-        {children}
+        {!(isLoading && iconOnly) && children}
       </Link>
     )
   }
@@ -60,7 +67,7 @@ export const Action = (props: ActionProps) => {
     children,
     variant: _variant,
     isLoading,
-    iconOnly: _iconOnly,
+    iconOnly,
     className: _className,
     type = 'button',
     disabled,
@@ -81,18 +88,19 @@ export const Action = (props: ActionProps) => {
           props.className
         )
       }
-      disabled={disabled || isLoading}
+      disabled={disabled || isLoading || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true'}
       aria-busy={isLoading || undefined}
     >
       {
         isLoading &&
-        <LoaderCircle
+        <Icon
+          name="loader-circle"
           className={styles.spinner}
           size={18}
           aria-hidden="true"
         />
       }
-      {children}
+      {!(isLoading && iconOnly) && children}
     </button>
   )
 }

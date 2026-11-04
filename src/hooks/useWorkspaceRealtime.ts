@@ -5,7 +5,9 @@ import { useRouter } from 'next/navigation'
 
 import { createClient } from '@/lib/supabase/client'
 
-import type { WorkspaceConnection, WorkspaceRealtimeProps } from '@/types/workspace'
+import type { WorkspaceRealtimeProps } from './types'
+
+import type { WorkspaceConnection } from '@/types/workspace'
 
 export function useWorkspaceRealtime({
   userId,

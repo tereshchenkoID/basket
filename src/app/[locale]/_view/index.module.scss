@@ -1,0 +1,42 @@
+.eyebrow {
+  @include flex($align-items: center);
+
+  gap: var(--space-2);
+  margin-block-end: var(--space-4);
+  letter-spacing: 0.15em;
+}
+
+.dot {
+  @include size(rem(7px));
+
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-color: var(--primary);
+}
+
+.title {
+  line-height: 1.12;
+  letter-spacing: -0.065em;
+}
+
+.dashboard {
+  justify-content: space-between;
+  width: 100%;
+}
+
+.caption {
+  border-top: rem(1px) solid var(--border);
+}
+
+.leaf {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.art {
+  position: relative;
+  border-radius: 48% 48% var(--radius-lg) var(--radius-lg);
+  width: 100%;
+  background-color: var(--primary-subtle);
+  justify-self: center;
+}

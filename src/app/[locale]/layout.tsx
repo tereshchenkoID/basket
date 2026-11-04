@@ -1,20 +1,18 @@
 import type { Metadata, Viewport } from 'next'
-import { notFound } from 'next/navigation'
 import { NextIntlClientProvider } from 'next-intl'
-import { getMessages, getTranslations } from 'next-intl/server'
-
-import { isLocale } from '@/i18n/locales'
+import { getLocale, getMessages, getTranslations } from 'next-intl/server'
 
 import { getTheme } from '@/lib/theme/server'
 
-import { Box } from '@/components/Box'
+import { Container } from '@/components/Container'
 import { Footer } from '@/widgets/Footer'
 import { Header } from '@/widgets/Header'
+import { Modals } from '@/widgets/Modals'
+import { Toastify } from '@/widgets/Toastify'
+
+import type { LocaleLayoutProps } from './types'
 
 import './layout.scss'
-import styles from './layout.module.scss'
-
-import type { LocaleLayoutProps } from '@/types/routes'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -23,12 +21,8 @@ export const viewport: Viewport = {
   interactiveWidget: 'resizes-content',
 }
 
-export const generateMetadata = async ({ params }: Pick<LocaleLayoutProps, 'params'>): Promise<Metadata> => {
-  const { locale } = await params
-
-  if (!isLocale(locale)) return {}
-
-  const t = await getTranslations({ locale, namespace: 'Common' })
+export const generateMetadata = async (): Promise<Metadata> => {
+  const t = await getTranslations('Workspace')
 
   return {
     referrer: 'no-referrer',
@@ -37,40 +31,37 @@ export const generateMetadata = async ({ params }: Pick<LocaleLayoutProps, 'para
   }
 }
 
-const LocaleLayout = async ({ children, params }: LocaleLayoutProps) => {
-  const { locale } = await params
-
-  if (!isLocale(locale)) notFound()
-
-  const theme = await getTheme()
-  const messages = await getMessages()
-  const t = await getTranslations('Common')
+const LocaleLayout = async ({ children }: LocaleLayoutProps) => {
+  const [
+    locale,
+    theme,
+    messages
+  ] = await Promise.all([
+    getLocale(),
+    getTheme(),
+    getMessages(),
+  ])
 
   return (
     <html
       lang={locale}
       data-theme={theme}
     >
-      <body className={styles.body}>
+      <body>
         <NextIntlClientProvider messages={messages}>
-          <a
-            href="#main"
-            className={styles.skip}
-          >
-            {t('skip')}
-          </a>
           <Header theme={theme} />
-          <Box
+          <Container
             as="main"
             id="main"
-            container
             grow
             display="flex"
             align="center"
           >
             {children}
-          </Box>
+          </Container>
           <Footer />
+          <Modals />
+          <Toastify />
         </NextIntlClientProvider>
       </body>
     </html>

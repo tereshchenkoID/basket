@@ -9,7 +9,7 @@ const shift = (value, from, to) => value.split('\n').map((line, index) => {
 
 const isJsx = node => node?.type === 'JSXElement' || node?.type === 'JSXFragment'
 
-const jsxLayout = {
+const JSX_LAYOUT = {
   meta: {
     type: 'layout',
     fixable: 'whitespace',
@@ -22,6 +22,35 @@ const jsxLayout = {
     const render = (node, indent) => shift(text(node), node.loc.start.column, indent)
 
     return {
+      'JSXElement:exit'(node) {
+        const opening = node.openingElement
+        const closing = node.closingElement
+
+        if (opening.loc.start.line === opening.loc.end.line) return
+
+        const children = node.children.filter(child => child.type !== 'JSXText' || child.value.trim())
+
+        if (!children.length) return
+
+        const first = children[0]
+        const last = children[children.length - 1]
+        const changes = []
+
+        const firstHasBreak = first.type === 'JSXText' && /^[ \t]*\n/.test(first.value)
+        const lastHasBreak = last.type === 'JSXText' && /\n[ \t]*$/.test(last.value)
+
+        if (!firstHasBreak && first.loc.start.line === opening.loc.end.line) {
+          changes.push({ range: [opening.range[1], first.range[0]], value: '\n' + padding(opening.loc.start.column + 2) })
+        }
+
+        if (!lastHasBreak && last.loc.end.line === closing.loc.start.line) {
+          changes.push({ range: [last.range[1], closing.range[0]], value: '\n' + padding(opening.loc.start.column) })
+        }
+
+        if (!changes.length) return
+
+        context.report({ node, messageId: 'layout', fix: fixer => changes.map(change => fixer.replaceTextRange(change.range, change.value)) })
+      },
       'JSXExpressionContainer:exit'(node) {
         if (node.parent.type === 'JSXAttribute') return
 
@@ -65,7 +94,7 @@ const jsxLayout = {
   },
 }
 
-const clsxLayout = {
+const CLSX_LAYOUT = {
   meta: {
     type: 'layout',
     fixable: 'code',
@@ -130,7 +159,7 @@ const clsxLayout = {
 
 export default {
   rules: {
-    'jsx-layout': jsxLayout,
-    'clsx-layout': clsxLayout,
+    'jsx-layout': JSX_LAYOUT,
+    'clsx-layout': CLSX_LAYOUT,
   },
 }

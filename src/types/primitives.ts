@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef, CSSProperties, ElementType } from 'react'
+import type { ComponentPropsWithRef, ElementType } from 'react'
 
 export type Breakpoint = 'initial' | 'mobS' | 'mobM' | 'tabS' | 'tabM' | 'tabL' | 'deskS' | 'deskM'
 
@@ -6,7 +6,11 @@ export type Responsive<Value> = Value | Partial<Record<Breakpoint, Value>>
 
 export type Space = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
-export type TextSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'title' | 'hero'
+export type TextSize = 1 | 2 | 3 | 4 | 5 | 6 | 7
+
+export type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold'
+
+export type TextTransform = 'none' | 'uppercase' | 'lowercase' | 'capitalize'
 
 export type TextColor = 'default' | 'muted' | 'error' | 'success' | 'accent'
 
@@ -24,15 +28,15 @@ export type LayoutProps = SpacingProps & {
   justify?: Responsive<'start' | 'center' | 'end' | 'between'>
   grow?: boolean
   full?: boolean
-  container?: boolean
-  surface?: 'paper' | 'soft'
-  radius?: 'small' | 'large'
+  surface?: 'default' | 'soft'
+  radius?: 'sm' | 'lg'
   border?: boolean
 }
 
 export type TypographyProps = SpacingProps & {
   size?: Responsive<TextSize>
-  weight?: 400 | 500 | 600 | 650 | 700
+  weight?: Responsive<TextWeight>
+  transform?: Responsive<TextTransform>
   color?: TextColor
   align?: Responsive<'start' | 'center' | 'end'>
   family?: 'base' | 'accent'
@@ -41,18 +45,3 @@ export type TypographyProps = SpacingProps & {
 export type PrimitiveProps<Tag extends ElementType, OwnProps> = OwnProps & {
   as?: Tag
 } & Omit<ComponentPropsWithRef<NoInfer<Tag>>, keyof OwnProps | 'as'>
-
-export type BoxProps<Tag extends ElementType = 'div'> = PrimitiveProps<Tag, LayoutProps>
-
-export type GridProps<Tag extends ElementType = 'div'> = PrimitiveProps<Tag, LayoutProps & {
-  columns?: Responsive<number | string>
-}>
-
-export type PrimitiveKind = 'space' | 'raw' | 'columns' | 'size' | 'color' | 'justify' | 'textalign' | 'family'
-
-export type PrimitiveDefinitions = Record<string, PrimitiveKind>
-
-export type PrimitiveAttributes = Record<string, unknown> & {
-  className?: string
-  style?: CSSProperties
-}

@@ -1,8 +1,46 @@
 @use '@/scss/config' as *;
 @use '@/scss/theme';
+@use '@/scss/abstract/variables/tokens' as *;
+
+:root {
+  --font-base: -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+  --font-accent: georgia, 'Times New Roman', serif;
+  --content-width: #{rem(1120px)};
+  --control-height: #{rem(48px)};
+  --touch-target: #{rem(44px)};
+  --motion-duration: 160ms;
+  --focus-width: #{rem(3px)};
+  --focus-offset: #{rem(4px)};
+  --disabled-opacity: 0.5;
+  --header-height: #{rem(64px)};
+  --gutter: #{rem(16px)};
+
+  @each $name, $value in $spaces {
+    --space-#{$name}: #{rem($value)};
+  }
+
+  @each $name, $value in $text-sizes {
+    --text-#{$name}: #{$value};
+  }
+
+  @each $name, $value in $radius {
+    --radius-#{$name}: #{rem($value)};
+  }
+
+  @include tab-s {
+    --header-height: #{rem(80px)};
+    --gutter: #{rem(32px)};
+  }
+}
 
 * {
   box-sizing: border-box;
+  user-select: none;
+
+  &::after,
+  &::before {
+    box-sizing: border-box;
+  }
 }
 
 html {
@@ -11,14 +49,17 @@ html {
 }
 
 body {
-  margin: 0;
-  background-color: var(--background);
-  font-family: var(--font-base);
-  font-size: var(--text-md);
-  line-height: 1.5;
-  color: var(--ink);
-
   @include smooth-font;
+  @include flex($direction: column);
+
+  margin: 0;
+  min-height: 100svh;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  font-family: var(--font-base);
+  font-size: var(--text-3);
+  line-height: 1.5;
+  color: var(--text);
 }
 
 a {
@@ -44,13 +85,7 @@ input[type='checkbox'] {
 input,
 select {
   scroll-margin-block: calc(var(--header-height) + var(--space-3)) var(--space-4);
-  accent-color: var(--green);
-}
-
-button,
-summary,
-a {
-  user-select: none;
+  accent-color: var(--primary);
 }
 
 button:enabled:active,
@@ -59,18 +94,67 @@ summary:active {
 }
 
 :focus-visible {
-  outline: 3px solid var(--green);
-  outline-offset: 4px;
+  outline: var(--focus-width) solid var(--primary);
+  outline-offset: var(--focus-offset);
+}
+
+button:disabled,
+input:disabled:not([type='checkbox'], [aria-hidden='true']),
+textarea:disabled,
+select:disabled:not([aria-hidden='true']),
+a[aria-disabled='true'] {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+input,
+textarea {
+  caret-color: currentcolor;
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:-webkit-autofill {
+    caret-color: var(--text-muted) !important;
+  }
+}
+
+button,
+a {
+  @include transition;
+}
+
+ul,
+ol {
+  @include reset-list;
+}
+
+picture,
+img {
+  @include size(100%, auto);
+
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  content-visibility: auto;
+}
+
+svg {
+  &:focus {
+    outline: 0;
+  }
 }
 
 ::selection {
-  background-color: var(--green-soft);
+  background-color: var(--primary-subtle);
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
-  *::after {
+  *::after,
+  *::details-content {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

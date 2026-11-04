@@ -1,25 +1,22 @@
-import { notFound } from 'next/navigation'
+import { getLocale } from 'next-intl/server'
 
-import { isLocale } from '@/i18n/locales'
+import { getUser } from '@/app/actions/static'
 
-import { getUser } from '@/lib/auth/user'
 import { isAuthConfigured } from '@/lib/config'
 
-import HomeView from './_view'
+import Section from './_view'
 
-import type { LocalePageProps } from '@/types/routes'
-
-export const dynamic = 'force-dynamic'
-
-const Home = async ({ params }: LocalePageProps) => {
-  const { locale } = await params
-
-  if (!isLocale(locale)) notFound()
-
-  const user = await getUser()
+const Home = async () => {
+  const [
+    locale,
+    user
+  ] = await Promise.all([
+    getLocale(),
+    getUser(),
+  ])
 
   return (
-    <HomeView
+    <Section
       locale={locale}
       authenticated={Boolean(user)}
       configured={isAuthConfigured()}

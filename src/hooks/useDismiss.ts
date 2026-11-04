@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import type { DismissOptions } from '@/types/ui'
+import type { DismissOptions } from './types'
 
 export const useDismiss = ({ refs, enabled, onDismiss }: DismissOptions) => {
   useEffect(() => {

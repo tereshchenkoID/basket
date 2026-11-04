@@ -1,17 +1,12 @@
 import { createElement } from 'react'
 
-import { primitiveProps, typographyProps } from '@/helpers/primitives'
+import { primitiveProps, TYPOGRAPHY_PROPS } from '@/helpers/primitives'
+
+import type { TextProps } from './types'
 
 import styles from './index.module.scss'
 
-import type { TextProps } from '@/types/ui'
-
 export const Text = ({
   as = 'p',
-  tone,
-  color,
   ...props
-}: TextProps) => createElement(as, primitiveProps({
-  ...props,
-  color: color ?? tone,
-}, typographyProps, styles.block))
+}: TextProps) => createElement(as, primitiveProps(props, TYPOGRAPHY_PROPS, styles.block))

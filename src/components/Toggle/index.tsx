@@ -4,9 +4,9 @@ import clsx from 'clsx'
 
 import { Text } from '@/components/Text'
 
-import styles from './index.module.scss'
+import type { ToggleProps } from './types'
 
-import type { ToggleProps } from '@/types/ui'
+import styles from './index.module.scss'
 
 export const Toggle = ({
   label,
@@ -46,7 +46,7 @@ export const Toggle = ({
       error &&
       <Text
         as="span"
-        size="sm"
+        size={2}
         color="error"
         role="alert"
       >

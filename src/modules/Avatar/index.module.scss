@@ -1,15 +1,13 @@
-@use '@/scss/config' as *;
+.block,
+.text {
+  @include size(rem(40px));
 
-.avatar,
-.initial {
   flex-shrink: 0;
   border-radius: 50%;
-
-  @include size(rem(40px));
 }
 
-.initial {
+.text {
   display: grid;
   place-items: center;
-  background-color: var(--green-soft);
+  background-color: var(--primary-subtle);
 }

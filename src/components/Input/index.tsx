@@ -2,13 +2,13 @@
 
 import { useId } from 'react'
 import clsx from 'clsx'
-import { LoaderCircle } from 'lucide-react'
 
 import { Field } from '@/components/Field'
+import Icon from '@/components/Icon'
+
+import type { InputProps } from './types'
 
 import styles from './index.module.scss'
-
-import type { InputProps } from '@/types/ui'
 
 export const Input = ({
   id,
@@ -52,7 +52,8 @@ export const Input = ({
         />
         {
           isLoading &&
-          <LoaderCircle
+          <Icon
+            name="loader-circle"
             className={styles.spinner}
             size={18}
             aria-hidden="true"

@@ -1,8 +1,6 @@
-@use '@/scss/config' as *;
-
 .block {
   padding-block: var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--border);
+  border-top: rem(1px) solid var(--border);
 }
 
 .link {
@@ -11,9 +9,9 @@
   gap: var(--space-1);
   min-height: var(--touch-target);
   text-decoration: none;
-  color: var(--ink);
+  color: var(--text);
 }
 
 .icon {
-  color: var(--green);
+  color: var(--primary);
 }

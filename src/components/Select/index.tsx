@@ -7,15 +7,15 @@ import {
   useState,
 } from 'react'
 import clsx from 'clsx'
-import { Check, ChevronDown, LoaderCircle } from 'lucide-react'
 
 import { useDismiss } from '@/hooks/useDismiss'
 
 import { Field } from '@/components/Field'
+import Icon from '@/components/Icon'
+
+import type { SelectPosition, SelectProps } from './types'
 
 import styles from './index.module.scss'
-
-import type { SelectPosition, SelectProps } from '@/types/ui'
 
 export const Select = <Value extends string,>({
   id,
@@ -53,7 +53,7 @@ export const Select = <Value extends string,>({
   })
   const currentValue = value ?? selected
   const current = options.find(option => option.value === currentValue)
-  const CurrentIcon = current?.icon
+  const currentIcon = current?.icon
 
   const close = (restoreFocus = false) => {
     setOpen(false)
@@ -259,8 +259,9 @@ export const Select = <Value extends string,>({
           }}
         >
           {
-            CurrentIcon &&
-            <CurrentIcon
+            currentIcon &&
+            <Icon
+              name={currentIcon}
               className={styles.icon}
               size={18}
               aria-hidden="true"
@@ -275,13 +276,15 @@ export const Select = <Value extends string,>({
           {
             isLoading
               ?
-              <LoaderCircle
+              <Icon
+                name="loader-circle"
                 className={styles.spinner}
                 size={18}
                 aria-hidden="true"
               />
               :
-              <ChevronDown
+              <Icon
+                name="chevron-down"
                 className={
                   clsx(
                     styles.chevron,
@@ -306,7 +309,7 @@ export const Select = <Value extends string,>({
           >
             {
               options.map((option, index) => {
-                const Icon = option.icon
+                const icon = option.icon
 
                 return (
                   <button
@@ -330,8 +333,9 @@ export const Select = <Value extends string,>({
                     onClick={() => choose(index)}
                   >
                     {
-                      Icon &&
+                      icon &&
                       <Icon
+                        name={icon}
                         className={styles.icon}
                         size={18}
                         aria-hidden="true"
@@ -340,7 +344,8 @@ export const Select = <Value extends string,>({
                     <span className={styles.value}>{option.label}</span>
                     {
                       option.value === currentValue &&
-                      <Check
+                      <Icon
+                        name="check"
                         className={styles.icon}
                         size={18}
                         aria-hidden="true"

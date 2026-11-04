@@ -4,7 +4,7 @@ import { primitiveProps, styles } from '@/helpers/primitives'
 
 import { Box } from '@/components/Box'
 
-import type { GridProps } from '@/types/primitives'
+import type { GridProps } from './types'
 
 export const Grid = <Tag extends ElementType = 'div'>({
   as,

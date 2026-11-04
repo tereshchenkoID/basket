@@ -1,7 +1,7 @@
-import type { validationErrors } from '@/constant/errors'
+import type { VALIDATION_ERRORS } from '@/constant/errors'
 
 export type ActionError =
-  | (typeof validationErrors)[keyof typeof validationErrors]
+  | (typeof VALIDATION_ERRORS)[keyof typeof VALIDATION_ERRORS]
   | 'invalid'
   | 'unauthorized'
   | 'forbidden'

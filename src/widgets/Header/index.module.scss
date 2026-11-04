@@ -1,13 +1,15 @@
-@use '@/scss/config' as *;
-
 .block {
   position: sticky;
   top: 0;
   padding-block: calc(var(--space-2) + env(safe-area-inset-top, 0px)) var(--space-2);
   height: calc(var(--header-height) + env(safe-area-inset-top, 0px));
-  background-color: var(--background);
+  background-color: var(--bg);
   z-index: $z-index-8;
-  border-bottom: 1px solid var(--border);
+  border-bottom: rem(1px) solid var(--border);
+
+  @include tab-s {
+    padding-block: var(--space-3);
+  }
 }
 
 .brand {
@@ -23,23 +25,6 @@
   flex-shrink: 0;
 }
 
-.dot {
-  margin-left: rem(-6px);
-  color: var(--green);
-}
-
-@include tab-s {
-  .block {
-    padding-block: var(--space-3);
-  }
-}
-
 .language {
-  width: rem(84px);
-}
-
-@include mob-m {
-  .language {
-    width: rem(96px);
-  }
+  min-width: rem(84px);
 }

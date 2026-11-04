@@ -1,13 +1,15 @@
 import type { z } from 'zod'
 
-import { getUser } from '@/lib/auth/user'
+import { getUser } from '@/app/actions/static'
+
 import { createClient } from '@/lib/supabase/server'
 import { databaseError } from '@/helpers/errors'
 import { validationError } from '@/helpers/validation'
 
+import type { MutationOperation } from './types'
+
 import 'server-only'
 import type { ActionResult } from '@/types/action'
-import type { MutationOperation } from '@/types/supabase'
 
 export async function mutate<T, U>(
   schema: z.ZodType<T>,

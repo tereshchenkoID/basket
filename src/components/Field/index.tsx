@@ -1,7 +1,7 @@
 import { Grid } from '@/components/Grid'
 import { Text } from '@/components/Text'
 
-import type { FieldProps } from '@/types/ui'
+import type { FieldProps } from './types'
 
 export const Field = ({
   id,
@@ -22,9 +22,9 @@ export const Field = ({
         as="label"
         id={`${id}-label`}
         htmlFor={id}
-        size="sm"
+        size={2}
         color="muted"
-        weight={500}
+        weight="medium"
       >
         {label}
       </Text>
@@ -34,7 +34,7 @@ export const Field = ({
       error || hint &&
       <Text
         id={`${id}-message`}
-        size="sm"
+        size={2}
         color={error ? 'error' : 'muted'}
         role={error ? 'alert' : undefined}
       >

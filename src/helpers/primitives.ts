@@ -1,10 +1,10 @@
 import clsx from 'clsx'
 
+import type { PrimitiveAttributes, PrimitiveDefinitions, PrimitiveKind } from './primitives.types'
+
 import styles from '@/scss/utilities.module.scss'
 
-import type { PrimitiveAttributes, PrimitiveDefinitions, PrimitiveKind } from '@/types/primitives'
-
-const spacing = {
+const SPACING = {
   m: 'space',
   mx: 'space',
   my: 'space',
@@ -18,8 +18,8 @@ const spacing = {
   gap: 'space',
 } as const
 
-export const layoutProps: PrimitiveDefinitions = {
-  ...spacing,
+export const LAYOUT_PROPS: PrimitiveDefinitions = {
+  ...SPACING,
   display: 'raw',
   direction: 'raw',
   wrap: 'raw',
@@ -28,28 +28,32 @@ export const layoutProps: PrimitiveDefinitions = {
   columns: 'columns',
 }
 
-export const typographyProps: PrimitiveDefinitions = {
-  ...spacing,
+export const TYPOGRAPHY_PROPS: PrimitiveDefinitions = {
+  ...SPACING,
   size: 'size',
-  weight: 'raw',
+  weight: 'weight',
+  transform: 'raw',
   color: 'color',
   align: 'textalign',
   family: 'family',
 }
 
-const colors = {
-  default: 'ink',
-  muted: 'muted',
-  error: 'error',
-  success: 'green',
-  accent: 'green',
+const WEIGHTS = { regular: 400, medium: 500, semibold: 600, bold: 700 } as const
+
+const COLORS = {
+  default: 'text',
+  muted: 'text-muted',
+  error: 'danger',
+  success: 'primary',
+  accent: 'primary',
 } as const
 
 const cssValue = (value: string | number, kind: PrimitiveKind) => {
   if (kind === 'space') return value === 'auto' || value === 0 ? value : `var(--space-${value})`
+  if (kind === 'weight') return WEIGHTS[value as keyof typeof WEIGHTS]
   if (kind === 'size') return `var(--text-${value})`
   if (kind === 'family') return `var(--font-${value})`
-  if (kind === 'color') return `var(--${colors[value as keyof typeof colors]})`
+  if (kind === 'color') return `var(--${COLORS[value as keyof typeof COLORS]})`
   if (kind === 'columns' && /^\d+$/.test(String(value))) return `repeat(${value}, 1fr)`
   if (kind === 'justify' && value === 'between') return 'space-between'
 

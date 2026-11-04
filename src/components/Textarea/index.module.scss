@@ -1,5 +1,3 @@
-@use '@/scss/config' as *;
-
 .control {
   position: relative;
   width: 100%;
@@ -9,39 +7,26 @@
   @include transition(border-color, var(--motion-duration));
 
   padding: rem(12px);
-  border: 1px solid var(--control-border);
-  border-radius: var(--radius-small);
+  border: rem(1px) solid var(--border-strong);
+  border-radius: var(--radius-sm);
   width: 100%;
   min-height: rem(112px);
-  background-color: var(--paper);
-  color: var(--ink);
+  background-color: var(--surface);
+  color: var(--text);
   resize: vertical;
 
-  &::placeholder {
-    color: var(--muted);
-  }
-
   &[aria-busy='true'] {
-    padding-right: rem(42px);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    padding-inline-end: rem(42px);
   }
 
   &:read-only {
-    background-color: var(--background);
+    background-color: var(--bg);
   }
 
   &:user-invalid,
   &.invalid {
-    border-color: var(--error);
+    border-color: var(--danger);
   }
-}
-
-.invalid:focus-visible {
-  outline-color: var(--error);
 }
 
 .spinner {
@@ -49,7 +34,7 @@
   top: var(--space-3);
   right: var(--space-3);
   animation: spin 0.8s linear infinite;
-  color: var(--muted);
+  color: var(--text-muted);
 }
 
 @keyframes spin {

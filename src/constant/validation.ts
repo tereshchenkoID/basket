@@ -1,4 +1,4 @@
-export const validationLimits = {
+export const VALIDATION_LIMITS = {
   groupName: 80,
   listTitle: 100,
   itemName: 120,

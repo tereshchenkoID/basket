@@ -1,10 +1,6 @@
 import type {
-  Group,
-  Invite,
-  MemberProfile,
-  ShoppingItem,
-  ShoppingList,
-} from './database'
+  Group, Invite, MemberProfile, ShoppingItem, ShoppingList
+} from '@/types/database'
 
 export type GroupData = {
   group: Group
@@ -13,7 +9,11 @@ export type GroupData = {
   invites: Pick<Invite, 'id' | 'expires_at' | 'use_count' | 'revoked_at'>[]
 }
 
-export type ListData = { list: ShoppingList; items: ShoppingItem[] }
+export type ListData = {
+  group: Pick<Group, 'id' | 'name'>
+  list: ShoppingList
+  items: ShoppingItem[]
+}
 
 export type InvitationLink = {
   url: string
@@ -21,9 +21,3 @@ export type InvitationLink = {
 }
 
 export type WorkspaceConnection = 'connecting' | 'live' | 'offline'
-
-export type WorkspaceRealtimeProps = {
-  userId: string
-  groupId?: string
-  listId?: string
-}

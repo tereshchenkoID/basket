@@ -3,7 +3,6 @@ import { createServerClient } from '@supabase/ssr'
 
 import { isLocale } from '@/i18n/locales'
 
-import { nextForLocale, safeNext } from '@/lib/auth/redirect'
 import { getSupabaseConfig, isAuthConfigured } from '@/lib/config'
 
 import type { Database } from '@/types/database'
@@ -13,12 +12,11 @@ export async function updateSession(
   response: NextResponse,
   localize: (request: NextRequest) => NextResponse,
 ) {
-  const [, locale, page] = request.nextUrl.pathname.split('/')
+  const [, locale] = request.nextUrl.pathname.split('/')
 
   if (!isLocale(locale)) return response
 
   const config = getSupabaseConfig()
-  let authenticated = false
 
   if (config && isAuthConfigured()) {
     // Preserve next-intl's rewrite headers while forwarding refreshed cookies.
@@ -39,33 +37,10 @@ export async function updateSession(
     })
 
     try {
-      const { data, error } = await supabase.auth.getClaims()
-      authenticated = !error && Boolean(data?.claims.sub)
+      await supabase.auth.getClaims()
     } catch {
-      /* Fail closed on network/auth errors. */
+      /* The account gate verifies the user before protected data is loaded. */
     }
-  }
-
-  let destination: string | null = null
-
-  if (['dashboard', 'groups'].includes(page) && !authenticated) {
-    destination = `/${locale}/login${isAuthConfigured() ? '' : '?error=configuration'}`
-  } else if (
-    page === 'invite' &&
-    !authenticated &&
-    safeNext(request.nextUrl.pathname) === request.nextUrl.pathname
-  ) {
-    const params = new URLSearchParams({ next: request.nextUrl.pathname })
-
-    if (!isAuthConfigured()) params.set('error', 'configuration')
-
-    destination = `/${locale}/login?${params}`
-  } else if (page === 'login' && authenticated)
-    destination = nextForLocale(request.nextUrl.searchParams.get('next'), locale)
-  if (destination) {
-    const redirect = NextResponse.redirect(new URL(destination, request.url))
-    response.cookies.getAll().forEach(cookie => redirect.cookies.set(cookie))
-    response = redirect
   }
 
   response.headers.set('Cache-Control', 'private, no-store, max-age=0')
