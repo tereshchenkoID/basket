@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
 import { THEMES } from '@/constant/theme'
 
 import { useModalStore } from '@/store/modal'
@@ -59,27 +60,27 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
             </Grid>
           </Box>
           <Action
-            href="/dashboard"
+            href={ROUTES_USER.dashboard.url}
             variant="secondary"
             onClick={handleClose}
           >
             <Icon
-              name="layout-dashboard"
+              name={ROUTES_USER.dashboard.icon}
               size={18}
               aria-hidden="true"
             />
-            {t('dashboard')}
+            {t(ROUTES_USER.dashboard.text)}
           </Action>
         </Grid>
       }
       {
         !account &&
         <Action
-          href="/login"
+          href={NAVIGATION.login.url}
           variant="secondary"
           onClick={handleClose}
         >
-          {t('signIn')}
+          {t(NAVIGATION.login.text)}
         </Action>
       }
       <Grid gap={3}>

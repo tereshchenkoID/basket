@@ -1,5 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { localeFromNext, safeNext } from '@/lib/auth/redirect'
 import { getSiteUrl, isAuthConfigured } from '@/lib/config'
 import { createClient } from '@/lib/supabase/server'
@@ -18,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 
   const fail = (error: 'oauth' | 'configuration') => {
-    const url = new URL(`/${locale}/login`, origin)
+    const url = new URL(`/${locale}${NAVIGATION.login.url}`, origin)
     url.searchParams.set('error', error)
     url.searchParams.set('next', next)
     const response = NextResponse.redirect(url)

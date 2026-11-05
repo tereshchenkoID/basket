@@ -2,6 +2,8 @@
 
 import { createHash, randomBytes } from 'node:crypto'
 
+import { ROUTES_USER } from '@/constant/navigation'
+
 import { getSiteUrl } from '@/lib/config'
 import { mutate } from '@/lib/supabase/mutation'
 
@@ -23,7 +25,7 @@ export async function createInvite(input: unknown) {
 
   return {
     ok: true as const,
-    data: { id: result.data, url: new URL(`/${parsed.locale}/invite/${token}`, getSiteUrl()).href },
+    data: { id: result.data, url: new URL(`/${parsed.locale}${ROUTES_USER.invite.url(token)}`, getSiteUrl()).href },
   }
 }
 

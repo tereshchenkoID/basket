@@ -4,6 +4,8 @@ import createMiddleware from 'next-intl/middleware'
 import { isLocale } from '@/i18n/locales'
 import { ROUTING } from '@/i18n/routing'
 
+import { ROUTES_DEV } from '@/constant/navigation'
+
 import { updateSession } from '@/lib/supabase/proxy'
 
 const intl = createMiddleware(ROUTING)
@@ -11,7 +13,9 @@ const intl = createMiddleware(ROUTING)
 export async function proxy(request: NextRequest) {
   const [locale, segment] = request.nextUrl.pathname.split('/').filter(Boolean)
 
-  if (process.env.NODE_ENV !== 'development' && (locale === 'ui-kit' || (isLocale(locale) && segment === 'ui-kit'))) {
+  const uiKit = ROUTES_DEV.uiKit.url.slice(1)
+
+  if (process.env.NODE_ENV !== 'development' && (locale === uiKit || (isLocale(locale) && segment === uiKit))) {
     return new NextResponse('Not found', { status: 404 })
   }
 

@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
 import { SORT_OPTIONS } from '@/constant/workspace'
 
 import { deleteGroup, removeMember } from '@/lib/groups/action'
@@ -85,7 +86,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
     }
   }
 
-  const handleCreate = (id: string) => router.push(`/groups/${data.group.id}/lists/${id}`)
+  const handleCreate = (id: string) => router.push(ROUTES_USER.list.url(data.group.id, id))
 
   const handleTabChange = (value: string) => window.history.pushState(null, '', tabQuery(search.toString(), value))
 
@@ -103,11 +104,11 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
 
   const handleDelete = () => deleteGroup({ groupId: data.group.id })
 
-  const handleDeleted = () => router.replace('/dashboard?tab=deleted')
+  const handleDeleted = () => router.replace(`${ROUTES_USER.dashboard.url}?tab=deleted`)
 
   const handleLeaveGroup = () => removeMember({ groupId: data.group.id, memberId: userId })
 
-  const handleLeave = () => router.replace('/dashboard')
+  const handleLeave = () => router.replace(ROUTES_USER.dashboard.url)
 
   const handleRemoveMember = (memberId: string) => removeMember({ groupId: data.group.id, memberId })
 
@@ -126,8 +127,8 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
     >
       <Breadcrumbs
         items={[
-          { label: workspace('home'), href: '/' },
-          { label: workspace('backDashboard'), href: '/dashboard' },
+          { label: workspace(NAVIGATION.home.text), href: NAVIGATION.home.url },
+          { label: workspace(ROUTES_USER.dashboard.text), href: ROUTES_USER.dashboard.url },
           { label: data.group.name },
         ]}
       />
@@ -220,7 +221,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
                         surface="default"
                         key={list.id}
                         className={styles.card}
-                        href={`/groups/${data.group.id}/lists/${list.id}`}
+                        href={ROUTES_USER.list.url(data.group.id, list.id)}
                       >
                         <Heading
                           as="h3"
@@ -235,7 +236,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
                           align="center"
                           gap={2}
                         >
-                          <Text as="span">{t('openList')}</Text>
+                          <Text as="span">{t(ROUTES_USER.list.text)}</Text>
                           <Icon
                             name="arrow-up-right"
                             size={16}

@@ -1,5 +1,7 @@
 import { useTranslations } from 'next-intl'
 
+import { ROUTES_USER } from '@/constant/navigation'
+
 import { Action } from '@/components/Action'
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
@@ -64,7 +66,7 @@ export const Empty = ({
         >
           {children ?? (
             <Action
-              href="/dashboard"
+              href={ROUTES_USER.dashboard.url}
               variant="secondary"
             >
               <Icon

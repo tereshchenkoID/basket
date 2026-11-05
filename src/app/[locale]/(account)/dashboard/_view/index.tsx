@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { ROUTES_USER } from '@/constant/navigation'
 import { SORT_OPTIONS } from '@/constant/workspace'
 
 import { restoreGroup } from '@/lib/groups/action'
@@ -50,7 +51,7 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
   const groups = sortRecords(tab === 'active' ? active : deleted, sort[tab], locale,
     group => group.name, group => group.deleted_at ?? group.created_at)
 
-  const handleCreate = (id: string) => router.push(`/groups/${id}`)
+  const handleCreate = (id: string) => router.push(ROUTES_USER.group.url(id))
 
   const handleTabChange = (value: string) => window.history.pushState(null, '', tabQuery(search.toString(), value))
 
@@ -186,7 +187,7 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                         border
                         radius="sm"
                         surface="default"
-                        href={`/groups/${group.id}`}
+                        href={ROUTES_USER.group.url(group.id)}
                         key={group.id}
                         className={styles.card}
                       >
@@ -225,7 +226,7 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                           color="accent"
                           mt={4}
                         >
-                          {workspace('openGroup')}
+                          {workspace(ROUTES_USER.group.text)}
                           <Icon
                             name="arrow-up-right"
                             size={16}

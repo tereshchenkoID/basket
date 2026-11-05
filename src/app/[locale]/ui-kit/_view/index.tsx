@@ -2,6 +2,8 @@
 
 import { Link } from '@/i18n/navigation'
 
+import { ROUTES_DEV } from '@/constant/navigation'
+
 import { Grid } from '@/components/Grid'
 import { Heading } from '@/components/Heading'
 import { Text } from '@/components/Text'
@@ -41,7 +43,7 @@ const Section = () => (
                 <Link
                   className={styles.card}
                   key={entry.slug}
-                  href={`/ui-kit/${group}/${entry.slug}`}
+                  href={ROUTES_DEV.component.url(group, entry.slug)}
                 >
                   {entry.name}
                 </Link>

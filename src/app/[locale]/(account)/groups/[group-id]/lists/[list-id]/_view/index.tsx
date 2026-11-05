@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl'
 
 import { useRouter } from '@/i18n/navigation'
 
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
+
 import { updateList } from '@/lib/shopping/action'
 import { useWorkspaceRealtime } from '@/hooks/useWorkspaceRealtime'
 
@@ -54,9 +56,9 @@ const Section = ({ result, userId }: ListViewProps) => {
     >
       <Breadcrumbs
         items={[
-          { label: workspace('home'), href: '/' },
-          { label: workspace('backDashboard'), href: '/dashboard' },
-          { label: data.group.name, href: `/groups/${data.group.id}` },
+          { label: workspace(NAVIGATION.home.text), href: NAVIGATION.home.url },
+          { label: workspace(ROUTES_USER.dashboard.text), href: ROUTES_USER.dashboard.url },
+          { label: data.group.name, href: ROUTES_USER.group.url(data.group.id) },
           { label: data.list.title },
         ]}
       />

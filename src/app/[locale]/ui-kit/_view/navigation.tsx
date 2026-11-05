@@ -2,6 +2,8 @@
 
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
 
+import { ROUTES_DEV } from '@/constant/navigation'
+
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
 import { Select } from '@/components/Select'
@@ -15,8 +17,8 @@ export const Navigation = () => {
   const pathname = usePathname()
   const router = useRouter()
   const options = [
-    { value: '/ui-kit', label: 'Overview' },
-    ...CATALOG.map(entry => ({ value: `/ui-kit/${entry.group}/${entry.slug}`, label: `${entry.group} / ${entry.name}` })),
+    { value: ROUTES_DEV.uiKit.url, label: ROUTES_DEV.uiKit.text },
+    ...CATALOG.map(entry => ({ value: ROUTES_DEV.component.url(entry.group, entry.slug), label: `${entry.group} / ${entry.name}` })),
   ]
 
   const handleChange = (path: string) => router.push(path)
@@ -26,7 +28,7 @@ export const Navigation = () => {
       <Box display={{ initial: 'block', tabS: 'none' }}>
         <Select
           ariaLabel="Component catalog"
-          value={options.some(option => option.value === pathname) ? pathname : '/ui-kit'}
+          value={options.some(option => option.value === pathname) ? pathname : ROUTES_DEV.uiKit.url}
           options={options}
           onChange={handleChange}
         />
@@ -39,11 +41,11 @@ export const Navigation = () => {
         aria-label="Component catalog"
       >
         <Link
-          href="/ui-kit"
+          href={ROUTES_DEV.uiKit.url}
           className={styles.link}
-          aria-current={pathname === '/ui-kit' ? 'page' : undefined}
+          aria-current={pathname === ROUTES_DEV.uiKit.url ? 'page' : undefined}
         >
-          Overview
+          {ROUTES_DEV.uiKit.text}
         </Link>
         {
           GROUPS.map(group =>
@@ -52,9 +54,9 @@ export const Navigation = () => {
               gap={1}
             >
               <Link
-                href={`/ui-kit/${group}`}
+                href={ROUTES_DEV.group.url(group)}
                 className={styles.link}
-                aria-current={pathname === `/ui-kit/${group}` ? 'page' : undefined}
+                aria-current={pathname === ROUTES_DEV.group.url(group) ? 'page' : undefined}
               >
                 <Text
                   as="span"
@@ -69,9 +71,9 @@ export const Navigation = () => {
                 CATALOG.filter(entry => entry.group === group).map(entry =>
                   <Link
                     key={entry.slug}
-                    href={`/ui-kit/${entry.group}/${entry.slug}`}
+                    href={ROUTES_DEV.component.url(entry.group, entry.slug)}
                     className={styles.link}
-                    aria-current={pathname === `/ui-kit/${entry.group}/${entry.slug}` ? 'page' : undefined}
+                    aria-current={pathname === ROUTES_DEV.component.url(entry.group, entry.slug) ? 'page' : undefined}
                   >
                     {entry.name}
                   </Link>

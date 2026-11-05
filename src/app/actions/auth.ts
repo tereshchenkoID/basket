@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation'
 
 import { isLocale } from '@/i18n/locales'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { createClient } from '@/lib/supabase/server'
 
 export async function logout(locale: string): Promise<{ error: boolean }> {
@@ -19,5 +21,5 @@ export async function logout(locale: string): Promise<{ error: boolean }> {
   }
 
   // Cookie mutation invalidates Router Cache; redirect triggers a fresh server render.
-  redirect(`/${locale}/login`)
+  redirect(`/${locale}${NAVIGATION.login.url}`)
 }

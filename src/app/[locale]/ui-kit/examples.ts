@@ -137,6 +137,8 @@ export const Example = () => {
   Action: `
 'use client'
 
+import { ROUTES_USER } from '@/constant/navigation'
+
 import { Action } from '@/components/Action'
 
 export const Example = () => {
@@ -145,7 +147,7 @@ export const Example = () => {
       <Action variant="primary">Save</Action>
       <Action variant="secondary" disabled>Disabled</Action>
       <Action isLoading>Saving</Action>
-      <Action href="/dashboard">Dashboard</Action>
+      <Action href={ROUTES_USER.dashboard.url}>Dashboard</Action>
     </>
   )
 }

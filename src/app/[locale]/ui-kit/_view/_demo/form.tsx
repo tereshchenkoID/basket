@@ -3,6 +3,8 @@
 import type { ChangeEvent, SubmitEvent } from 'react'
 import { useState } from 'react'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { Action } from '@/components/Action'
 import { Box } from '@/components/Box'
 import { Checkbox } from '@/components/Checkbox'
@@ -71,15 +73,15 @@ export const Actions = () => (
           aria-hidden="true"
         />
       </Action>
-      <Action href="/">Link</Action>
+      <Action href={NAVIGATION.home.url}>Link</Action>
       <Action
-        href="/"
+        href={NAVIGATION.home.url}
         aria-disabled="true"
       >
         Disabled link
       </Action>
       <Action
-        href="/"
+        href={NAVIGATION.home.url}
         isLoading
       >
         Loading link

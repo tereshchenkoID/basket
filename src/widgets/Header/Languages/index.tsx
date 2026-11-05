@@ -7,6 +7,8 @@ import type { Locale } from '@/i18n/locales'
 import { isLocale, LOCALES } from '@/i18n/locales'
 import { usePathname, useRouter } from '@/i18n/navigation'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { nextForLocale } from '@/lib/auth/redirect'
 
 import { Select } from '@/components/Select'
@@ -24,7 +26,7 @@ export const Languages = () => {
   const handleChange = (value: Locale) => {
     const query = Object.fromEntries(search.entries())
 
-    if (pathname === '/login' && next) query.next = nextForLocale(next, value)
+    if (pathname === NAVIGATION.login.url && next) query.next = nextForLocale(next, value)
 
     router.replace({ pathname, query }, { locale: value })
   }

@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { Action } from '@/components/Action'
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
@@ -46,7 +48,7 @@ const NotFound = () => {
         mt={3}
       >
         <Action
-          href="/"
+          href={NAVIGATION.home.url}
           variant="secondary"
         >
           <Icon

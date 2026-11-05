@@ -2,6 +2,8 @@
 
 import { Link } from '@/i18n/navigation'
 
+import { ROUTES_DEV } from '@/constant/navigation'
+
 import { Grid } from '@/components/Grid'
 import { Heading } from '@/components/Heading'
 import { Text } from '@/components/Text'
@@ -28,7 +30,7 @@ const Section = ({ group, entries }: CatalogGroupViewProps) => {
             radius="sm"
             p={3}
           >
-            <Link href={`/ui-kit/${group}/${entry.slug}`}>{entry.name}</Link>
+            <Link href={ROUTES_DEV.component.url(group, entry.slug)}>{entry.name}</Link>
             <Text
               size={2}
               color="muted"

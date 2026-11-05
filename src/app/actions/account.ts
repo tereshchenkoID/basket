@@ -3,6 +3,8 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
+
 import { getUser } from '@/app/actions/static'
 
 import { safeNext } from '@/lib/auth/redirect'
@@ -24,12 +26,12 @@ export const getAccount = cache(async () => {
     const pathname = requestHeaders.get('x-basket-pathname')
     const query = new URLSearchParams()
 
-    if (pathname?.startsWith(`/${locale}/invite/`) && safeNext(pathname) === pathname)
+    if (pathname?.startsWith(`/${locale}${ROUTES_USER.invite.url('')}`) && safeNext(pathname) === pathname)
       query.set('next', pathname)
 
     if (!isAuthConfigured()) query.set('error', 'configuration')
 
-    redirect(`/${locale}/login${query.size ? `?${query}` : ''}`)
+    redirect(`/${locale}${NAVIGATION.login.url}${query.size ? `?${query}` : ''}`)
   }
 
   return user

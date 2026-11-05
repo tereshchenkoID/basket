@@ -4,6 +4,8 @@ import { getLocale, getTranslations } from 'next-intl/server'
 import { DEFAULT_LOCALE, isLocale } from '@/i18n/locales'
 import { Link } from '@/i18n/navigation'
 
+import { NAVIGATION } from '@/constant/navigation'
+
 import { getUser } from '@/app/actions/static'
 
 import { Box } from '@/components/Box'
@@ -45,7 +47,7 @@ export const Header = async ({ theme }: HeaderProps) => {
       className={styles.block}
     >
       <Link
-        href="/"
+        href={NAVIGATION.home.url}
         className={styles.brand}
       >
         <Icon

@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 
+import { ROUTES_USER } from '@/constant/navigation'
+
 import { Action } from '@/components/Action'
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
@@ -69,7 +71,7 @@ const Section = ({ locale, authenticated, configured }: HomeViewProps) => {
             authenticated
               ?
               <Action
-                href="/dashboard"
+                href={ROUTES_USER.dashboard.url}
                 variant="secondary"
                 className={styles.dashboard}
               >

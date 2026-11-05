@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
+import { ROUTES_USER } from '@/constant/navigation'
+
 import { acceptInvite } from '@/lib/invites/action'
 
 import { Action } from '@/components/Action'
@@ -34,7 +36,7 @@ const Section = ({ result, token }: InviteViewProps) => {
 
   const handleJoin = () => acceptInvite({ token })
 
-  const handleJoined = (groupId: string) => router.replace(`/groups/${groupId}`)
+  const handleJoined = (groupId: string) => router.replace(ROUTES_USER.group.url(groupId))
 
   return (
     <Grid
@@ -66,7 +68,7 @@ const Section = ({ result, token }: InviteViewProps) => {
       {
         preview.already_member
           ?
-          <Action href={`/groups/${preview.group_id}`}>{workspace('openGroup')}
+          <Action href={ROUTES_USER.group.url(preview.group_id)}>{workspace(ROUTES_USER.group.text)}
             <Icon
               name="arrow-up-right"
               size={16}
@@ -81,7 +83,7 @@ const Section = ({ result, token }: InviteViewProps) => {
       }
       <Link
         className={styles.back}
-        href="/dashboard"
+        href={ROUTES_USER.dashboard.url}
       >
         {workspace('backDashboard')}
       </Link>
