@@ -32,6 +32,10 @@ const Section = ({ result, token }: InviteViewProps) => {
 
   const preview = result.data
 
+  const handleJoin = () => acceptInvite({ token })
+
+  const handleJoined = (groupId: string) => router.replace(`/groups/${groupId}`)
+
   return (
     <Grid
       as="section"
@@ -71,8 +75,8 @@ const Section = ({ result, token }: InviteViewProps) => {
           :
           <Mutation
             label={t('joinGroup')}
-            operation={() => acceptInvite({ token })}
-            onSuccess={groupId => router.replace(`/groups/${groupId}`)}
+            operation={handleJoin}
+            onSuccess={handleJoined}
           />
       }
       <Link

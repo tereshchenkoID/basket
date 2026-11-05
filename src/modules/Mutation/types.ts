@@ -9,6 +9,7 @@ export type MutationProps<T> = {
   operation: (id: string) => Promise<ActionResult<T>>
   onSuccess?: (data: T) => void
   confirmation?: string
+  confirmationTitle?: string
   variant?: ActionVariant
   icon?: IconProps['name']
   iconOnly?: boolean

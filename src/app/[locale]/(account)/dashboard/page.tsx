@@ -16,9 +16,11 @@ const Dashboard = async () => {
   ])
 
   const result = await getGroups()
+  const now = new Date().getTime()
 
   return (
     <Section
+      now={now}
       result={result}
       userId={user.id}
       locale={locale}

@@ -1,3 +1,4 @@
+import type { PointerEvent, SyntheticEvent } from 'react'
 import { useEffect, useId, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import clsx from 'clsx'
@@ -17,7 +18,7 @@ export const Modal = ({ title, drawer, children }: ModalProps) => {
   const t = useTranslations('Workspace')
   const id = useId()
   const dialogRef = useRef<HTMLDialogElement>(null)
-  const close = useModalStore(state => state.close)
+  const handleClose = useModalStore(state => state.close)
 
   useEffect(() => {
     const dialog = dialogRef.current
@@ -35,6 +36,22 @@ export const Modal = ({ title, drawer, children }: ModalProps) => {
     }
   }, [])
 
+  const handleCancel = (event: SyntheticEvent<HTMLDialogElement, Event>) => {
+    event.preventDefault()
+    handleClose()
+  }
+
+  const handlePointerDown = (event: PointerEvent<HTMLDialogElement>) => {
+    if (event.target !== event.currentTarget) return
+
+    const rect = event.currentTarget.getBoundingClientRect()
+
+    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+      event.preventDefault()
+      handleClose()
+    }
+  }
+
   return (
     <dialog
       ref={dialogRef}
@@ -47,20 +64,8 @@ export const Modal = ({ title, drawer, children }: ModalProps) => {
         )
       }
       aria-labelledby={id}
-      onCancel={event => {
-        event.preventDefault()
-        close()
-      }}
-      onPointerDown={event => {
-        if (event.target !== event.currentTarget) return
-
-        const rect = event.currentTarget.getBoundingClientRect()
-
-        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
-          event.preventDefault()
-          close()
-        }
-      }}
+      onCancel={handleCancel}
+      onPointerDown={handlePointerDown}
     >
       <Box
         display="flex"
@@ -79,7 +84,7 @@ export const Modal = ({ title, drawer, children }: ModalProps) => {
           variant="secondary"
           iconOnly
           aria-label={t('close')}
-          onClick={close}
+          onClick={handleClose}
         >
           <Icon
             name="x"

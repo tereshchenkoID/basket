@@ -12,7 +12,10 @@
     "check": "npm run lint && npm run stylelint && npm run typecheck",
     "db:types": "node scripts/generate-types.mjs",
     "stylelint": "stylelint \"src/**/*.scss\" --max-warnings=0",
-    "stylelint:fix": "stylelint \"src/**/*.scss\" --fix --max-warnings=0"
+    "stylelint:fix": "stylelint \"src/**/*.scss\" --fix --max-warnings=0",
+    "postinstall": "node scripts/patch-next.mjs",
+    "predev": "node scripts/patch-next.mjs",
+    "prebuild": "node scripts/patch-next.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

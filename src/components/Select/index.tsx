@@ -1,5 +1,11 @@
 'use client'
 
+import type {
+  ChangeEvent,
+  KeyboardEvent,
+  PointerEvent,
+  SyntheticEvent,
+} from 'react'
 import {
   useEffect,
   useId,
@@ -55,17 +61,17 @@ export const Select = <Value extends string,>({
   const current = options.find(option => option.value === currentValue)
   const currentIcon = current?.icon
 
-  const close = (restoreFocus = false) => {
+  const handleClose = (restoreFocus = false) => {
     setOpen(false)
 
     if (restoreFocus) triggerRef.current?.focus()
   }
 
-  useDismiss({ refs: [blockRef], enabled: open, onDismiss: reason => close(reason === 'escape') })
+  useDismiss({ refs: [blockRef], enabled: open, onDismiss: reason => handleClose(reason === 'escape') })
 
   useEffect(() => {
     const form = nativeRef.current?.form
-    const reset = () => {
+    const handleReset = () => {
       const resetValue = value ?? defaultValue ?? ''
       const select = nativeRef.current
 
@@ -76,31 +82,31 @@ export const Select = <Value extends string,>({
       setSelected(defaultValue ?? '')
       setInvalid(false)
     }
-    form?.addEventListener('reset', reset)
+    form?.addEventListener('reset', handleReset)
 
-    return () => form?.removeEventListener('reset', reset)
+    return () => form?.removeEventListener('reset', handleReset)
   }, [defaultValue, value])
 
   useEffect(() => {
     if (!open) return
 
-    const scroll = (event: Event) => {
+    const handleScroll = (event: Event) => {
       if (event.target instanceof Node && blockRef.current?.contains(event.target)) return
 
       setOpen(false)
     }
-    const resize = () => setOpen(false)
-    window.addEventListener('resize', resize)
-    window.addEventListener('scroll', scroll, true)
+    const handleResize = () => setOpen(false)
+    window.addEventListener('resize', handleResize)
+    window.addEventListener('scroll', handleScroll, true)
     document.getElementById(`${listId}-${active}`)?.scrollIntoView({ block: 'nearest' })
 
     return () => {
-      window.removeEventListener('resize', resize)
-      window.removeEventListener('scroll', scroll, true)
+      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('scroll', handleScroll, true)
     }
   }, [open, active, listId])
 
-  const show = (edge?: 'first' | 'last') => {
+  const handleOpen = (edge?: 'first' | 'last') => {
     const trigger = triggerRef.current
 
     if (!trigger || trigger.matches(':disabled')) return
@@ -127,7 +133,7 @@ export const Select = <Value extends string,>({
     setOpen(true)
   }
 
-  const choose = (index: number) => {
+  const handleSelect = (index: number) => {
     const option = options[index]
 
     if (disabled || isLoading || !option || option.disabled) return
@@ -135,14 +141,71 @@ export const Select = <Value extends string,>({
     setSelected(option.value)
     setInvalid(false)
     onChange?.(option.value)
-    close(true)
+    handleClose(true)
   }
 
-  const move = (direction: number) => {
+  const handleMove = (direction: number) => {
     const enabled = options.map((option, index) => ({ ...option, index })).filter(option => !option.disabled)
     const index = enabled.findIndex(option => option.index === active)
     setActive(enabled[(index + direction + enabled.length) % enabled.length]?.index ?? -1)
   }
+
+  const handleChange = (event: ChangeEvent<HTMLSelectElement, HTMLSelectElement>) => {
+    const index = options.findIndex(option => option.value === event.currentTarget.value)
+    handleSelect(index)
+  }
+
+  const handleInvalid = (event: SyntheticEvent<HTMLSelectElement, Event>) => {
+    event.preventDefault()
+    setInvalid(true)
+    triggerRef.current?.focus()
+  }
+
+  const handleClick = () => open ? handleClose() : handleOpen()
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === 'Tab') {
+      handleClose()
+
+      return
+    }
+
+    if (event.key === 'Escape' && open) {
+      event.preventDefault()
+      event.stopPropagation()
+      handleClose(true)
+
+      return
+    }
+
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)) {
+      event.preventDefault()
+
+      if (!open) handleOpen(event.key === 'Home' ? 'first' : event.key === 'ArrowUp' || event.key === 'End' ? 'last' : undefined)
+      else if (event.key === 'Enter' || event.key === ' ') handleSelect(active)
+      else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') handleMove(event.key === 'ArrowDown' ? 1 : -1)
+      else {
+        const enabled = options.map((option, index) => ({ ...option, index })).filter(option => !option.disabled)
+        setActive((event.key === 'Home' ? enabled[0] : enabled.at(-1))?.index ?? -1)
+      }
+
+      return
+    }
+
+    if (event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey) {
+      const now = Date.now()
+      const query = now - searchRef.current.timestamp < 700 ? searchRef.current.value + event.key : event.key
+      searchRef.current = { value: query, timestamp: now }
+      const index = options.findIndex(option => !option.disabled && option.label.toLocaleLowerCase().startsWith(query.toLocaleLowerCase()))
+
+      if (!open) handleOpen()
+      if (index >= 0) setActive(index)
+    }
+  }
+
+  const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => event.preventDefault()
+
+  const handleMouseEnter = (index: number) => setActive(index)
 
   return (
     <Field
@@ -165,15 +228,8 @@ export const Select = <Value extends string,>({
           className={styles.native}
           tabIndex={-1}
           aria-hidden="true"
-          onChange={event => {
-            const index = options.findIndex(option => option.value === event.currentTarget.value)
-            choose(index)
-          }}
-          onInvalid={event => {
-            event.preventDefault()
-            setInvalid(true)
-            triggerRef.current?.focus()
-          }}
+          onChange={handleChange}
+          onInvalid={handleInvalid}
         >
           <option
             value=""
@@ -217,46 +273,8 @@ export const Select = <Value extends string,>({
           aria-invalid={Boolean(error || invalid)}
           aria-describedby={error || hint ? `${fieldId}-message` : undefined}
           aria-busy={isLoading || undefined}
-          onClick={() => open ? close() : show()}
-          onKeyDown={event => {
-            if (event.key === 'Tab') {
-              close()
-
-              return
-            }
-
-            if (event.key === 'Escape' && open) {
-              event.preventDefault()
-              event.stopPropagation()
-              close(true)
-
-              return
-            }
-
-            if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'Enter', ' '].includes(event.key)) {
-              event.preventDefault()
-
-              if (!open) show(event.key === 'Home' ? 'first' : event.key === 'ArrowUp' || event.key === 'End' ? 'last' : undefined)
-              else if (event.key === 'Enter' || event.key === ' ') choose(active)
-              else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') move(event.key === 'ArrowDown' ? 1 : -1)
-              else {
-                const enabled = options.map((option, index) => ({ ...option, index })).filter(option => !option.disabled)
-                setActive((event.key === 'Home' ? enabled[0] : enabled.at(-1))?.index ?? -1)
-              }
-
-              return
-            }
-
-            if (event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey) {
-              const now = Date.now()
-              const query = now - searchRef.current.timestamp < 700 ? searchRef.current.value + event.key : event.key
-              searchRef.current = { value: query, timestamp: now }
-              const index = options.findIndex(option => !option.disabled && option.label.toLocaleLowerCase().startsWith(query.toLocaleLowerCase()))
-
-              if (!open) show()
-              if (index >= 0) setActive(index)
-            }
-          }}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
         >
           {
             currentIcon &&
@@ -328,9 +346,9 @@ export const Select = <Value extends string,>({
                         }
                       )
                     }
-                    onPointerDown={event => event.preventDefault()}
-                    onMouseEnter={() => setActive(index)}
-                    onClick={() => choose(index)}
+                    onPointerDown={handlePointerDown}
+                    onMouseEnter={() => handleMouseEnter(index)}
+                    onClick={() => handleSelect(index)}
                   >
                     {
                       icon &&

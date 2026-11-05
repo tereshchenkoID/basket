@@ -1,5 +1,6 @@
 'use client'
 
+import type { MouseEvent } from 'react'
 import clsx from 'clsx'
 
 import { Link } from '@/i18n/navigation'
@@ -23,6 +24,12 @@ export const Action = (props: ActionProps) => {
     } = props
 
     const unavailable = isLoading || rest['aria-disabled'] === true || rest['aria-disabled'] === 'true'
+    const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+      if (unavailable) {
+        event.preventDefault()
+        event.stopPropagation()
+      } else rest.onClick?.(event)
+    }
 
     return (
       <Link
@@ -41,13 +48,7 @@ export const Action = (props: ActionProps) => {
         aria-busy={isLoading || undefined}
         aria-disabled={unavailable || undefined}
         tabIndex={unavailable ? -1 : rest.tabIndex}
-        onClick={event => {
-          if (unavailable) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-          else rest.onClick?.(event)
-        }}
+        onClick={handleClick}
       >
         {
           isLoading &&

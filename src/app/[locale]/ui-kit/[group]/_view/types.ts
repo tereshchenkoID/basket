@@ -1,4 +1,4 @@
-import type { CatalogEntry } from '@/app/[locale]/(account)/ui-kit/catalog'
+import type { CatalogEntry } from '@/app/[locale]/ui-kit/catalog'
 
 export type CatalogGroupViewProps = {
   group: string

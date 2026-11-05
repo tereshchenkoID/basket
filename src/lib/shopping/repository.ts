@@ -31,7 +31,7 @@ export const getList = async (
       .maybeSingle()
 
     if (list.error) return { ok: false, error: databaseError(list.error) }
-    if (!list.data) return { ok: false, error: 'forbidden' }
+    if (!list.data) return { ok: false, error: 'groupUnavailable' }
 
     const [group, items] = await Promise.all([
       client.from('groups').select('id, name').eq('id', groupId).maybeSingle(),

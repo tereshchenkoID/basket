@@ -10,7 +10,12 @@ import type { ConfirmationProps } from '@/types/modal'
 
 export const Confirmation = ({ label, description, onConfirm }: ConfirmationProps) => {
   const t = useTranslations('Workspace')
-  const close = useModalStore(state => state.close)
+  const handleClose = useModalStore(state => state.close)
+
+  const handleClick = () => {
+    handleClose()
+    onConfirm()
+  }
 
   return (
     <>
@@ -23,16 +28,13 @@ export const Confirmation = ({ label, description, onConfirm }: ConfirmationProp
       >
         <Action
           variant="secondary"
-          onClick={close}
+          onClick={handleClose}
         >
           {t('cancel')}
         </Action>
         <Action
           variant="danger"
-          onClick={() => {
-          close()
-          onConfirm()
-        }}
+          onClick={handleClick}
         >
           {label}
         </Action>

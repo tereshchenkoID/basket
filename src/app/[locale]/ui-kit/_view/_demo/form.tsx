@@ -1,5 +1,6 @@
 'use client'
 
+import type { ChangeEvent, SubmitEvent } from 'react'
 import { useState } from 'react'
 
 import { Action } from '@/components/Action'
@@ -7,9 +8,11 @@ import { Box } from '@/components/Box'
 import { Checkbox } from '@/components/Checkbox'
 import { Field } from '@/components/Field'
 import { Grid } from '@/components/Grid'
+import { Heading } from '@/components/Heading'
 import Icon from '@/components/Icon'
 import { Input } from '@/components/Input'
 import { Select } from '@/components/Select'
+import { Tabs } from '@/components/Tabs'
 import { Text } from '@/components/Text'
 import { Textarea } from '@/components/Textarea'
 import { Toggle } from '@/components/Toggle'
@@ -123,12 +126,20 @@ export const Fields = ({ kind }: FieldsProps) => {
 
 export const Selects = () => {
   const [value, setValue] = useState('second')
+  const handleChange = (value: string) => setValue(value)
   const [submitted, setSubmitted] = useState(false)
   const options = [
     { value: 'first', label: 'First option' },
     { value: 'second', label: 'Second option' },
     { value: 'disabled', label: 'Disabled option', disabled: true },
   ]
+
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setSubmitted(true)
+  }
+
+  const handleReset = () => setSubmitted(false)
 
   return (
     <Grid
@@ -144,7 +155,7 @@ export const Selects = () => {
       <Select
         label="Controlled"
         value={value}
-        onChange={setValue}
+        onChange={handleChange}
         options={options}
       />
       <Select
@@ -176,8 +187,8 @@ export const Selects = () => {
       <Grid
         as="form"
         gap={3}
-        onSubmit={event => { event.preventDefault(); setSubmitted(true) }}
-        onReset={() => setSubmitted(false)}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
       >
         <Select
           name="choice"
@@ -216,6 +227,8 @@ export const Checks = ({ kind }: ChecksProps) => {
   const Component = kind === 'Checkbox' ? Checkbox : Toggle
   const [checked, setChecked] = useState(false)
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => setChecked(event.currentTarget.checked)
+
   return (
     <Grid
       gap={3}
@@ -225,7 +238,7 @@ export const Checks = ({ kind }: ChecksProps) => {
       <Component
         label="Controlled"
         checked={checked}
-        onChange={event => setChecked(event.currentTarget.checked)}
+        onChange={handleChange}
       />
       <Component label="Unchecked" />
       <Component
@@ -262,3 +275,77 @@ export const FieldExample = () => (
     />
   </Field>
 )
+
+export const TabExamples = () => {
+  const [value, setValue] = useState('overview')
+  const handleChange = (value: string) => setValue(value)
+
+  return (
+    <Grid gap={4}>
+      <Heading
+        as="h3"
+        size={4}
+      >
+        Two tabs
+      </Heading>
+      <Tabs
+        label="Two tabs"
+        defaultValue="first"
+        items={[
+        { value: 'first', label: 'First', content: <Text>First panel</Text> },
+        { value: 'second', label: 'Second', content: <Text>Second panel</Text> },
+      ]}
+      />
+      <Heading
+        as="h3"
+        size={4}
+      >
+        Controlled, counters and disabled item
+      </Heading>
+      <Tabs
+        label="Controlled tabs"
+        value={value}
+        onValueChange={handleChange}
+        items={[
+        { value: 'overview', label: 'Overview', count: 3, content: <Text>Overview panel</Text> },
+        { value: 'details', label: 'Details', count: 0, content: <Text>Details panel</Text> },
+        { value: 'unavailable', label: 'Disabled', disabled: true, content: <Text>Unavailable</Text> },
+      ]}
+      />
+      <Text
+        size={2}
+        color="muted"
+      >
+        Selected: {value}
+      </Text>
+      <Heading
+        as="h3"
+        size={4}
+      >
+        Disabled control
+      </Heading>
+      <Tabs
+        label="Disabled tabs"
+        disabled
+        items={[
+        { value: 'first', label: 'First', content: <Text>Read-only preview</Text> },
+        { value: 'second', label: 'Second' },
+      ]}
+      />
+      <Heading
+        as="h3"
+        size={4}
+      >
+        Horizontal scrolling on mobile
+      </Heading>
+      <Tabs
+        label="Responsive tabs"
+        items={[
+        { value: 'first', label: 'A longer first label', content: <Text>First panel</Text> },
+        { value: 'second', label: 'A longer second label', content: <Text>Second panel</Text> },
+        { value: 'third', label: 'A longer third label', content: <Text>Third panel</Text> },
+      ]}
+      />
+    </Grid>
+  )
+}

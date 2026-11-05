@@ -8,6 +8,8 @@ export const VALIDATION_ERRORS = {
 } as const
 
 export const DATABASE_ERROR_MESSAGES = {
+  group_unavailable: 'groupUnavailable',
+  restore_expired: 'restoreExpired',
   invalid_invite: 'inviteInvalid',
   owner_cannot_leave: 'ownerCannotLeave',
 } as const satisfies Record<string, ActionError>

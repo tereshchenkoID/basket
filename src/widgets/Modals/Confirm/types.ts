@@ -3,6 +3,7 @@ import type { IconProps } from '@/components/Icon/types'
 import type { ActionVariant } from '@/types/ui'
 
 export type ConfirmProps = {
+  title?: string
   label: string
   ariaLabel?: string
   description: string

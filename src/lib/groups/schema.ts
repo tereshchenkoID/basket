@@ -13,3 +13,5 @@ export const CREATE_GROUP_SCHEMA = z.object({
 export const RENAME_GROUP_SCHEMA = z.object({ groupId: UUID, name: normalizedText(VALIDATION_LIMITS.groupName) })
 
 export const REMOVE_MEMBER_SCHEMA = z.object({ groupId: UUID, memberId: UUID })
+
+export const GROUP_LIFECYCLE_SCHEMA = z.object({ groupId: UUID })

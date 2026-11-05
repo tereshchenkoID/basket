@@ -33,6 +33,7 @@ export function useWorkspaceRealtime({
     )
     const tables = groupId
       ? [
+        { table: 'group_members', filter: `user_id=eq.${userId}` },
         { table: 'group_members', filter: `group_id=eq.${groupId}` },
         { table: 'shopping_lists', filter: `group_id=eq.${groupId}` },
         { table: 'groups', filter: `id=eq.${groupId}` },
@@ -53,21 +54,26 @@ export function useWorkspaceRealtime({
       } else if (value === 'CHANNEL_ERROR' || value === 'TIMED_OUT' || value === 'CLOSED')
         setStatus('offline')
     })
-    const online = () => refresh()
-    const offline = () => setStatus('offline')
-    const visible = () => {
+    const handleOnline = () => refresh()
+    const handleOffline = () => setStatus('offline')
+    const handleVisibility = () => {
       if (document.visibilityState === 'visible') refresh()
     }
-    window.addEventListener('online', online)
-    window.addEventListener('offline', offline)
-    document.addEventListener('visibilitychange', visible)
+    // A visible-page fallback also handles missed/revoked Realtime subscriptions.
+    const poll = setInterval(handleVisibility, 30_000)
+    window.addEventListener('focus', handleOnline)
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    document.addEventListener('visibilitychange', handleVisibility)
 
     return () => {
       disposed = true
       clearTimeout(timer)
-      window.removeEventListener('online', online)
-      window.removeEventListener('offline', offline)
-      document.removeEventListener('visibilitychange', visible)
+      clearInterval(poll)
+      window.removeEventListener('focus', handleOnline)
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+      document.removeEventListener('visibilitychange', handleVisibility)
       void supabase.removeChannel(channel)
     }
   }, [groupId, listId, router, userId])

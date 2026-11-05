@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 
+import type { Locale } from '@/i18n/locales'
 import { isLocale, LOCALES } from '@/i18n/locales'
 import { usePathname, useRouter } from '@/i18n/navigation'
 
@@ -20,17 +21,20 @@ export const Languages = () => {
   const next = search.get('next')
   const t = useTranslations('Workspace')
 
+  const handleChange = (value: Locale) => {
+    const query = Object.fromEntries(search.entries())
+
+    if (pathname === '/login' && next) query.next = nextForLocale(next, value)
+
+    router.replace({ pathname, query }, { locale: value })
+  }
+
   return (
     <Select
       ariaLabel={t('language')}
       value={isLocale(locale) ? locale : 'en'}
       options={LOCALES.map(value => ({ value, label: LABELS[value], shortLabel: value.toUpperCase() }))}
-      onChange={value => router.replace(
-        pathname === '/login' && next
-          ? { pathname, query: { next: nextForLocale(next, value) } }
-          : pathname,
-        { locale: value },
-      )}
+      onChange={handleChange}
     />
   )
 }

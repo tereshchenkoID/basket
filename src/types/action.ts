@@ -9,5 +9,7 @@ export type ActionError =
   | 'setupRequired'
   | 'inviteInvalid'
   | 'ownerCannotLeave'
+  | 'groupUnavailable'
+  | 'restoreExpired'
 
 export type ActionResult<T = undefined> = { ok: true; data: T } | { ok: false; error: ActionError }

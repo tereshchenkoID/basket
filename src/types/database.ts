@@ -8,6 +8,7 @@ type Table<Row> = {
 type Rpc<Args, Returns> = { Args: Args; Returns: Returns }
 
 export type Group = {
+  deleted_at: string | null
   id: string
   name: string
   created_by: string
@@ -16,6 +17,7 @@ export type Group = {
 }
 
 export type Member = {
+  revision: number
   group_id: string
   user_id: string
   role: 'owner' | 'member'
@@ -69,6 +71,9 @@ export type ShoppingItem = {
 }
 
 export type GroupSummary = {
+  created_at: string
+  deleted_at: string | null
+  role: 'owner' | 'member'
   id: string
   name: string
   member_count: number
@@ -97,6 +102,8 @@ export type Database = {
     Views: { [_ in never]: never }
     Functions: {
       create_group: Rpc<{ p_id: string; p_name: string; p_list_title: string }, string>
+      delete_group: Rpc<{ p_group_id: string }, null>
+      restore_group: Rpc<{ p_group_id: string }, null>
       rename_group: Rpc<{ p_group_id: string; p_name: string }, null>
       remove_group_member: Rpc<{ p_group_id: string; p_member_id: string }, null>
       group_member_profiles: Rpc<{ p_group_id: string }, MemberProfile[]>

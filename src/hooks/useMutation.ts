@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 import type { ActionError, ActionResult } from '@/types/action'
 
 export const useMutation = (successMessage?: string) => {
   const t = useTranslations('Workspace')
+  const router = useRouter()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<ActionError | null>(null)
   const [success, setSuccess] = useState(false)
@@ -27,6 +29,8 @@ export const useMutation = (successMessage?: string) => {
       if (!result.ok) {
         setError(result.error)
         toast.error(t(`errors.${result.error}`))
+
+        if (['forbidden', 'groupUnavailable', 'unauthorized', 'restoreExpired'].includes(result.error)) router.refresh()
 
         return
       }

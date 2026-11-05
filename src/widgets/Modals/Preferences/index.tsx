@@ -24,7 +24,7 @@ import type { PreferencesProps } from '@/types/components'
 
 export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
   const t = useTranslations('Workspace')
-  const close = useModalStore(state => state.close)
+  const handleClose = useModalStore(state => state.close)
   const [initialTheme] = useState(() => {
     const current = document.documentElement.dataset.theme
 
@@ -61,7 +61,7 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
           <Action
             href="/dashboard"
             variant="secondary"
-            onClick={close}
+            onClick={handleClose}
           >
             <Icon
               name="layout-dashboard"
@@ -77,7 +77,7 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
         <Action
           href="/login"
           variant="secondary"
-          onClick={close}
+          onClick={handleClose}
         >
           {t('signIn')}
         </Action>

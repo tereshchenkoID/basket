@@ -19,7 +19,13 @@ const JSX_LAYOUT = {
   create(context) {
     const source = context.sourceCode
     const text = node => source.getText(node)
-    const render = (node, indent) => shift(text(node), node.loc.start.column, indent)
+    const render = (node, indent) => {
+      const grouped = ['LogicalExpression', 'ConditionalExpression', 'SequenceExpression'].includes(node.type)
+        && source.getTokenBefore(node)?.value === '('
+        && source.getTokenAfter(node)?.value === ')'
+
+      return shift(grouped ? `(${text(node)})` : text(node), node.loc.start.column - (grouped ? 1 : 0), indent)
+    }
 
     return {
       'JSXElement:exit'(node) {

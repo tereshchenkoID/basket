@@ -19,6 +19,8 @@ export const Navigation = () => {
     ...CATALOG.map(entry => ({ value: `/ui-kit/${entry.group}/${entry.slug}`, label: `${entry.group} / ${entry.name}` })),
   ]
 
+  const handleChange = (path: string) => router.push(path)
+
   return (
     <>
       <Box display={{ initial: 'block', tabS: 'none' }}>
@@ -26,7 +28,7 @@ export const Navigation = () => {
           ariaLabel="Component catalog"
           value={options.some(option => option.value === pathname) ? pathname : '/ui-kit'}
           options={options}
-          onChange={path => router.push(path)}
+          onChange={handleChange}
         />
       </Box>
       <Grid

@@ -6,22 +6,22 @@ export const useDismiss = ({ refs, enabled, onDismiss }: DismissOptions) => {
   useEffect(() => {
     if (!enabled) return
 
-    const outside = (event: MouseEvent | FocusEvent) => {
+    const handleOutside = (event: MouseEvent | FocusEvent) => {
       if (event.target instanceof Node && !refs.some(ref => ref.current?.contains(event.target as Node))) {
         onDismiss('outside')
       }
     }
-    const escape = (event: KeyboardEvent) => {
+    const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape' && !event.defaultPrevented) onDismiss('escape')
     }
-    document.addEventListener('click', outside)
-    document.addEventListener('focusin', outside)
-    document.addEventListener('keydown', escape)
+    document.addEventListener('click', handleOutside)
+    document.addEventListener('focusin', handleOutside)
+    document.addEventListener('keydown', handleEscape)
 
     return () => {
-      document.removeEventListener('click', outside)
-      document.removeEventListener('focusin', outside)
-      document.removeEventListener('keydown', escape)
+      document.removeEventListener('click', handleOutside)
+      document.removeEventListener('focusin', handleOutside)
+      document.removeEventListener('keydown', handleEscape)
     }
   }, [enabled, onDismiss, refs])
 }

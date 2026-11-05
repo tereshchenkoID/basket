@@ -1,6 +1,7 @@
 export const GROUPS = ['layout', 'typography', 'form', 'overlay'] as const
 
 export const CATALOG = [
+  { group: 'layout', name: 'Tabs', slug: 'tabs', props: 'items: { value, label, count?, disabled?, content? }[] · value / defaultValue · onValueChange · label · disabled · children' },
   { group: 'layout', name: 'Container', slug: 'container', props: 'Box props · shared content width · responsive gutters · safe area padding' },
   { group: 'layout', name: 'Box', slug: 'box', props: 'as · display · direction · wrap · align · justify · gap · p · m · full · grow · surface · border · radius: sm | lg' },
   { group: 'layout', name: 'Grid', slug: 'grid', props: 'Box props · columns: number | string | Responsive' },

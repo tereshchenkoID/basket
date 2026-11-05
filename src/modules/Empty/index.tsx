@@ -20,6 +20,7 @@ export const Empty = ({
 }: EmptyProps) => {
   const t = useTranslations('Workspace')
   const key = typeof error === 'string' && t.has(`errors.${error}`) ? error : 'unavailable'
+  const message = description ?? t(error ? `errors.${key}` : 'emptyDescription')
 
   return (
     <Grid
@@ -47,9 +48,12 @@ export const Empty = ({
       >
         {title ?? t(error ? 'unavailableTitle' : 'emptyTitle')}
       </Heading>
-      <Text color="muted">{description ?? t(error ? `errors.${key}` : 'emptyDescription')}</Text>
       {
-        children || error &&
+        message &&
+        <Text color="muted">{message}</Text>
+      }
+      {
+        (children || error) &&
         <Box
           display="flex"
           justify="center"

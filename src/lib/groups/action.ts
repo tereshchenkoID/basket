@@ -5,7 +5,9 @@ import { getTranslations } from 'next-intl/server'
 import { mutate } from '@/lib/supabase/mutation'
 
 import * as repository from './repository'
-import { CREATE_GROUP_SCHEMA, REMOVE_MEMBER_SCHEMA, RENAME_GROUP_SCHEMA } from './schema'
+import {
+  CREATE_GROUP_SCHEMA, GROUP_LIFECYCLE_SCHEMA, REMOVE_MEMBER_SCHEMA, RENAME_GROUP_SCHEMA
+} from './schema'
 
 export async function createGroup(input: unknown) {
   return mutate(CREATE_GROUP_SCHEMA, input, async (client, value) => {
@@ -21,4 +23,12 @@ export async function renameGroup(input: unknown) {
 
 export async function removeMember(input: unknown) {
   return mutate(REMOVE_MEMBER_SCHEMA, input, repository.removeMember)
+}
+
+export async function deleteGroup(input: unknown) {
+  return mutate(GROUP_LIFECYCLE_SCHEMA, input, repository.deleteGroup)
+}
+
+export async function restoreGroup(input: unknown) {
+  return mutate(GROUP_LIFECYCLE_SCHEMA, input, repository.restoreGroup)
 }

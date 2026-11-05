@@ -14,6 +14,8 @@ export const Preferences = (props: PreferencesProps) => {
   const open = useModalStore(state => state.open)
   const expanded = useModalStore(state => state.modal?.name === 'menu')
 
+  const handleClick = () => open({ name: 'menu', title: t('menu'), props })
+
   return (
     <Action
       variant="secondary"
@@ -21,7 +23,7 @@ export const Preferences = (props: PreferencesProps) => {
       aria-label={t('menu')}
       aria-haspopup="dialog"
       aria-expanded={expanded}
-      onClick={() => open({ name: 'menu', title: t('menu'), props })}
+      onClick={handleClick}
     >
       <Icon
         name="menu"

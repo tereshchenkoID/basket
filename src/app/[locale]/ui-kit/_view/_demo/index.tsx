@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import type { ComponentName } from '../../catalog'
 
 import {
-  Actions, Checks, FieldExample, Fields, Selects
+  Actions, Checks, FieldExample, Fields, Selects, TabExamples
 } from './form'
 import { DropdownExample, IconExample } from './overlay'
 import {
@@ -13,6 +13,7 @@ import type { DemoProps } from './types'
 
 const DEMOS: Record<ComponentName, ReactNode> = {
   Container: <Containers />,
+  Tabs: <TabExamples />,
   Box: <Boxes />,
   Grid: <Grids />,
   Heading: <Headings />,

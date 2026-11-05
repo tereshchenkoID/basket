@@ -27,9 +27,9 @@ export const Item = ({ item, archived }: ItemProps) => {
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const { execute, pending, error } = useMutation(t('purchaseUpdated'))
-  const refresh = () => router.refresh()
+  const handleRefresh = () => router.refresh()
 
-  const toggle = async () => {
+  const handleToggle = async () => {
     const result = await execute(() =>
       purchaseItem({
         itemId: item.id,
@@ -37,7 +37,16 @@ export const Item = ({ item, archived }: ItemProps) => {
       })
     )
 
-    if (result?.ok) refresh()
+    if (result?.ok) handleRefresh()
+  }
+
+  const handleEdit = () => setEditing(!editing)
+
+  const handleDelete = () => deleteItem({ itemId: item.id })
+
+  const handleSave = () => {
+    setEditing(false)
+    handleRefresh()
   }
 
   return (
@@ -53,7 +62,7 @@ export const Item = ({ item, archived }: ItemProps) => {
           checked={item.is_purchased}
           disabled={pending || archived}
           aria-busy={pending}
-          onChange={toggle}
+          onChange={handleToggle}
           label={
             <Box
               as="span"
@@ -88,7 +97,7 @@ export const Item = ({ item, archived }: ItemProps) => {
               variant="primary"
               iconOnly
               aria-expanded={editing}
-              onClick={() => setEditing(!editing)}
+              onClick={handleEdit}
               aria-label={t('editNamedItem', { name: item.name })}
             >
               {
@@ -115,8 +124,8 @@ export const Item = ({ item, archived }: ItemProps) => {
               icon="trash-2"
               iconOnly
               disabled={pending}
-              operation={() => deleteItem({ itemId: item.id })}
-              onSuccess={refresh}
+              operation={handleDelete}
+              onSuccess={handleRefresh}
             />
           </Box>
         }
@@ -142,10 +151,7 @@ export const Item = ({ item, archived }: ItemProps) => {
         >
           <Form
             item={item}
-            onSuccess={() => {
-              setEditing(false)
-              refresh()
-            }}
+            onSuccess={handleSave}
           />
         </Grid>
       }

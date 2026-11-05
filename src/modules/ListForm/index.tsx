@@ -1,3 +1,4 @@
+import type { SubmitEvent } from 'react'
 import { useTranslations } from 'next-intl'
 
 import { VALIDATION_LIMITS } from '@/constant/validation'
@@ -16,24 +17,26 @@ export const ListForm = ({ groupId, list, onSuccess }: ListFormProps) => {
   const t = useTranslations('Workspace')
   const { execute, pending, error } = useMutation(t(list ? 'listUpdated' : 'listCreated'))
 
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const title = new FormData(event.currentTarget).get('name')
+
+    if (list) {
+      const result = await execute(() => updateList({ listId: list.id, title }))
+
+      if (result) onSuccess(list.id)
+    } else {
+      const result = await execute(id => createList({ id, groupId, title }))
+
+      if (result) onSuccess(result.data)
+    }
+  }
+
   return (
     <Grid
       as="form"
       gap={3}
-      onSubmit={async event => {
-        event.preventDefault()
-        const title = new FormData(event.currentTarget).get('name')
-
-        if (list) {
-          const result = await execute(() => updateList({ listId: list.id, title }))
-
-          if (result) onSuccess(list.id)
-        } else {
-          const result = await execute(id => createList({ id, groupId, title }))
-
-          if (result) onSuccess(result.data)
-        }
-      }}
+      onSubmit={handleSubmit}
       aria-busy={pending}
     >
       <Grid

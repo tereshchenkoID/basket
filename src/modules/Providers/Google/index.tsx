@@ -20,7 +20,7 @@ export const Google = ({ locale, configured, next }: GoogleProps) => {
   const [pending, setPending] = useState(false)
   const [error, setError] = useState(false)
 
-  const signIn = async () => {
+  const handleLogin = async () => {
     setPending(true)
     setError(false)
 
@@ -46,7 +46,7 @@ export const Google = ({ locale, configured, next }: GoogleProps) => {
         variant="secondary"
         className={styles.button}
         type="button"
-        onClick={signIn}
+        onClick={handleLogin}
         disabled={pending || !configured}
         aria-busy={pending}
       >

@@ -16,6 +16,7 @@ export const Mutation = <T,>({
   operation,
   onSuccess,
   confirmation,
+  confirmationTitle,
   compact,
   variant,
   icon,
@@ -25,7 +26,7 @@ export const Mutation = <T,>({
 }: MutationProps<T>) => {
   const t = useTranslations('Workspace')
   const { execute, pending, error } = useMutation()
-  const run = async () => {
+  const handleSubmit = async () => {
     const result = await execute(operation)
 
     if (result) onSuccess?.(result.data)
@@ -42,13 +43,14 @@ export const Mutation = <T,>({
           <Confirm
             label={label}
             description={confirmation}
+            title={confirmationTitle}
             ariaLabel={ariaLabel}
             variant={variant ?? (compact ? 'secondary' : 'primary')}
             icon={icon}
             iconOnly={iconOnly}
             isLoading={pending}
             disabled={disabled || pending}
-            onConfirm={() => void run()}
+            onConfirm={handleSubmit}
           />
           :
           <Action
@@ -57,7 +59,7 @@ export const Mutation = <T,>({
             aria-label={ariaLabel ?? (iconOnly ? label : undefined)}
             disabled={disabled}
             isLoading={pending}
-            onClick={() => void run()}
+            onClick={handleSubmit}
           >
             {
               icon &&

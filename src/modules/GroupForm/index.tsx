@@ -1,3 +1,4 @@
+import type { SubmitEvent } from 'react'
 import { useTranslations } from 'next-intl'
 
 import { VALIDATION_LIMITS } from '@/constant/validation'
@@ -16,24 +17,26 @@ export const GroupForm = ({ group, locale, onSuccess }: GroupFormProps) => {
   const t = useTranslations('Workspace')
   const { execute, pending, error } = useMutation(t(group ? 'groupUpdated' : 'groupCreated'))
 
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const name = new FormData(event.currentTarget).get('name')
+
+    if (group) {
+      const result = await execute(() => renameGroup({ groupId: group.id, name }))
+
+      if (result) onSuccess(group.id)
+    } else {
+      const result = await execute(id => createGroup({ id, name, locale }))
+
+      if (result) onSuccess(result.data)
+    }
+  }
+
   return (
     <Grid
       as="form"
       gap={3}
-      onSubmit={async event => {
-        event.preventDefault()
-        const name = new FormData(event.currentTarget).get('name')
-
-        if (group) {
-          const result = await execute(() => renameGroup({ groupId: group.id, name }))
-
-          if (result) onSuccess(group.id)
-        } else {
-          const result = await execute(id => createGroup({ id, name, locale }))
-
-          if (result) onSuccess(result.data)
-        }
-      }}
+      onSubmit={handleSubmit}
       aria-busy={pending}
     >
       <Grid

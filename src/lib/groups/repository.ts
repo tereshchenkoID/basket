@@ -1,7 +1,9 @@
 import { databaseError } from '@/helpers/errors'
 import { UUID } from '@/helpers/validation'
 
-import type { CreateGroupRecord, RemoveMemberInput, RenameGroupInput } from './types'
+import type {
+  CreateGroupRecord, GroupLifecycleInput, RemoveMemberInput, RenameGroupInput
+} from './types'
 
 import type { ActionResult } from '@/types/action'
 import type { GroupSummary } from '@/types/database'
@@ -30,7 +32,7 @@ export const getGroup = async (
     const group = await client.from('groups').select('*').eq('id', groupId).maybeSingle()
 
     if (group.error) return { ok: false, error: databaseError(group.error) }
-    if (!group.data) return { ok: false, error: 'forbidden' }
+    if (!group.data || group.data.deleted_at) return { ok: false, error: 'groupUnavailable' }
 
     const [members, lists, invites] = await Promise.all([
       client.rpc('group_member_profiles', { p_group_id: groupId }),
@@ -69,3 +71,7 @@ export const createGroup = (client: DatabaseClient, value: CreateGroupRecord) =>
 export const renameGroup = (client: DatabaseClient, value: RenameGroupInput) => client.rpc('rename_group', { p_group_id: value.groupId, p_name: value.name })
 
 export const removeMember = (client: DatabaseClient, value: RemoveMemberInput) => client.rpc('remove_group_member', { p_group_id: value.groupId, p_member_id: value.memberId })
+
+export const deleteGroup = (client: DatabaseClient, value: GroupLifecycleInput) => client.rpc('delete_group', { p_group_id: value.groupId })
+
+export const restoreGroup = (client: DatabaseClient, value: GroupLifecycleInput) => client.rpc('restore_group', { p_group_id: value.groupId })

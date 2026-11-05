@@ -27,7 +27,7 @@ import styles from './index.module.scss'
 const Section = ({ result, userId }: ListViewProps) => {
   const t = useTranslations('List')
   const workspace = useTranslations('Workspace')
-  
+
   const router = useRouter()
   const status = useWorkspaceRealtime({ userId, groupId: result.ok ? result.data.list.group_id : undefined, listId: result.ok ? result.data.list.id : undefined })
 
@@ -40,9 +40,11 @@ const Section = ({ result, userId }: ListViewProps) => {
 
   const data = result.data
 
-  const refresh = () => router.refresh()
+  const handleRefresh = () => router.refresh()
   const purchased = data.items.filter(item => item.is_purchased).length
   const archived = data.list.status === 'archived'
+
+  const handleArchive = () => updateList({ listId: data.list.id, status: archived ? 'active' : 'archived' })
 
   return (
     <Box
@@ -110,7 +112,7 @@ const Section = ({ result, userId }: ListViewProps) => {
         !archived &&
         <Add
           listId={data.list.id}
-          onSuccess={refresh}
+          onSuccess={handleRefresh}
         />
       }
       {
@@ -137,17 +139,16 @@ const Section = ({ result, userId }: ListViewProps) => {
         <ListForm
           groupId={data.list.group_id}
           list={data.list}
-          onSuccess={refresh}
+          onSuccess={handleRefresh}
         />
         <Mutation
           className={styles.setting}
           label={t(archived ? 'restoreList' : 'archiveList')}
           variant={archived ? 'secondary' : 'danger'}
           confirmation={archived ? undefined : t('confirmArchive')}
-          operation={() =>
-            updateList({ listId: data.list.id, status: archived ? 'active' : 'archived' })
+          operation={handleArchive
           }
-          onSuccess={refresh}
+          onSuccess={handleRefresh}
         />
       </Dropdown>
     </Box>

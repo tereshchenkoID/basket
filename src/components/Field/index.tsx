@@ -31,7 +31,7 @@ export const Field = ({
     }
     {children}
     {
-      error || hint &&
+      (error || hint) &&
       <Text
         id={`${id}-message`}
         size={2}

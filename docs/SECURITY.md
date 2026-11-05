@@ -12,7 +12,7 @@ Browser/server Supabase clients используют только Publishable ke
 
 | Функции                                                                                 | Проверка                                                                                      |
 | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `private.is_member`, `private.is_owner`                                                 | Членство только для `auth.uid()`, активная строка без `removed_at`                            |
+| `private.is_member`, `private.is_owner`                                                 | Членство только для `auth.uid()`, активная строка без `removed_at` и группа без `deleted_at`                            |
 | `create_group`                                                                          | Подтверждённый UID, атомарно группа + владелец + список, повтор UUID только владельцем        |
 | `rename_group`, `create_group_invite`, `revoke_group_invite`                            | Только владелец соответствующей группы                                                        |
 | `remove_group_member`                                                                   | Владелец удаляет участника или участник удаляет себя; владелец не выходит                     |
@@ -45,3 +45,7 @@ RLS не фильтрует DELETE так же, как INSERT/UPDATE. Поэто
 Не добавляйте auth codes, auth tokens или invitation tokens в логи. Next dev incoming-request logging исключает пути/query с `invite` и OAuth callback. Referrer-Policy — no-referrer. Это не настраивает внешние reverse proxy / CDN / analytics: на каждом хостинге исключите invite URL и callback/login query из access-логов отдельно.
 
 Приватный HTML и callback не кешируются. Logout использует cookie API Next.js, инвалидирует Router Cache и возвращает login. Сессия текущего браузера завершается без выхода из всех остальных устройств.
+
+## Жизненный цикл группы
+
+Удаление, восстановление, закрытая очистка, усиление общих RLS-проверок и уведомление через membership описаны в [GROUP_LIFECYCLE.md](GROUP_LIFECYCLE.md). `dashboard_groups` — проверенный definer RPC: для активных групп возвращает сводку участника, для удалённых — только минимальную карточку владельца. Обычный SELECT удалённой группы и дочерних данных недоступен. Старые приглашения после восстановления остаются отозванными даже для прежних участников.

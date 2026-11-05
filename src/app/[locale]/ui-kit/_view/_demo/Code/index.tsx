@@ -17,6 +17,15 @@ export const Code = ({ children }: CodeProps) => {
   const [status, setStatus] = useState<CopyStatus>('idle')
   const code = formatCode(children)
 
+  const handleClick = async () => {
+    try {
+      await copyText(code)
+      setStatus('copied')
+    } catch {
+      setStatus('error')
+    }
+  }
+
   return (
     <Box
       border
@@ -31,14 +40,7 @@ export const Code = ({ children }: CodeProps) => {
         <Action
           variant="ghost"
           aria-label="Copy code"
-          onClick={async () => {
-            try {
-              await copyText(code)
-              setStatus('copied')
-            } catch {
-              setStatus('error')
-            }
-          }}
+          onClick={handleClick}
         >
           {
             status === 'copied'

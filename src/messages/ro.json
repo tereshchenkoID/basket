@@ -11,10 +11,14 @@
   },
   "Dashboard": {
     "eyebrow": "Oamenii tăi, listele voastre",
-    "startFamily": "Cu cine faci cumpărăturile?",
-    "startDescription": "Creează un grup pentru familie, prieteni sau colegi de apartament. Prima listă e gata de folosit.",
+    "startFamily": "Nu ai încă grupuri active.",
+    "startDescription": "Creează primul grup pentru a începe cumpărăturile împreună.",
     "memberCount": "{count, plural, one {# membru} few {# membri} other {# de membri}}",
-    "remainingCount": "{count, plural, one {# produs de cumpărat} few {# produse de cumpărat} other {# de produse de cumpărat}}"
+    "remainingCount": "{count, plural, one {# produs de cumpărat} few {# produse de cumpărat} other {# de produse de cumpărat}}",
+    "emptyDeleted": "Nu există grupuri șterse.",
+    "restore": "Restabilește",
+    "deletedOn": "Șters la {date}",
+    "daysLeft": "{count, plural, =0 {Perioada de restabilire s-a încheiat} one {O zi rămasă pentru restabilire} few {# zile rămase pentru restabilire} other {# de zile rămase pentru restabilire}}"
   },
   "Workspace": {
     "defaultList": "Cumpărături",
@@ -45,7 +49,9 @@
       "textRequired": "Introduceți un nume sau un titlu.",
       "textTooLong": "Numele sau titlul este prea lung.",
       "invalidQuantity": "Introduceți o cantitate mai mare decât zero și de cel mult 1.000.000.",
-      "invalidUnit": "Selectați o unitate validă."
+      "invalidUnit": "Selectați o unitate validă.",
+      "groupUnavailable": "Acest grup sau această listă nu mai este disponibilă. Poate că a fost șters sau accesul tău s-a schimbat.",
+      "restoreExpired": "Perioada de restabilire de 30 de zile s-a încheiat. Grupul nu mai poate fi restabilit."
     },
     "loading": "Se pregătesc listele…",
     "emptyTitle": "Încă nu este nimic aici",
@@ -82,6 +88,25 @@
       "logout": "Deconectare",
       "loggingOut": "Se deconectează…",
       "logoutError": "Deconectarea a eșuat. Verifică conexiunea și încearcă din nou."
+    },
+    "tabs": {
+      "active": "Active",
+      "deleted": "Șterse",
+      "archived": "Arhivate"
+    },
+    "sort": {
+      "label": "Ordine de sortare",
+      "newest": "Create recent",
+      "oldest": "Cele mai vechi",
+      "nameAsc": "Nume A–Z",
+      "nameDesc": "Nume Z–A",
+      "deletedNewest": "Șterse recent",
+      "deletedOldest": "Șterse de mai mult timp",
+      "updated": "Actualizate recent"
+    },
+    "roles": {
+      "owner": "Proprietarul grupului",
+      "member": "Membru"
     }
   },
   "NotFound": {
@@ -96,11 +121,9 @@
     "note": "Ai nevoie doar de contul Google."
   },
   "Group": {
-    "owner": "Proprietarul grupului",
-    "member": "Membru",
     "lists": "Liste de cumpărături",
     "openList": "Deschide lista",
-    "noLists": "Nu există încă liste active.",
+    "noLists": "Nu există liste active. Creează prima listă de cumpărături.",
     "archivedLists": "Liste arhivate",
     "members": "Membri",
     "unnamed": "Membru Basket",
@@ -122,7 +145,11 @@
     "groupSettings": "Setările grupului",
     "leaveDescription": "Vei pierde accesul la grup și la listele sale.",
     "leaveGroup": "Părăsește grupul",
-    "ownerStays": "Ai creat acest grup și rămâi membru al lui."
+    "ownerStays": "Ai creat acest grup și rămâi membru al lui.",
+    "noArchivedLists": "Nu există liste arhivate.",
+    "deleteGroup": "Șterge grupul",
+    "deleteNamedGroup": "Ștergi grupul „{name}”?",
+    "confirmDeleteGroup": "Grupul va dispărea pentru toți membrii. Îl poți restabili în termen de 30 de zile. După aceea, grupul și toate datele sale vor fi șterse definitiv."
   },
   "List": {
     "itemAdded": "Adăugat în listă",
