@@ -1,0 +1,32 @@
+.image {
+  @include size(100%, rem(180px));
+
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+}
+
+.progress {
+  @include size(100%, rem(8px));
+
+  accent-color: var(--primary);
+}
+
+.actions {
+  position: sticky;
+  bottom: var(--space-2);
+  background-color: var(--surface);
+  z-index: $z-index-2;
+}
+
+.item {
+  padding-block: rem(12px);
+}
+
+.price {
+  white-space: nowrap;
+}
+
+.source {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

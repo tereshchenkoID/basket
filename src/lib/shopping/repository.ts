@@ -55,17 +55,21 @@ export const getList = async (
   }
 }
 
-export const createList = (client: DatabaseClient, value: CreateListInput) => client.rpc('create_shopping_list', {
-  p_id: value.id,
-  p_group_id: value.groupId,
-  p_title: value.title,
-})
+export const createList = (client: DatabaseClient, value: CreateListInput) => value.storeId !== undefined || value.storeName !== undefined
+  ? client.rpc('create_list_with_store', { p_id: value.id, p_group_id: value.groupId, p_title: value.title, p_store_id: value.storeId ?? null, p_store_name: value.storeName ?? null })
+  : client.rpc('create_shopping_list', {
+    p_id: value.id,
+    p_group_id: value.groupId,
+    p_title: value.title,
+  })
 
-export const updateList = (client: DatabaseClient, value: UpdateListInput) => client.rpc('update_shopping_list', {
-  p_list_id: value.listId,
-  p_title: value.title ?? null,
-  p_status: value.status ?? null,
-})
+export const updateList = (client: DatabaseClient, value: UpdateListInput) => value.storeId !== undefined || value.storeName !== undefined
+  ? client.rpc('update_list_with_store', { p_list_id: value.listId, p_title: value.title ?? null, p_status: value.status ?? null, p_store_id: value.storeId ?? null, p_store_name: value.storeName ?? null })
+  : client.rpc('update_shopping_list', {
+    p_list_id: value.listId,
+    p_title: value.title ?? null,
+    p_status: value.status ?? null,
+  })
 
 export const addItem = (client: DatabaseClient, value: AddItemInput) => client.rpc('add_shopping_item', {
   p_id: value.id,

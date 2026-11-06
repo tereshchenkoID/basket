@@ -19,7 +19,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-В production `NEXT_PUBLIC_SITE_URL` должен содержать публичный HTTPS origin. После изменения `NEXT_PUBLIC_*` нужна пересборка. Secret / service_role ключи в приложение не передаются.
+В production `NEXT_PUBLIC_SITE_URL` должен содержать публичный HTTPS origin. После изменения `NEXT_PUBLIC_*` нужна пересборка. Secret / service_role ключи никогда не передаются клиенту; фоновая очистка чеков использует отдельный серверный ключ.
 
 ## Google OAuth
 
@@ -70,6 +70,7 @@ Callback обменивает code на сессию и возвращает в 
 npm run lint:fix
 npm run stylelint:fix
 npm run check
+npm test
 npm run build
 ```
 
@@ -90,3 +91,7 @@ CSS-переменные объявлены явно: цвета — в `scss/th
 ## Патч Next.js 16.4.5
 
 `scripts/patch-next.mjs` исправляет условный `use()` внутри `InnerLayoutRouter`: чтение deferred RSC и ожидание отсутствующего сегмента вынесены в стабильные дочерние компоненты. Это устраняет предупреждение React 19.3 при переходах, сохраняя Suspense. Патч применяется через `postinstall`, `predev` и `prebuild`, проверяет точную версию Next и поддерживает ESM/CJS. При обновлении Next нужно проверить наличие upstream-исправления и удалить либо пересмотреть патч.
+
+## Чеки и история покупок
+
+Необязательный магазин списка, сканирование нескольких фотографий, проверка и история личных/групповых покупок: [RECEIPTS.md](docs/RECEIPTS.md). Миграция применена к production с отдельного разрешения владельца; настройку и live-проверку фоновой очистки ещё нужно завершить. Документ описывает настройку приватного Storage, серверной очистки, ограничения OCR и выполненные регрессионные проверки.

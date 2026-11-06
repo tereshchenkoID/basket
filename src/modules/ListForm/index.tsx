@@ -10,23 +10,28 @@ import { Action } from '@/components/Action'
 import { Grid } from '@/components/Grid'
 import { Input } from '@/components/Input'
 import { Text } from '@/components/Text'
+import { Store } from '@/modules/Store'
 
 import type { ListFormProps } from './types'
 
-export const ListForm = ({ groupId, list, onSuccess }: ListFormProps) => {
+export const ListForm = ({ groupId, list, onSuccess, stores = [], storesAvailable = false }: ListFormProps) => {
   const t = useTranslations('Workspace')
   const { execute, pending, error } = useMutation(t(list ? 'listUpdated' : 'listCreated'))
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const title = new FormData(event.currentTarget).get('name')
+    const form = new FormData(event.currentTarget)
+    const title = form.get('name')
+    const selected = form.get('store')
+    const storeId = storesAvailable ? selected === 'none' || selected === 'other' ? null : selected : undefined
+    const storeName = selected === 'other' ? form.get('storeName') : undefined
 
     if (list) {
-      const result = await execute(() => updateList({ listId: list.id, title }))
+      const result = await execute(() => updateList({ listId: list.id, title, storeId, storeName }))
 
       if (result) onSuccess(list.id)
     } else {
-      const result = await execute(id => createList({ id, groupId, title }))
+      const result = await execute(id => createList({ id, groupId, title, storeId, storeName }))
 
       if (result) onSuccess(result.data)
     }
@@ -60,6 +65,14 @@ export const ListForm = ({ groupId, list, onSuccess }: ListFormProps) => {
           {t(list ? 'save' : 'createList')}
         </Action>
       </Grid>
+      {
+        storesAvailable &&
+        <Store
+          stores={stores}
+          value={list?.store_id}
+          disabled={pending}
+        />
+      }
       {
         error &&
         <Text

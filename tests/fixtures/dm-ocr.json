@@ -1,0 +1,34 @@
+{
+  "description": "Captured local PaddleOCR output from the supplied dm photos. Bank/transaction identifiers, address and barcode removed. Product text and fiscal timestamp are not corrected by hand.",
+  "segments": [
+    {
+      "lines": [
+        "DM DROGHERIE MARKT S.R.L",
+        "1.000 Bucat1 x 13.95",
+        "DMBIO FAINA DE OREZ ECO 500 G 13.95 B",
+        "1.000 Bucati x 21.95",
+        "HIPP CEREALE NOAPTE 4+EC0250 21,95 B",
+        "1,000 Bucati x 17.95",
+        "PALMERS BALSAM BUZE SPF 15 17.95A",
+        "1,000 Bucati x 29.95",
+        "BABY NOVA BIBERON O+300MI 29,95 A",
+        "1,000 Bucat1 x 7.95",
+        "BALEA SAPUN CREMA LAPTE&MIERI 7,95 A",
+        "TOTAI 91.75",
+        "DATA: 31/10/2026 ORA: 19:47:46"
+      ],
+      "confidence": 93
+    },
+    {
+      "lines": [
+        "TOTAL",
+        "TOTAL IVA 13.25",
+        "TVAA21.00 3.56",
+        "IVA B11.00",
+        "www.dm-droger1emarkt.ro",
+        "BF00860 DAIA:31/10/20260RA:19-4811"
+      ],
+      "confidence": 95
+    }
+  ]
+}

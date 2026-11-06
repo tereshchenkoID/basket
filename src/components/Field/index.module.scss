@@ -1,0 +1,13 @@
+.wrapper {
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  top: rem(-4px);
+  inset-inline-start: rem(12px);
+  background-color: var(--surface);
+  z-index: $z-index-1;
+  font-size: rem(10px);
+  line-height: 1;
+}

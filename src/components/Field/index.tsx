@@ -1,7 +1,12 @@
+import clsx from 'clsx'
+
+import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
 import { Text } from '@/components/Text'
 
 import type { FieldProps } from './types'
+
+import styles from './index.module.scss'
 
 export const Field = ({
   id,
@@ -12,24 +17,31 @@ export const Field = ({
   children,
 }: FieldProps) => (
   <Grid
-    gap={2}
+    gap={1}
     full
-    className={className}
+    className={
+      clsx(
+        styles.block,
+        className
+      )
+    }
   >
+    <Box className={styles.wrapper}>
     {
       label &&
       <Text
         as="label"
         id={`${id}-label`}
         htmlFor={id}
-        size={2}
         color="muted"
         weight="medium"
+        className={styles.label}
       >
         {label}
       </Text>
     }
     {children}
+    </Box>
     {
       (error || hint) &&
       <Text

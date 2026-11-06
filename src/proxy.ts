@@ -30,5 +30,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!auth(?:/|$)|api(?:/|$)|_next(?:/|$)|_vercel(?:/|$)|basket\\.svg$).*)'],
+  matcher: ['/((?!auth(?:/|$)|ocr(?:/|$)|api(?:/|$)|_next(?:/|$)|_vercel(?:/|$)|basket\\.svg$).*)'],
 }

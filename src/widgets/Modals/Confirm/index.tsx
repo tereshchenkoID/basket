@@ -9,6 +9,7 @@ import type { ConfirmProps } from './types'
 
 export const Confirm = ({
   label,
+  confirmLabel,
   title,
   ariaLabel,
   description,
@@ -21,7 +22,7 @@ export const Confirm = ({
 }: ConfirmProps) => {
   const open = useModalStore(state => state.open)
 
-  const handleClick = () => open({ name: 'confirm', title: title ?? label, props: { label, description, onConfirm } })
+  const handleClick = () => open({ name: 'confirm', title: title ?? label, props: { label: confirmLabel ?? label, description, onConfirm } })
 
   return (
     <Action

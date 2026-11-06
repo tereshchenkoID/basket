@@ -12,6 +12,19 @@ export const NAVIGATION = {
 } as const
 
 export const ROUTES_USER = {
+  scan: {
+    text: 'scan',
+    icon: 'scan-line',
+    url: '/receipts',
+  },
+  history: {
+    text: 'history',
+    icon: 'receipt-text',
+    url: '/history',
+  },
+  receipt: {
+    url: (receiptId: string) => `/receipts/${encodeURIComponent(receiptId)}`,
+  },
   dashboard: {
     text: 'dashboard',
     icon: 'layout-dashboard',

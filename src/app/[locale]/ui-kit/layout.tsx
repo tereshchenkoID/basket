@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+
+import { NAVIGATION } from '@/constant/navigation'
 
 import { Box } from '@/components/Box'
 import { Grid } from '@/components/Grid'
-import { Text } from '@/components/Text'
+import { Breadcrumbs } from '@/modules/Breadcrumbs'
 
 import { Navigation } from './_view/navigation'
 import type { UIKitLayoutProps } from './types'
@@ -16,6 +19,8 @@ export const metadata: Metadata = {
 }
 
 const UIKitLayout = ({ children }: UIKitLayoutProps) => {
+  const t = useTranslations('Workspace')
+
   if (process.env.NODE_ENV !== 'development') notFound()
 
   return (
@@ -24,12 +29,12 @@ const UIKitLayout = ({ children }: UIKitLayoutProps) => {
       gap={4}
       py={4}
     >
-      <Text
-        size={2}
-        color="muted"
-      >
-        Basket / Development / UI kit
-      </Text>
+      <Breadcrumbs
+        items={[
+          { label: t(NAVIGATION.home.text), href: NAVIGATION.home.url },
+          { label: 'UI kit' },
+        ]}
+      />
       <Grid
         columns={{ initial: 1, tabS: '13rem 1fr' }}
         align="start"

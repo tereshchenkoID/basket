@@ -1,3 +1,8 @@
+import type {
+  CleanupJob, ReceiptDocument, ReceiptImage, ReceiptItemRow, ReceiptRow, ReceiptSegment, ReceiptSummary, ReceiptWireDetail,
+} from '@/lib/receipts/types'
+import type { Store } from '@/lib/stores/types'
+
 // Regenerate with `npm run db:types` after applying Supabase migrations.
 type Table<Row> = {
   Row: Row
@@ -46,6 +51,7 @@ export type Invite = {
 }
 
 export type ShoppingList = {
+  store_id?: string | null
   id: string
   group_id: string
   title: string
@@ -92,6 +98,12 @@ export type InvitePreview = { group_id: string; group_name: string; already_memb
 export type Database = {
   public: {
     Tables: {
+      stores: Table<Store>
+      receipts: Table<ReceiptRow>
+      receipt_items: Table<ReceiptItemRow>
+      receipt_images: Table<ReceiptImage>
+      receipt_ocr_segments: Table<ReceiptSegment>
+      receipt_cleanup_jobs: Table<CleanupJob>
       profiles: Table<Profile>
       groups: Table<Group>
       group_members: Table<Member>
@@ -101,6 +113,19 @@ export type Database = {
     }
     Views: { [_ in never]: never }
     Functions: {
+      delete_receipt_draft: Rpc<{ p_id: string }, null>
+      resolve_store: Rpc<{ p_name: string }, string>
+      create_list_with_store: Rpc<{ p_id: string; p_group_id: string; p_title: string; p_store_id?: string | null; p_store_name?: string | null }, string>
+      update_list_with_store: Rpc<{ p_list_id: string; p_title?: string | null; p_status?: string | null; p_store_id?: string | null; p_store_name?: string | null }, null>
+      save_receipt: Rpc<{ p_id: string; p_document: ReceiptDocument; p_revision: number; p_confirm: boolean; p_correction: boolean }, string>
+      receipt_detail: Rpc<{ p_id: string }, ReceiptWireDetail>
+      receipt_history: Rpc<{ p_store_id?: string | null; p_group_id?: string | null; p_personal?: boolean; p_from?: string | null; p_until?: string | null; p_offset?: number; p_limit?: number; p_ascending?: boolean }, ReceiptSummary[]>
+      complete_receipt_upload: Rpc<{ p_receipt_id: string; p_image_id: string }, null>
+      prepare_receipt_image: Rpc<{ p_receipt_id: string; p_image_id: string; p_position: number; p_replace_id?: string | null }, string>
+      save_receipt_segment: Rpc<{ p_receipt_id: string; p_image_id: string; p_lines: string[]; p_confidence: number; p_status: string }, null>
+      remove_receipt_image: Rpc<{ p_receipt_id: string; p_image_id: string }, null>
+      finish_receipt_cleanup: Rpc<{ p_job_id: string; p_success: boolean }, null>
+      claim_receipt_cleanup: Rpc<Record<string, never>, CleanupJob[]>
       create_group: Rpc<{ p_id: string; p_name: string; p_list_title: string }, string>
       delete_group: Rpc<{ p_group_id: string }, null>
       restore_group: Rpc<{ p_group_id: string }, null>

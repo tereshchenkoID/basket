@@ -37,3 +37,20 @@
 .sort {
   width: rem(240px);
 }
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: rem(10px);
+  border-radius: var(--radius-sm);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.link {
+  @include flex(space-between, center);
+
+  gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-top: rem(1px) solid var(--border);
+}

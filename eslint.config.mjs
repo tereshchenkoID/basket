@@ -143,6 +143,7 @@ const eslintConfig = defineConfig([
 
   globalIgnores([
     '.next/**',
+    'public/ocr/**',
     'coverage/**',
     'supabase/.temp/**',
     'out/**',
