@@ -20,12 +20,24 @@ export function useWorkspaceRealtime({
   useEffect(() => {
     const supabase = createClient()
     let disposed = false
+    let connected = false
+    let reconnect = false
+    let pendingRefresh = false
     let timer: ReturnType<typeof setTimeout> | undefined
     // Events invalidate snapshots. Rows are always fetched through RLS, never appended from payloads.
     const refresh = () => {
+      if (disposed) return
+
+      pendingRefresh = true
       clearTimeout(timer)
+
+      if (document.visibilityState !== 'visible') return
+
       timer = setTimeout(() => {
-        if (!disposed) router.refresh()
+        if (disposed || document.visibilityState !== 'visible') return
+
+        pendingRefresh = false
+        router.refresh()
       }, 120)
     }
     const channel = supabase.channel(
@@ -46,34 +58,48 @@ export function useWorkspaceRealtime({
         channel.on('postgres_changes', { event, schema: 'public', ...table }, refresh)
       }
     }
-    channel.subscribe(value => {
+    const handleStatus = (value: string) => {
       if (disposed) return
       if (value === 'SUBSCRIBED') {
+        connected = true
         setStatus('live')
-        refresh()
-      } else if (value === 'CHANNEL_ERROR' || value === 'TIMED_OUT' || value === 'CLOSED')
+
+        if (reconnect) refresh()
+
+        reconnect = false
+      } else if (value === 'CHANNEL_ERROR' || value === 'TIMED_OUT' || value === 'CLOSED') {
+        connected = false
+        reconnect = true
         setStatus('offline')
-    })
-    const handleOnline = () => refresh()
-    const handleOffline = () => setStatus('offline')
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') refresh()
+      }
     }
-    // A visible-page fallback also handles missed/revoked Realtime subscriptions.
-    const poll = setInterval(handleVisibility, 30_000)
-    window.addEventListener('focus', handleOnline)
-    window.addEventListener('online', handleOnline)
+    channel.subscribe(handleStatus)
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible' && (pendingRefresh || !connected)) refresh()
+    }
+    const handleOffline = () => {
+      connected = false
+      reconnect = true
+      setStatus('offline')
+    }
+    const handlePoll = () => {
+      if (!connected && window.navigator?.onLine !== false) handleVisible()
+    }
+    // Poll only while Realtime is unavailable; a healthy subscription sends changes itself.
+    const poll = setInterval(handlePoll, 30_000)
+    window.addEventListener('focus', handleVisible)
+    window.addEventListener('online', handleVisible)
     window.addEventListener('offline', handleOffline)
-    document.addEventListener('visibilitychange', handleVisibility)
+    document.addEventListener('visibilitychange', handleVisible)
 
     return () => {
       disposed = true
       clearTimeout(timer)
       clearInterval(poll)
-      window.removeEventListener('focus', handleOnline)
-      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('focus', handleVisible)
+      window.removeEventListener('online', handleVisible)
       window.removeEventListener('offline', handleOffline)
-      document.removeEventListener('visibilitychange', handleVisibility)
+      document.removeEventListener('visibilitychange', handleVisible)
       void supabase.removeChannel(channel)
     }
   }, [groupId, listId, router, userId])

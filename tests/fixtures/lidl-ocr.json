@@ -1,0 +1,64 @@
+{
+  "description": "Captured local PaddleOCR PP-OCRv4 output from the two supplied photos. Merchant identifiers, address, payment identifiers and barcode omitted. Not hand-corrected product text.",
+  "segments": [
+    {
+      "lines": [
+        "LIDL DISCOUNT SRL",
+        "1.546KGX19.90",
+        "BUC_Pui Grill fara ahtib 30.77 B",
+        "1,000BUCX919",
+        "Ulei de floarea soarelul 9,19 B",
+        "1,000BUCX9,99",
+        "Sacimenajeri 9,99A",
+        "1:000BUCX15.99",
+        "shiraz AUs sec 15,99A",
+        "1.000buCX0.50",
+        "Garantie 1 buc. 0,50D",
+        "1,000BUCX5.99",
+        "Sandwich Toastcu unt 5,99B",
+        "1,000BUCX6,99",
+        "Branza de vaci 6,99B",
+        "1,000BUCX6,99",
+        "Branza de vaci 6,998",
+        "1,000BUCX6,99",
+        "Branza devaci 6,99 B",
+        "1,000BUCX24.29",
+        "Pizza pevatra salam 24,29 B",
+        "1,000BUCX 23.49",
+        "Pizza cu patru 23,49 B",
+        "SUBTOTAL 141,18",
+        "TOTAL 141.18"
+      ],
+      "confidence": 92
+    },
+    {
+      "lines": [
+        "1000BUCX15.99 15.99",
+        "Shiraz AUS sec",
+        "1.000bucx0.50 0.50 D",
+        "Galrantie1buc.",
+        "1.0D0BUCX5.99",
+        "Sandwich Toast cu unt 5,99 B",
+        "1,000BUCX6,99",
+        "Branza de vaci 6,99B",
+        "1,000BUCX6.99",
+        "Bianza de vaci 6,99 B",
+        "1,000BUCX6.99",
+        "Branza de vaci 6.99 B",
+        "1.000BUCX24.29",
+        "Pizza pevatra salam 24,29 B",
+        "1,000BUCX23,49",
+        "Pizza cu patru 23,49 B",
+        "SUBTOTAL 141,18",
+        "TOTAL 141.18",
+        "TOTAL TVA 15,88",
+        "TVAA21.00% 4,51",
+        "TVAB 11.00% 11.37",
+        "TVAD 0,00% 0,00",
+        "Voucher SGR 18.50",
+        "BF.00096 DATA:01/11/2026 ORA:16-27-50"
+      ],
+      "confidence": 93
+    }
+  ]
+}

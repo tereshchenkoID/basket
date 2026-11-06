@@ -7,15 +7,17 @@ import { normalizedText, UUID } from '@/helpers/validation'
 
 export const UNITS = ['pcs', 'kg', 'g', 'l', 'ml', 'pack'] as const
 
-export const CREATE_LIST_SCHEMA = z.object({ id: UUID, groupId: UUID, title: normalizedText(VALIDATION_LIMITS.listTitle) })
+export const CREATE_LIST_SCHEMA = z.object({ id: UUID, groupId: UUID, title: normalizedText(VALIDATION_LIMITS.listTitle), storeId: UUID.nullable().optional(), storeName: normalizedText(120).optional() })
 
 export const UPDATE_LIST_SCHEMA = z
   .object({
     listId: UUID,
+    storeId: UUID.nullable().optional(),
+    storeName: normalizedText(120).optional(),
     title: normalizedText(VALIDATION_LIMITS.listTitle).optional(),
     status: z.enum(['active', 'archived']).optional(),
   })
-  .refine(value => value.title !== undefined || value.status !== undefined)
+  .refine(value => value.title !== undefined || value.status !== undefined || value.storeId !== undefined || value.storeName !== undefined)
 
 const FIELDS = {
   name: normalizedText(VALIDATION_LIMITS.itemName),

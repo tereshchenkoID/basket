@@ -5,6 +5,7 @@ import type { ActionVariant } from '@/types/ui'
 export type ConfirmProps = {
   title?: string
   label: string
+  confirmLabel?: string
   ariaLabel?: string
   description: string
   onConfirm: () => void

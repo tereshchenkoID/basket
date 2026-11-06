@@ -6,7 +6,7 @@ import { useFormatter, useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { ROUTES_USER } from '@/constant/navigation'
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
 import { SORT_OPTIONS } from '@/constant/workspace'
 
 import { restoreGroup } from '@/lib/groups/action'
@@ -22,6 +22,7 @@ import Icon from '@/components/Icon'
 import { Select } from '@/components/Select'
 import { Tabs } from '@/components/Tabs'
 import { Text } from '@/components/Text'
+import { Breadcrumbs } from '@/modules/Breadcrumbs'
 import { Empty } from '@/modules/Empty'
 import { GroupForm } from '@/modules/GroupForm'
 import { Mutation } from '@/modules/Mutation'
@@ -49,7 +50,7 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
   const active = result.data.filter(group => !group.deleted_at)
   const deleted = result.data.filter(group => group.deleted_at)
   const groups = sortRecords(tab === 'active' ? active : deleted, sort[tab], locale,
-    group => group.name, group => group.deleted_at ?? group.created_at)
+    group => group.name, group => group.created_at)
 
   const handleCreate = (id: string) => router.push(ROUTES_USER.group.url(id))
 
@@ -67,6 +68,12 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
       full
       py={4}
     >
+      <Breadcrumbs
+        items={[
+          { label: workspace(NAVIGATION.home.text), href: NAVIGATION.home.url },
+          { label: workspace('dashboard') },
+        ]}
+      />
       <Text
         className={styles.eyebrow}
         transform="uppercase"
@@ -121,9 +128,9 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
               className={styles.sort}
               ariaLabel={workspace('sort.label')}
               value={sort[tab]}
-              options={SORT_OPTIONS.filter(value => tab === 'active' || value !== 'nameDesc').map(value => ({
+              options={SORT_OPTIONS.map(value => ({
                 value,
-                label: workspace(`sort.${value === 'newest' && tab === 'deleted' ? 'deletedNewest' : value === 'oldest' && tab === 'deleted' ? 'deletedOldest' : value}`),
+                label: workspace(`sort.${value}`),
               }))}
               onChange={handleSort}
             />
@@ -165,6 +172,12 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                           size={2}
                           color="muted"
                         >
+                          {workspace('createdOn', { date: formatter.dateTime(new Date(group.created_at), { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) })}
+                        </Text>
+                        <Text
+                          size={2}
+                          color="muted"
+                        >
                           {t('deletedOn', { date: formatter.dateTime(new Date(group.deleted_at), { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) })}
                         </Text>
                         <Text
@@ -181,9 +194,10 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                         />
                       </Grid>
                       :
-                      <Box
+                      <Grid
                         as={Link}
                         p={4}
+                        gap={3}
                         border
                         radius="sm"
                         surface="default"
@@ -191,40 +205,60 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                         key={group.id}
                         className={styles.card}
                       >
-                        <Text
-                          as="span"
-                          className={styles.icon}
-                          aria-hidden="true"
+                        <Box
+                          display="flex"
+                          align="start"
+                          gap={3}
                         >
-                          <Icon
-                            name="users"
-                            size={24}
+                          <Box
+                            className={styles.icon}
                             aria-hidden="true"
-                          />
-                        </Text>
-                        <Heading
-                          as="h2"
-                          size={5}
-                        >
-                          {group.name}
-                        </Heading>
-                        {
-                          group.role &&
-                          <Text
-                            size={2}
-                            color="accent"
                           >
-                            {workspace(`roles.${group.role}`)}
-                          </Text>
-                        }
-                        <Text color="muted">{t('memberCount', { count: group.member_count })}</Text>
-                        <Text color="muted">{t('remainingCount', { count: group.remaining_count })}</Text>
+                            <Icon
+                              name="users"
+                              size={24}
+                              aria-hidden="true"
+                            />
+                          </Box>
+                          <Grid gap={1}>
+                            <Heading
+                              as="h2"
+                              size={5}
+                            >
+                              {group.name}
+                            </Heading>
+                            {
+                              group.role &&
+                              <Text
+                                size={1}
+                                color="accent"
+                              >
+                                {workspace(`roles.${group.role}`)}
+                              </Text>
+                            }
+                          </Grid>
+                        </Box>
+                        <Grid
+                          gap={1}
+                          p={3}
+                          surface="soft"
+                          radius="sm"
+                        >
+                          <Text size={2}>{t('memberCount', { count: group.member_count })}</Text>
+                          <Text size={2}>{t('remainingCount', { count: group.remaining_count })}</Text>
+                        </Grid>
+                        <Text
+                          size={1}
+                          color="muted"
+                        >
+                          {workspace('createdOn', { date: formatter.dateTime(new Date(group.created_at), { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) })}
+                        </Text>
                         <Text
                           as="span"
                           className={styles.link}
                           size={2}
+                          weight="semibold"
                           color="accent"
-                          mt={4}
                         >
                           {workspace(ROUTES_USER.group.text)}
                           <Icon
@@ -233,7 +267,7 @@ const Section = ({ result, userId, locale, now }: DashboardViewProps) => {
                             aria-hidden="true"
                           />
                         </Text>
-                      </Box>
+                      </Grid>
                   )
                 }
               </Grid>

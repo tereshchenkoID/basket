@@ -13,11 +13,13 @@
     "db:types": "node scripts/generate-types.mjs",
     "stylelint": "stylelint \"src/**/*.scss\" --max-warnings=0",
     "stylelint:fix": "stylelint \"src/**/*.scss\" --fix --max-warnings=0",
-    "postinstall": "node scripts/patch-next.mjs",
-    "predev": "node scripts/patch-next.mjs",
-    "prebuild": "node scripts/patch-next.mjs"
+    "postinstall": "node scripts/patch-next.mjs && node scripts/prepare-ocr.mjs",
+    "predev": "node scripts/patch-next.mjs && node scripts/prepare-ocr.mjs",
+    "prebuild": "node scripts/patch-next.mjs && node scripts/prepare-ocr.mjs",
+    "test": "node --test tests/receipts.test.mjs"
   },
   "dependencies": {
+    "@gutenye/ocr-browser": "1.4.9",
     "@supabase/ssr": "0.12.7",
     "@supabase/supabase-js": "2.118.0",
     "clsx": "2.1.1",
@@ -41,6 +43,7 @@
     "@types/node": "24.19.2",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
+    "esbuild": "0.28.1",
     "eslint": "10.14.0",
     "eslint-plugin-jsx-a11y-x": "0.2.0",
     "eslint-plugin-react-hooks": "7.1.1",
@@ -59,6 +62,8 @@
   "packageManager": "npm@12.0.1",
   "allowScripts": {
     "@parcel/watcher@2.6.0": true,
-    "@swc/core@1.16.21": true
+    "@swc/core@1.16.21": true,
+    "esbuild@0.28.1": true,
+    "protobufjs@7.6.6": false
   }
 }

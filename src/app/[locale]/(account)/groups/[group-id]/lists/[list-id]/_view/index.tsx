@@ -26,7 +26,7 @@ import type { ListViewProps } from './types'
 
 import styles from './index.module.scss'
 
-const Section = ({ result, userId }: ListViewProps) => {
+const Section = ({ result, userId, stores, storesAvailable }: ListViewProps) => {
   const t = useTranslations('List')
   const workspace = useTranslations('Workspace')
 
@@ -91,6 +91,15 @@ const Section = ({ result, userId }: ListViewProps) => {
         </div>
         <Connection status={status} />
       </Box>
+      {
+        data.list.store_id &&
+        <Text
+          color="muted"
+          mt={2}
+        >
+          {stores.find(store => store.id === data.list.store_id)?.name}
+        </Text>
+      }
       <Grid
         gap={2}
         my={4}
@@ -139,6 +148,8 @@ const Section = ({ result, userId }: ListViewProps) => {
       }
       <Dropdown label={t('listSettings')}>
         <ListForm
+          stores={stores}
+          storesAvailable={storesAvailable}
           groupId={data.list.group_id}
           list={data.list}
           onSuccess={handleRefresh}
@@ -148,8 +159,7 @@ const Section = ({ result, userId }: ListViewProps) => {
           label={t(archived ? 'restoreList' : 'archiveList')}
           variant={archived ? 'secondary' : 'danger'}
           confirmation={archived ? undefined : t('confirmArchive')}
-          operation={handleArchive
-          }
+          operation={handleArchive}
           onSuccess={handleRefresh}
         />
       </Dropdown>

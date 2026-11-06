@@ -55,7 +55,7 @@ const LocaleLayout = async ({ children }: LocaleLayoutProps) => {
             id="main"
             grow
             display="flex"
-            align="center"
+            align="start"
           >
             {children}
           </Container>

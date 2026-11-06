@@ -8,6 +8,7 @@ export const VALIDATION_ERRORS = {
 } as const
 
 export const DATABASE_ERROR_MESSAGES = {
+  receipt_conflict: 'receiptConflict',
   group_unavailable: 'groupUnavailable',
   restore_expired: 'restoreExpired',
   invalid_invite: 'inviteInvalid',

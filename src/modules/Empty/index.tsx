@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl'
+import clsx from 'clsx'
 
 import { ROUTES_USER } from '@/constant/navigation'
 
@@ -14,6 +15,7 @@ import type { EmptyProps } from './types'
 import styles from './index.module.scss'
 
 export const Empty = ({
+  full,
   error,
   title,
   description,
@@ -33,7 +35,14 @@ export const Empty = ({
       border
       radius="lg"
       surface="default"
-      className={styles.block}
+      className={
+        clsx(
+          styles.block,
+          {
+            [styles.full]: full
+          }
+        )
+      }
       role={error ? 'alert' : undefined}
     >
       <Box className={styles.icon}>

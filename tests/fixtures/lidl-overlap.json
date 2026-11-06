@@ -1,0 +1,66 @@
+{
+  "description": "Manually verified transcription of the two user-supplied Lidl photos. Transaction identifiers and payment details excluded. This is parser ground truth, not a claim of OCR accuracy.",
+  "segments": [
+    {
+      "lines": [
+        "LIDL DISCOUNT SRL",
+        "Lei",
+        "1,546 KG x 19,90",
+        "BUC.Pui Grill fara antib 30,77 B",
+        "1,000 BUC x 9,19",
+        "Ulei de floarea soarelui 9,19 B",
+        "1,000 BUC x 9,99",
+        "Saci menajeri 9,99 A",
+        "1,000 BUC x 15,99",
+        "Shiraz AUS sec 15,99 A",
+        "1,000 BUC x 0,50",
+        "Garantie 1 buc. 0,50 D",
+        "1,000 BUC x 5,99",
+        "Sandwich Toast cu unt 5,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 24,29",
+        "Pizza pe vatra salam 24,29 B",
+        "1,000 BUC x 23,49",
+        "Pizza cu patru 23,49 B",
+        "SUBTOTAL 141,18",
+        "TOTAL 141,18"
+      ],
+      "confidence": 90
+    },
+    {
+      "lines": [
+        "1,000 BUC x 15,99",
+        "Shiraz AUS sec 15,99 A",
+        "1,000 BUC x 0,50",
+        "Garantie 1 buc. 0,50 D",
+        "1,000 BUC x 5,99",
+        "Sandwich Toast cu unt 5,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 6,99",
+        "Branza de vaci 6,99 B",
+        "1,000 BUC x 24,29",
+        "Pizza pe vatra salam 24,29 B",
+        "1,000 BUC x 23,49",
+        "Pizza cu patru 23,49 B",
+        "SUBTOTAL 141,18",
+        "TOTAL 141,18",
+        "TOTAL TVA 15,88",
+        "TVA A 21,00% 4,51",
+        "TVA B 11,00% 11,37",
+        "TVA D 0,00% 0,00",
+        "Voucher SGR 18,50",
+        "CARD 122,68",
+        "DATA:01/11/2026 ORA:16-27-50"
+      ],
+      "confidence": 90
+    }
+  ]
+}

@@ -13,7 +13,7 @@
 
 .icon {
   display: inline-flex;
-  margin-block-end: var(--space-3);
+  flex-shrink: 0;
   padding: rem(10px);
   border-radius: 50%;
   background-color: var(--primary-subtle);
@@ -23,6 +23,8 @@
   @include flex(space-between, center);
 
   gap: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-top: rem(1px) solid var(--border);
 }
 
 .eyebrow {
@@ -30,5 +32,5 @@
 }
 
 .sort {
-  width: rem(240px);
+  width: rem(280px);
 }

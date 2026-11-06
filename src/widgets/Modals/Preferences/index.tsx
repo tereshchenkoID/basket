@@ -37,13 +37,14 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
       {
         account &&
         <Grid
-          gap={4}
+          gap={2}
           className={styles.account}
         >
           <Box
             display="flex"
             align="center"
-            gap={3}
+            gap={2}
+            mb={2}
           >
             <Avatar
               name={account.name}
@@ -63,6 +64,7 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
             href={ROUTES_USER.dashboard.url}
             variant="secondary"
             onClick={handleClose}
+            className={styles.action}
           >
             <Icon
               name={ROUTES_USER.dashboard.icon}
@@ -71,6 +73,24 @@ export const Preferences = ({ theme, account, locale }: PreferencesProps) => {
             />
             {t(ROUTES_USER.dashboard.text)}
           </Action>
+          {
+            [ROUTES_USER.scan, ROUTES_USER.history].map(route =>
+              <Action
+                key={route.url}
+                href={route.url}
+                variant="secondary"
+                onClick={handleClose}
+                className={styles.action}
+              >
+                <Icon
+                  name={route.icon}
+                  size={18}
+                  aria-hidden="true"
+                />
+                {t(route.text)}
+              </Action>
+            )
+          }
         </Grid>
       }
       {

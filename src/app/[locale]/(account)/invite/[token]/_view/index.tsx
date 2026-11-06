@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
-import { ROUTES_USER } from '@/constant/navigation'
+import { NAVIGATION, ROUTES_USER } from '@/constant/navigation'
 
 import { acceptInvite } from '@/lib/invites/action'
 
@@ -13,6 +13,7 @@ import { Grid } from '@/components/Grid'
 import { Heading } from '@/components/Heading'
 import Icon from '@/components/Icon'
 import { Text } from '@/components/Text'
+import { Breadcrumbs } from '@/modules/Breadcrumbs'
 import { Empty } from '@/modules/Empty'
 import { Mutation } from '@/modules/Mutation'
 
@@ -48,6 +49,12 @@ const Section = ({ result, token }: InviteViewProps) => {
       radius="lg"
       surface="default"
     >
+      <Breadcrumbs
+        items={[
+          { label: workspace(NAVIGATION.home.text), href: NAVIGATION.home.url },
+          { label: t('invited') },
+        ]}
+      />
       <Text
         className={styles.eyebrow}
         transform="uppercase"

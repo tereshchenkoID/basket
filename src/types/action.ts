@@ -11,5 +11,6 @@ export type ActionError =
   | 'ownerCannotLeave'
   | 'groupUnavailable'
   | 'restoreExpired'
+  | 'receiptConflict'
 
 export type ActionResult<T = undefined> = { ok: true; data: T } | { ok: false; error: ActionError }

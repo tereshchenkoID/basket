@@ -3,7 +3,7 @@
 import type { FocusEvent } from 'react'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useFormatter, useTranslations } from 'next-intl'
 
 import { Link, useRouter } from '@/i18n/navigation'
 
@@ -40,8 +40,9 @@ import styles from './index.module.scss'
 
 import type { InvitationLink } from '@/types/workspace'
 
-const Section = ({ result, userId, locale }: GroupViewProps) => {
+const Section = ({ result, userId, locale, stores, storesAvailable }: GroupViewProps) => {
   const t = useTranslations('Group')
+  const formatter = useFormatter()
   const workspace = useTranslations('Workspace')
 
   const router = useRouter()
@@ -66,7 +67,7 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
   const active = data.lists.filter(list => list.status === 'active')
   const archived = data.lists.filter(list => list.status === 'archived')
   const lists = sortRecords(tab === 'active' ? active : archived, sort[tab], locale,
-    list => list.title, list => tab === 'active' ? list.created_at : list.updated_at)
+    list => list.title, list => list.created_at)
   const liveInvites = data.invites.filter(
     invite =>
       !invite.revoked_at && invite.use_count === 0 && new Date(invite.expires_at) > new Date(),
@@ -176,6 +177,8 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
           {t('lists')}
         </Heading>
         <ListForm
+          stores={stores}
+          storesAvailable={storesAvailable}
           groupId={data.group.id}
           onSuccess={handleCreate}
         />
@@ -197,9 +200,9 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
                 className={styles.sort}
                 ariaLabel={workspace('sort.label')}
                 value={sort[tab]}
-                options={SORT_OPTIONS.filter(value => tab === 'active' || value === 'newest' || value === 'nameAsc').map(value => ({
+                options={SORT_OPTIONS.map(value => ({
                   value,
-                  label: workspace(`sort.${value === 'newest' && tab === 'archived' ? 'updated' : value}`),
+                  label: workspace(`sort.${value}`),
                 }))}
                 onChange={handleSort}
               />
@@ -213,9 +216,10 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
                 >
                   {
                     lists.map(list =>
-                      <Box
+                      <Grid
                         as={Link}
                         p={4}
+                        gap={3}
                         border
                         radius="sm"
                         surface="default"
@@ -223,27 +227,71 @@ const Section = ({ result, userId, locale }: GroupViewProps) => {
                         className={styles.card}
                         href={ROUTES_USER.list.url(data.group.id, list.id)}
                       >
-                        <Heading
-                          as="h3"
-                          size={4}
-                          mb={2}
-                        >
-                          {list.title}
-                        </Heading>
                         <Box
-                          as="span"
-                          display="inline-flex"
-                          align="center"
-                          gap={2}
+                          display="flex"
+                          align="start"
+                          gap={3}
                         >
-                          <Text as="span">{t(ROUTES_USER.list.text)}</Text>
+                          <Box
+                            className={styles.icon}
+                            aria-hidden="true"
+                          >
+                            <Icon
+                              name="list-checks"
+                              size={22}
+                              aria-hidden="true"
+                            />
+                          </Box>
+                          <Grid gap={1}>
+                            <Heading
+                              as="h3"
+                              size={4}
+                            >
+                              {list.title}
+                            </Heading>
+                            <Text
+                              size={1}
+                              color="muted"
+                            >
+                              {workspace('createdOn', { date: formatter.dateTime(new Date(list.created_at), { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }) })}
+                            </Text>
+                          </Grid>
+                        </Box>
+                        {
+                          list.store_id &&
+                          <Box
+                            display="flex"
+                            align="center"
+                            gap={2}
+                          >
+                            <Icon
+                              name="store"
+                              size={16}
+                              aria-hidden="true"
+                            />
+                            <Text
+                              color="muted"
+                              size={2}
+                            >
+                              {stores.find(store => store.id === list.store_id)?.name}
+                            </Text>
+                          </Box>
+                        }
+                        <Text
+                          as="span"
+                          className={styles.link}
+                          size={2}
+                          weight="semibold"
+                          color="accent"
+                        >
+                          {t(ROUTES_USER.list.text)}
                           <Icon
                             name="arrow-up-right"
                             size={16}
                             aria-hidden="true"
                           />
-                        </Box>
-                      </Box>
+                        </Text>
+                      </Grid>
                     )
                   }
                 </Grid>
